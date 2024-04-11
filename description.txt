@@ -1,0 +1,7 @@
+Warning: This mod is very much a WiP project, and is still in early stages of development. 
+Additionally, Glory mod is not designed around multiplayer yet, and many parts of its content are likely to break when played on multiplayer.
+
+Glory mod is a content mod primarily aimed at completely replacing Terraria's bosses and hostile events, along with changing the game's progression.
+Each replacement comes with its own theming and unique gimmicks, but also carries key features from their vanilla counterparts.
+The mod's difficulty and stat scaling is significantly higher than the vanilla game, and it is heavily recommended you play the mod on Master mode.
+Currently, the mod only contains 5 bosses and a small amount of additional loot dropped by each one. There is much more content planned to be added in the future.

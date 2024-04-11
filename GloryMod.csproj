@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\tModLoader.targets" />
+  <PropertyGroup>
+    <AssemblyName>GloryMod</AssemblyName>
+    <TargetFramework>net6.0</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="CoolEffects\Textures\twirl.png" />
+    <None Remove="Gores\BloodDroneGore1.png" />
+    <None Remove="Gores\BloodDroneGore2.png" />
+    <None Remove="Gores\BloodDroneGore3.png" />
+    <None Remove="Gores\BloodDroneGore4.png" />
+    <None Remove="Gores\BloodDroneGore5.png" />
+    <None Remove="Gores\GeomancerStaff.png" />
+    <None Remove="Gores\SightseerGore1.png" />
+    <None Remove="Gores\SightseerGore2.png" />
+    <None Remove="Gores\SightseerGore3.png" />
+    <None Remove="Gores\SightseerGore4.png" />
+    <None Remove="Gores\SightseerGore5.png" />
+    <None Remove="Gores\SightseerGore6.png" />
+    <None Remove="Gores\SightseerGore7.png" />
+    <None Remove="Gores\SightseerGore8.png" />
+    <None Remove="Gores\SightseerGore9.png" />
+    <None Remove="icon_small.png" />
+    <None Remove="icon_workshop.png" />
+    <None Remove="Items\BloodMoon\HemolicLance.png" />
+    <None Remove="Items\BloodMoon\HemolicLanceMask.png" />
+    <None Remove="Items\Sightseer\DeadEyesBow.png" />
+    <None Remove="Items\Sightseer\Oracle.png" />
+    <None Remove="Items\Sightseer\OracleCooldown.png" />
+    <None Remove="Items\Sightseer\OracleSwing.png" />
+    <None Remove="Items\Sightseer\OtherworldlyFlesh.png" />
+    <None Remove="Items\Sightseer\Scopophobia.png" />
+    <None Remove="Items\Sightseer\SightseerMinionBuff.png" />
+    <None Remove="Items\Sightseer\SightseerStaff.png" />
+    <None Remove="NPCs\BasaltBarriers\BasaltBarrier.png" />
+    <None Remove="NPCs\BasaltBarriers\BasaltBarrierWall.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierMask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall0.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall0Mask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall1.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall1Mask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall2.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall2Mask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall3.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall3Mask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall4.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall4Mask.png" />
+    <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrier_Head_Boss.png" />
+    <None Remove="NPCs\BasaltBarriers\Minions\Forsaken.png" />
+    <None Remove="NPCs\BasaltBarriers\Minions\ForsakenChain.png" />
+    <None Remove="NPCs\BasaltBarriers\Minions\ForsakenMask.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierJaw.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBDebris.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge0.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge1.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge2.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge3.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge4.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionMedium.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionSmall.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBFireBallLarge.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBFireBallMedium.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBFireBallSmall.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBPurpleRune.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBPurpleRuneHead.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBSpiritBolt.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\DevilsScythe.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\ForsakenExplosion.png" />
+    <None Remove="NPCs\BloodMoon\BloodDrone\BloodDrone.png" />
+    <None Remove="NPCs\BloodMoon\BloodDrone\BloodDroneMask.png" />
+    <None Remove="NPCs\BloodMoon\BloodDrone\BloodDroneRotor.png" />
+    <None Remove="NPCs\BloodMoon\BloodDrone\DroneMissile.png" />
+    <None Remove="NPCs\Geomancer\GeomancerDefeatedCape.png" />
+    <None Remove="NPCs\Nerd\Nerd.png" />
+    <None Remove="NPCs\Nerd\Nerd_Head_Boss.png" />
+    <None Remove="NPCs\Sightseer\Minions\SeersTag.png" />
+    <None Remove="NPCs\Sightseer\Minions\SightseerMinion.png" />
+    <None Remove="NPCs\Sightseer\Minions\SightseerMinionMask.png" />
+    <None Remove="NPCs\Sightseer\Minions\SightseerMinionSilhouette.png" />
+    <None Remove="NPCs\Sightseer\Projectiles\HomingShot.png" />
+    <None Remove="NPCs\Sightseer\Projectiles\HomingShotEye.png" />
+    <None Remove="NPCs\Sightseer\Projectiles\SightseerAnomaly.png" />
+    <None Remove="NPCs\Sightseer\Projectiles\SightseerAnomalyMask.png" />
+    <None Remove="NPCs\Sightseer\Sightseer.png" />
+    <None Remove="NPCs\Sightseer\SightseerMask.png" />
+    <None Remove="NPCs\Sightseer\SightseerSilhouette.png" />
+    <None Remove="NPCs\Sightseer\Sightseer_Head_Boss.png" />
+    <None Remove="NPCs\Sightseer\Sightseer_Head_Boss_2.png" />
+    <None Remove="Systems\BossBars\GeomancerBossBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+</Project>

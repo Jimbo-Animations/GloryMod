@@ -1,0 +1,300 @@
+Mods: {
+	GloryMod: {
+		Items: {
+			HemotechThruster: {
+				DisplayName: Hemotech Thruster
+				Tooltip:
+					'''
+					Doubles flight time
+					Increases jump and fall speed
+					Increases aerial mobility
+					'''
+			}
+
+			ArgonBasher: {
+				DisplayName: Argon Basher
+				Tooltip:
+					'''
+					Channelling the weapon will pull it back until ready to release
+					Will be thrown upon full charge and creates a powerful shockwave on impact
+					Will reel itself back in upon impact or if not channeled to full power
+					'''
+			}
+
+			KryptonScepter: {
+				DisplayName: Krypton Scepter
+				Tooltip:
+					'''
+					Picks up boulders from the ground before chucking them at your cursor
+					Uses mana equal to your maximum stored mana
+					Can only be used while on the ground
+					'''
+			}
+
+			NeonSniper: {
+				DisplayName: Neon Sniper
+				Tooltip:
+					'''
+					Fires bursts of 1-3 neon bolts
+					Uses gel as ammo
+					'''
+			}
+
+			XenonChain: {
+				DisplayName: Xenon Chain
+				Tooltip:
+					'''
+					5 summon tag damage
+					Your summons will focus struck enemies
+					Tagging enemies will cause xenon spikes to erupt from your target
+					'''
+			}
+
+			IgnitedIdolMask: {
+				DisplayName: Ignited Idol Mask
+				Tooltip: Hard to see through
+			}
+
+			DivineBeacon: {
+				DisplayName: Divine Beacon
+				Tooltip: Summons a powerful foe when used underground
+			}
+
+			LightBringer: {
+				DisplayName: Light Bringer
+				Tooltip: Strikes enemies with a powerful 3-step combo
+			}
+
+			ThePurifier: {
+				DisplayName: The Purifier
+				Tooltip:
+					'''
+					Releases a stream of deadly fire
+					Slowly loses power when used for extended periods of time
+					Uses gel as ammo
+					'''
+			}
+
+			AshBearer: {
+				DisplayName: Ash Bearer
+				Tooltip:
+					'''
+					Summons a ring of ceremonial lanterns to bombard enemies
+					The size of the ring is dependent on your maximum minion slots
+					Does not take up any minion slots to use
+					Must be channeled to keep the ring active
+					'''
+			}
+
+			RadiantScroll: {
+				DisplayName: Radiant Scroll
+				Tooltip:
+					'''
+					Summons a channeled projectile that follows your cursor
+					Knocks you away upon collision with a nearby surface or enemy
+					'''
+			}
+
+			OrbOfPondering: {
+				DisplayName: Orb Of Pondering
+				Tooltip: Standing still for an extended period of time will give you enlightenment...
+			}
+
+			ArcaneDischarge: {
+				DisplayName: Arcane Discharge
+				Tooltip:
+					'''
+					Releases a volley of homing arcane missiles to strike enemies, followed by a shield bash
+					Must be channeled to use the tome
+					Rapidly spends mana while channelling
+					'''
+			}
+
+			OtherworldlyFlesh: {
+				DisplayName: Otherworldly Flesh
+				Tooltip: You can hear it whispering to you...
+			}
+
+			DeadEyesBow: {
+				DisplayName: Dead Eye's Bow
+				Tooltip:
+					'''
+					Arrows fired will duplicate themselves overtime
+					Duplicate arrows are weaker than the arrow that summoned them
+					'''
+			}
+
+			Scopophobia: {
+				DisplayName: Scopophobia
+				Tooltip:
+					'''
+					Creates seeking anomalies that home in on enemies
+					Starting velocity of summoned anomalies is affected by player velocity
+					Has a 2 second cooldown after being used
+					'''
+			}
+
+			Oracle: {
+				DisplayName: Oracle
+				Tooltip:
+					'''
+					Right click to perform a blink towards your cursor that provides brief immunity
+					Blinks have an extended cooldown after usage
+					Blinks cannot teleport through walls
+					'''
+			}
+
+			SightseerStaff: {
+				DisplayName: Sightseer Staff
+				Tooltip:
+					'''
+					Summons a Warper Jellyfish to fight for you
+					Jellyfish can confuse enemies on hit
+					'''
+			}
+
+			HemolicLance: {
+				DisplayName: Hemolic Lance
+				Tooltip:
+					'''
+					Attacks enemies with a powerful charge, followed by 4-step combos
+					Will not charge after entering its combo stage, and requires a short wait before the charge can be used again
+					'''
+			}
+		}
+
+		Projectiles: {
+			ArgonBasherProj.DisplayName: Argon Basher
+			ArgonShockwave.DisplayName: Shockwave
+			DebrisExplosionFriendly.DisplayName: Explosion
+			KryptonScepterDebris.DisplayName: Debris
+			NeonBoltFriendly.DisplayName: Neon Bolt
+			XenonChainProj.DisplayName: Xenon Chain
+			XenonSpike.DisplayName: Xenon Spike
+			BloodBullet.DisplayName: Blood Bullet
+			HemoPulse.DisplayName: Sanguine Pulse
+			IntroExplosion.DisplayName: Sanguine Blast
+			NecroRay.DisplayName: Necrotic Ray
+			NecroticBolt.DisplayName: Necrotic Bolt
+			DebrisExplosion.DisplayName: Explosion
+			NeonLightning.DisplayName: Neon Bolt
+			NeonTyrantDebris.DisplayName: Debris
+			NeonTyrantMine.DisplayName: Neon Mine
+			NeonTyrantShockwave.DisplayName: Shockwave
+			NeonTyrantSpike.DisplayName: Neon Spike
+			NeonVortex.DisplayName: Neon Vortex
+			NobleVortex.DisplayName: Noble Vortex
+			VortexTelegraph.DisplayName: Telegraph
+			NecroticRay.DisplayName: Necrotic Ray
+			SanguineBlast.DisplayName: Sanguine Blast
+			SanguinePulse.DisplayName: Sanguine Pulse
+			AwakenedLight.DisplayName: Awakened Light
+			BlazingInferno.DisplayName: Blazing Inferno
+			DivineRay.DisplayName: Divine Ray
+			PrimordialSpirit.DisplayName: Primordial Spirit
+			SeekingStarlight.DisplayName: Seeking Starlight
+			WrathfulEmbers.DisplayName: Wrathful Embers
+			PurifierFlames.DisplayName: Purifier Flames
+			MiniLamp.DisplayName: Mini Lamp
+			LightBringerProj.DisplayName: Light Bringer Proj
+			LightBringerFireball.DisplayName: Light Bringer Fireball
+			LanternFireball.DisplayName: Lantern Fireball
+			RadiantFlame.DisplayName: Radiant Flame
+			DischargeBolt.DisplayName: Discharge Bolt
+			DischargeBook.DisplayName: Arcane Discharge
+			DischargeShield.DisplayName: Discharge Shield
+			GeomancerGreenProjectile.DisplayName: Geomantic Bolt
+			GeomancerBlueProjectile.DisplayName: Icicle Knife
+			GeomancerRedProjectile.DisplayName: Geothermal Blade
+			GeomancerYellowProjectile.DisplayName: Lightning Spear
+			ArgonBasherShockwave.DisplayName: Argon Shockwave
+			WigglyShot.DisplayName: Abyssal Shadow
+			OrbitShot.DisplayName: Orbitting Shadow
+			HomingShot.DisplayName: Dark Watcher
+			SightseerAnomaly.DisplayName: Anomaly
+			DroneBullet.DisplayName: Blood Bolt
+			DroneMissile.DisplayName: Machina Charge Blast
+			DroneExplosion.DisplayName: Bloody Blast
+			LightBringerStab.DisplayName: Light Bringer Stab
+			RadiantBlast.DisplayName: Radiant Blast
+			ScopophobiaProj.DisplayName: Scopophobia Proj
+			OracleSwing.DisplayName: Oracle Swing
+			SightseerStaffMinion.DisplayName: Warper Jellyfish
+			HemolicLanceProj.DisplayName: Hemolic Lance Proj
+			HemolicLanceThrow.DisplayName: Hemolic Lance Throw
+			EnergySpinProj.DisplayName: Energy Spin Proj
+			BBExplosion.DisplayName: Fiery Explosion
+			BBFireBallSmall.DisplayName: Barrier Fireball
+			BBFireBallLarge.DisplayName: Barrier Fireball
+			BBFireBallMedium.DisplayName: Barrier Fireball
+			BBDebris.DisplayName: Debris
+			YellowRoar.DisplayName: Yellow Roar
+			BBExplosionMedium.DisplayName: Fiery Explosion
+			BBExplosionSmall.DisplayName: Fiery Explosion
+			ForsakenExplosion.DisplayName: Fiery Explosion
+			DevilsScythe.DisplayName: Devil Scythe
+			BBSpiritBolt.DisplayName: Lost Soul
+			BBPurpleRune.DisplayName: B B Purple Rune
+			BBExplosionLarge.DisplayName: B B Explosion Large
+		}
+
+		Buffs: {
+			XenonChainDebuff: {
+				DisplayName: Mods.GloryMod.BuffName.XenonChainDebuff
+				Description: Mods.GloryMod.BuffDescription.XenonChainDebuff
+			}
+
+			FlamesOfJudgement: {
+				DisplayName: Flames Of Judgement
+				Description: You have angered the god of fire...
+			}
+
+			FlamesOfRetribution: {
+				DisplayName: Flames Of Retribution
+				Description: You have angered the god of fire...
+			}
+
+			OrbBuff: {
+				DisplayName: Enlightened
+				Description: Increased health regeneration, mana regeneration and movement speed.
+			}
+
+			SeersTag: {
+				DisplayName: Seer's Tag
+				Description: You will not receive an opportunity to counter-attack.
+			}
+
+			OracleCooldown: {
+				DisplayName: Oracle Cooldown
+				Description: You cannot blink with the Oracle
+			}
+
+			SightseerMinionBuff: {
+				Description: Warper Jellyfish
+				DisplayName: The jellyfish will fight for you
+			}
+		}
+
+		NPCs: {
+			Hemolitionist.DisplayName: Hemolitionist
+			RedtideWarrior.DisplayName: Redtide Warrior
+			IgnitedIdol.DisplayName: Ignited Idol
+			IIMinion.DisplayName: Awakened Lantern
+			NeonTyrant.DisplayName: Neon Tyrant
+			NobleSlime1.DisplayName: Noble Slime
+			NobleSlime2.DisplayName: Noble Slime
+			NobleSlime3.DisplayName: Noble Slime
+			NobleSlime4.DisplayName: Noble Slime
+			AwakenedLantern.DisplayName: Awakened Lantern
+			Geomancer.DisplayName: Geomancer
+			Geomancer_Sleep.DisplayName: Sleeping Wizard
+			Sightseer.DisplayName: Sightseer
+			SightseerClone.DisplayName: Sightseer
+			SightseerMinion.DisplayName: Otherwordly Jellyfish
+			BloodDrone.DisplayName: Steel Seraph
+			Nerd.DisplayName: Nerd
+			BasaltBarrier.DisplayName: Basalt Barrier
+			Forsaken.DisplayName: Forsaken
+		}
+	}
+}

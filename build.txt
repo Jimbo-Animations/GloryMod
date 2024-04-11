@@ -1,0 +1,7 @@
+displayName = Glory Mod
+author = Jimbo and the Glory Gang
+hideCode = false
+hideResources = false
+includeSource = true
+includePDB = true
+version = 0.3.0.1
