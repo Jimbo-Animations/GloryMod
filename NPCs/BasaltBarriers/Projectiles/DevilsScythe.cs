@@ -26,10 +26,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         public override void OnSpawn(IEntitySource source)
         {
             target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-
             Projectile.spriteDirection = Projectile.direction = target.Center.X > Projectile.Center.X ? 1 : -1;
-
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
 
         public override bool? CanHitNPC(NPC target)

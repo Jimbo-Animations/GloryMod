@@ -9,6 +9,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using System.Collections.Generic;
+using System.Data;
 
 namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 {
@@ -32,8 +34,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
-
             SoundEngine.PlaySound(SoundID.Item70, Projectile.Center);
 
             int numDusts = 30;
@@ -107,11 +107,9 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
-
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 
-            int numDusts = 25;
+            int numDusts = 30;
             for (int i = 0; i < numDusts; i++)
             {
                 int dust = Dust.NewDust(Projectile.Bottom, 0, 0, 6, Scale: 3f);
@@ -138,11 +136,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
             visibility = MathHelper.Lerp(visibility, Projectile.timeLeft <= 10 ? 0 : 1, .1f);
             glowVisibility = MathHelper.SmoothStep(glowVisibility, 0, .2f);
-        }
-
-        public override bool CanHitPlayer(Player target)
-        {
-            return Projectile.Bottom.Distance(target.Center) <= 82;
         }
 
         float visibility = 1;
@@ -181,17 +174,15 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
+            SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion with { Volume = 2.25f, Pitch = -0.75f }, Projectile.Center);
 
-            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 2 }, Projectile.Center);
-
-            int numDusts = 45;
+            int numDusts = 50;
             for (int i = 0; i < numDusts; i++)
             {
                 int dust = Dust.NewDust(Projectile.Bottom - new Vector2(0, 20), 0, 0, 6, Scale: 3f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = true;
-                Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(5, 16), 0).RotatedBy(i * -MathHelper.Pi / numDusts);
+                Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(7, 21), 0).RotatedBy(i * -MathHelper.Pi / numDusts);
             }
         }
 
@@ -207,6 +198,17 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 if (Projectile.frame >= 18)
                 {
                     Projectile.frame = 18;
+                }
+
+                if (Projectile.frame == 1)
+                {
+                    Systems.ScreenUtils.screenShaking = 5f;
+
+                    for (int i = -1; i < 2; i++)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(5, 10)).RotatedBy((i * MathHelper.PiOver2 / 3)).RotatedByRandom(MathHelper.ToRadians(10)), 
+                            ProjectileType<BBFireBallSmall>(), 75, 0, Projectile.owner);
+                    }
                 }
             }
 
@@ -257,7 +259,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 7;
-
         }
 
         public override void SetDefaults() 
@@ -271,15 +272,12 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             Projectile.alpha = 0;
         }
 
-        public override void OnSpawn(IEntitySource source)
-        {
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
-        }
-
         private int whichSheet;
+        Player target;
 
         public override void AI()
         {
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
             Projectile.ai[0]++;
             Projectile.ai[1]++;
 
@@ -299,19 +297,32 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
                 if (whichSheet == 0 && Projectile.frame == 3)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 2 }, Projectile.Center);
+                    SoundEngine.PlaySound(new SoundStyle("GloryMod/Music/Boom") with { Volume = 1.5f, Pitch = -.5f }, Projectile.Center);
+                    flash.Add(new Tuple<Vector2, float, float>(Projectile.Center, 0f, 100f));
 
-                    int numDusts = 150;
+                    int numDusts = 200;
                     for (int i = 0; i < numDusts; i++)
                     {
-                        int dust = Dust.NewDust(Projectile.Bottom - new Vector2(0, 300), 0, 0, 6, Scale: 4f);
+                        int dust = Dust.NewDust(Projectile.Bottom - new Vector2(0, 300), 0, 0, 6, Scale: 5f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].noLight = true;
-                        Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(20, 41), 0).RotatedBy(i * -MathHelper.Pi / numDusts);
-                    }                   
+                        Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(25, 51), 0).RotatedBy(i * -MathHelper.Pi / numDusts);
+                    }
+
+                    for (int i = -2; i < 2; i++)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 4).RotatedByRandom(MathHelper.ToRadians(15)), 
+                            ProjectileType<BBFireBallSmall>(), 75, 0, Projectile.owner);
+                    }
+
+                    for (int i = -1; i < 2; i++)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 3).RotatedByRandom(MathHelper.ToRadians(15)), 
+                            ProjectileType<BBFireBallMedium>(), 100, 0, Projectile.owner);
+                    }
                 }
 
-                if (whichSheet == 0 && Projectile.frame > 2 && Systems.ScreenUtils.screenShaking < 10) Systems.ScreenUtils.screenShaking = 10f;
+                if (whichSheet == 0 && Projectile.frame > 2 && Systems.ScreenUtils.screenShaking < 12) Systems.ScreenUtils.screenShaking = 12f;
             }
 
             visibility = MathHelper.Lerp(visibility, Projectile.timeLeft <= 20 ? 0 : 1, .1f);
@@ -325,29 +336,58 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         {
             if (whichSheet == 0)
             {
-                return (Projectile.Bottom - new Vector2(0, 440)).Distance(target.Center) <= 900 && Projectile.frame > 2;
+                return Projectile.Center.Distance(target.Center) <= 489 && Projectile.frame > 2;
 
             }
 
             else if (whichSheet == 1)
             {
-                return (Projectile.Bottom - new Vector2(0, 440)).Distance(target.Center) <= 900 && Projectile.frame < 5;
+                return Projectile.Center.Distance(target.Center) <= 489 && Projectile.frame < 5;
             }
 
             else return false;
         }
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+        {
+            modifiers.FinalDamage *= target.Distance(Projectile.Center) > 200 ? target.Distance(Projectile.Center) > 400 ?  0.2f : 0.5f : 1;
+        }
 
         float visibility = 1;
         float glowVisibility = 1;
+        List<Tuple<Vector2, float, float>> flash = new List<Tuple<Vector2, float, float>>();
         public override bool PreDraw(ref Color lightColor)
-        {
+        {    
             Texture2D texture = Request<Texture2D>(Texture).Value;
             Texture2D glow = Request<Texture2D>("GloryMod/CoolEffects/Textures/Glow_1").Value;
+            Texture2D pulse = Request<Texture2D>("GloryMod/CoolEffects/Textures/PulseCircle").Value;
             Rectangle frame = new Rectangle(0, (texture.Height / Main.projFrames[Projectile.type]) * Projectile.frame, texture.Width, texture.Height / Main.projFrames[Projectile.type]);
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height / Main.projFrames[Projectile.type] * 0.5f);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(255, 255, 255) * visibility, 0, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-            if ((whichSheet == 0 && Projectile.frame > 2) || whichSheet > 0) Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, new Color(200, 150, 50, 150) * glowVisibility, 0, glow.Size() / 2, Projectile.scale * (Projectile.ai[0] * 0.15f), SpriteEffects.None, 0);
+            if ((whichSheet == 0 && Projectile.frame > 2) || whichSheet > 0) Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, new Color(200, 150, 50, 150) * glowVisibility, 0, glow.Size() / 2, Projectile.scale * (Projectile.ai[0] * 0.33f), SpriteEffects.None, 0);
+
+            for (int i = 0; i < flash.Count; i++)
+            {
+                if (i >= flash.Count)
+                {
+                    break;
+                }
+
+                flash[i] = new Tuple<Vector2, float, float>(flash[i].Item1, flash[i].Item2 + flash[i].Item3, flash[i].Item3);
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
+
+                Main.EntitySpriteDraw(pulse, flash[i].Item1 - Main.screenPosition, null, new Color(200, 250, 100, 25) * visibility, 0, pulse.Size() / 2, flash[i].Item2 / pulse.Width, SpriteEffects.None, 0);
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
+
+                if (flash[i].Item2 >= target.Distance(flash[i].Item1) + Main.screenWidth * 3)
+                {
+                    flash.RemoveAt(i);
+                }
+            }
 
             return false;
         }

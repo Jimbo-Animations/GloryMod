@@ -16,7 +16,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             Projectile.tileCollide = false;
             Projectile.hostile = false;
             Projectile.ignoreWater = false;
-            Projectile.timeLeft = 200;
+            Projectile.timeLeft = 180;
             Projectile.alpha = 0;
         }
 

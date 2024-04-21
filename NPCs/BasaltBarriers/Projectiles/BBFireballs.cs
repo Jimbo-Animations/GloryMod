@@ -14,12 +14,14 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         public override void SetDefaults()
         {
             Projectile.Size = new Vector2(30);
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = false;
             Projectile.timeLeft = 600;
             Projectile.alpha = 0;
         }
+
+        Player target;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -36,10 +38,26 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             return Projectile.Distance(target.Center) <= 15;
         }
 
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+
+            fallThrough = Projectile.Center.Y < target.Bottom.Y;
+            return true;
+        }
+
         public override void AI()
         {
-            if (Projectile.lavaWet) Projectile.Kill();
-            Projectile.tileCollide = Projectile.velocity.Y > 0;
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+
+            if (Projectile.Center.Y > target.Bottom.Y)
+            {
+                if (Projectile.lavaWet) Projectile.Kill();
+                Projectile.tileCollide = true;
+            }
+            else Projectile.tileCollide = false;
+
+            Projectile.velocity.X += target.Center.X > Projectile.Center.X ? 0.1f : -0.1f;
 
             Projectile.ai[0]++;
             Projectile.ai[1]++;
@@ -68,6 +86,8 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
             }
+
+            visibility = MathHelper.Lerp(visibility, 1, 0.2f);
         }
 
         public override void Kill(int timeLeft)
@@ -75,7 +95,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top + new Vector2 (0, 4), Vector2.Zero, ProjectileType<BBExplosionSmall>(), Projectile.damage, 0, Projectile.owner);
         }
 
-        float visibility = 1;
+        float visibility = 0;
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -109,18 +129,19 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         public override void SetDefaults()
         {
             Projectile.Size = new Vector2(54);
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = false;
             Projectile.timeLeft = 600;
             Projectile.alpha = 0;
         }
 
+        Player target;
+
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
-
 
         public override bool? CanHitNPC(NPC target)
         {
@@ -132,10 +153,26 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             return Projectile.Distance(target.Center) <= 27;
         }
 
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+
+            fallThrough = Projectile.Center.Y < target.Bottom.Y;
+            return true;
+        }
+
         public override void AI()
         {
-            if (Projectile.lavaWet) Projectile.Kill();
-            Projectile.tileCollide = Projectile.velocity.Y > 0;
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+
+            if (Projectile.Center.Y > target.Bottom.Y)
+            {
+                if (Projectile.lavaWet) Projectile.Kill();
+                Projectile.tileCollide = true;
+            }
+            else Projectile.tileCollide = false;
+
+            Projectile.velocity.X += target.Center.X > Projectile.Center.X ? 0.05f : -0.05f;
 
             Projectile.ai[0]++;
             Projectile.ai[1]++;
@@ -164,15 +201,16 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
             }
-        }
 
+            visibility = MathHelper.Lerp(visibility, 1, 0.2f);
+        }
 
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top - new Vector2(0, 12), Vector2.Zero, ProjectileType<BBExplosionMedium>(), Projectile.damage, 0, Projectile.owner);
         }
 
-        float visibility = 1;
+        float visibility = 0;
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -206,18 +244,19 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
         public override void SetDefaults()
         {
             Projectile.Size = new Vector2(86);
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.hostile = true;
-            Projectile.ignoreWater = true;
+            Projectile.ignoreWater = false;
             Projectile.timeLeft = 600;
             Projectile.alpha = 0;
         }
+
+        Player target;
 
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
-
 
         public override bool? CanHitNPC(NPC target)
         {
@@ -231,20 +270,22 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            width = 70;
-            height = 70;
-            fallThrough = false;
+            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
 
+            fallThrough = Projectile.Center.Y < target.Bottom.Y;
             return true;
         }
 
         public override void AI()
         {
-            if (Projectile.lavaWet) Projectile.Kill();
-            Projectile.tileCollide = Projectile.velocity.Y > 0;
-
             Projectile.ai[0]++;
             Projectile.ai[1]++;
+
+            if (Projectile.ai[0] > 60)
+            {
+                if (Projectile.lavaWet) Projectile.Kill();
+                Projectile.tileCollide = true;
+            }
 
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.velocity *= 0.995f;
@@ -261,7 +302,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
             if (Projectile.ai[0] > 30)
             {
-                Projectile.velocity.Y += .2f;
+                Projectile.velocity.Y += .1f;
             }
 
             if (Projectile.ai[0] % 2 == 1)
@@ -270,17 +311,27 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
             }
+
+            visibility = MathHelper.Lerp(visibility, 1, 0.15f);
         }
 
-        float visibility = 1;
+        public override void Kill(int timeLeft)
+        {
+            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top - new Vector2(15, 150), Vector2.Zero, ProjectileType<BBExplosionLarge>(), Projectile.damage / 2, 0, Projectile.owner);
+        }
+
+        float visibility = 0;
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
             Texture2D glow = Request<Texture2D>("GloryMod/CoolEffects/Textures/Glow_1").Value;
+            Texture2D radius = Request<Texture2D>("GloryMod/CoolEffects/Textures/PulseCircle").Value;
             Rectangle frame = new Rectangle(0, (texture.Height / Main.projFrames[Projectile.type]) * Projectile.frame, texture.Width, texture.Height / Main.projFrames[Projectile.type]);
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
 
             Texture2D trail = Request<Texture2D>("GloryMod/CoolEffects/Textures/SemiStar").Value;
+
+            float mult = 0.95f + ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 2) * 0.1f);
 
             for (int i = 1; i < Projectile.oldPos.Length; i++)
             {
@@ -289,6 +340,14 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(255, 255, 255) * visibility, Projectile.rotation, drawOrigin + new Vector2(frame.Width * .2f, 0), Projectile.scale, SpriteEffects.FlipHorizontally, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center + new Vector2(0, 5).RotatedBy(Projectile.rotation) - Main.screenPosition, null, new Color(200, 150, 50, 50) * visibility, Projectile.rotation, glow.Size() / 2 - new Vector2(glow.Width * .1f, 0), Projectile.scale * 0.75f, SpriteEffects.FlipHorizontally, 0);
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
+
+            Main.EntitySpriteDraw(radius, Projectile.Top - new Vector2(15, 150) - Main.screenPosition, null, new Color(250, 50, 25, 200) * visibility * mult, Projectile.rotation, radius.Size() / 2, 1.91f * visibility * mult, SpriteEffects.None, 0);
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
             return false;
         }

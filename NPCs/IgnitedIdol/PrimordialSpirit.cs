@@ -22,11 +22,6 @@ namespace GloryMod.NPCs.IgnitedIdol
             Projectile.alpha = 0;
         }
 
-        private int rippleCount = 1;
-        private int rippleSize = 5;
-        private int rippleSpeed = 15;
-        private float distortStrength = 100f;
-
         public override void OnSpawn(IEntitySource source)
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 1.25f}, Projectile.Center);
@@ -150,7 +145,7 @@ namespace GloryMod.NPCs.IgnitedIdol
             Texture2D texture2 = Request<Texture2D>(Texture + "2").Value;
             Texture2D glow = Request<Texture2D>("GloryMod/CoolEffects/Textures/Glow_1").Value;
             Texture2D pulse = Request<Texture2D>("GloryMod/CoolEffects/Textures/PulseCircle").Value;
-            float mult = (0.85f + (float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.1f);
+            float mult = 0.85f + (float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.1f;
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
             if (Projectile.timeLeft <= 30)
 

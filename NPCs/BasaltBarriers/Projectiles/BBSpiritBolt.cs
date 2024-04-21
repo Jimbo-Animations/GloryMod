@@ -31,7 +31,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             startPosition = Projectile.Center;
             startVelocity = Projectile.velocity;
 
-            Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
+            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
 
         public override bool CanHitPlayer(Player target)
@@ -53,7 +53,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 Projectile.frame++;
                 Projectile.ai[0] = 0;
 
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 272, Scale: 1);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, Scale: 1);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = false;
 

@@ -79,7 +79,8 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
             Intro = 0,
             Test = 1,
             Debris = 2,
-            DevilScythes = 3
+            DevilScythes = 3,
+            Fireballs = 4
         }
 
         private AttackPattern AIstate
@@ -119,6 +120,8 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
         private float spawnCenterY;
         private float targetDistance;
         private float targetSpeed;
+        private float targetHeadPlacement;
+        private float aimTowards;
 
         SlotId ShieldNoise = SlotId.Invalid;
 
@@ -164,10 +167,10 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
                 }
             }
 
-
             switch (AIstate)
             {
                 case AttackPattern.Intro:
+
                     if (AITimer > 60)
                     {
                         MinionCount = 5;
@@ -204,9 +207,9 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
 
                 case AttackPattern.Debris:
 
-                    WallMovement(target.position, NPC.velocity.ToRotation(), NPC.spriteDirection,
-                   (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 20 : 2 - (MinionCount * 0.25f),
-                   (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 0.025f : 0.05f, 0.05f);
+                    WallMovement(target.position, AITimer < 200 ? NPC.velocity.ToRotation() : NPC.DirectionTo(target.Center).ToRotation(), NPC.spriteDirection,
+                    (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 20 : 2 - (MinionCount * 0.25f),
+                    (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 0.025f : 0.05f, 0.05f);
 
 
                     Vector2 rubbleStart = NPC.Top + new Vector2((Main.rand.NextFloat(501) + (AITimer * 8) - 480) * NPC.spriteDirection, -100);
@@ -232,6 +235,64 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
                     {
                         AITimer = 0;
                         NPC.ai[0]++;
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+
+                case AttackPattern.DevilScythes:
+
+                    if (AITimer == 1) 
+                    {
+                        targetHeadPlacement = target.position.Y + Main.rand.Next(-350, 351);
+                    }
+
+                    if (AITimer < 150)
+                    {
+                        aimTowards = NPC.DirectionTo(target.Center).ToRotation();
+                    }
+
+                    WallMovement(AITimer <= 360 ? new Vector2(target.position.X, targetHeadPlacement) : target.position, AITimer <= 360 ? aimTowards : NPC.DirectionTo(target.Center).ToRotation(), NPC.spriteDirection,
+                    (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 20 : 2 - (MinionCount * 0.25f),
+                    (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 0.025f : 0.05f, 0.05f, 0.0667f);
+
+                    if (AITimer >= 150 && AITimer % 15 == 1 && AITimer < 300)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(((AITimer * 6) - 650) * NPC.spriteDirection, 0).RotatedBy(NPC.rotation), Vector2.Zero, ProjectileType<BBPurpleRune>(), 100, 1, target.whoAmI);
+                        NPC.netUpdate = true;
+                    }
+
+                    if (AITimer >= 450)
+                    {
+                        AITimer = 0;
+                        NPC.ai[0]++;
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+
+                case AttackPattern.Fireballs:
+
+                    WallMovement(target.position, NPC.DirectionTo(target.Center).ToRotation(), NPC.spriteDirection,
+                  (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? 20 : (AITimer <= 150 ? 1 - MinionCount * .1f : 2 - (MinionCount * .25f)),
+                  (target.Center.X > NPC.Center.X + 650 && NPC.spriteDirection == 1 || target.Center.X < NPC.Center.X - 650 && NPC.spriteDirection == -1) ? .025f : .05f);
+
+                    if (AITimer <= 150)
+                    {
+                        animState = 1;
+
+                        if (AITimer == 150)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(10 * NPC.spriteDirection, 0).RotatedBy(MathHelper.ToRadians(NPC.rotation)), ProjectileType<BBFireBallLarge>(), 1000, 1, target.whoAmI);
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    else animState = 0;
+
+                    if (AITimer >= 300)
+                    {
+                        AITimer = 0;
+                        NPC.ai[0] = 1;
                         NPC.netUpdate = true;
                     }
 

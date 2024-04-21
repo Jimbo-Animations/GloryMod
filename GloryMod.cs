@@ -71,6 +71,8 @@ namespace GloryMod
             Request<SoundEffect>("GloryMod/Music/SightseerAttack", AssetRequestMode.ImmediateLoad);
             Request<SoundEffect>("GloryMod/Music/SightseerShriek", AssetRequestMode.ImmediateLoad);
 
+            Request<SoundEffect>("GloryMod/Music/Boom", AssetRequestMode.ImmediateLoad);
+
             Request<SoundEffect>("GloryMod/Music/HemolitionistRoar", AssetRequestMode.ImmediateLoad);
             Request<SoundEffect>("GloryMod/Music/HemolitionistRoarAlt", AssetRequestMode.ImmediateLoad);
             Request<SoundEffect>("GloryMod/Music/HemolitionistDeathray", AssetRequestMode.ImmediateLoad);
