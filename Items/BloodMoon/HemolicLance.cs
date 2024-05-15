@@ -48,7 +48,15 @@ namespace GloryMod.Items.BloodMoon
             if (comboExpireTimer++ == 120)
             {
                 SoundEngine.PlaySound(SoundID.Item131 with { Pitch = -0.5f }, player.Center);
-                CombatText.NewText(player.getRect(), Color.Red, "Charge ready!", true, false);
+
+                for (int i = 0; i < 24; i++)
+                {
+                    int dust = Dust.NewDust(player.Center, 0, 0, 114, Scale: 3f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].noLight = true;
+                    Main.dust[dust].velocity = new Vector2(8, 0).RotatedBy(i * MathHelper.TwoPi / 24);
+                }
+
                 attackType = 0;
             }
         }

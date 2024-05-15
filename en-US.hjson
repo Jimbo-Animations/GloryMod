@@ -161,6 +161,20 @@ Mods: {
 					Will not charge after entering its combo stage, and requires a short wait before the charge can be used again
 					'''
 			}
+
+			ExtinctionHeater: {
+				DisplayName: Extinction Heater
+				Tooltip:
+					'''
+					Left click to fire a double-barreled shotgun with a cooldown
+					Right click to throw a flame hook that attaches to, damages and burns enemies
+					'''
+			}
+
+			DivineIntervention: {
+				DisplayName: Divine Intervention
+				Tooltip: ""
+			}
 		}
 
 		Projectiles: {
@@ -232,10 +246,15 @@ Mods: {
 			BBExplosionMedium.DisplayName: Fiery Explosion
 			BBExplosionSmall.DisplayName: Fiery Explosion
 			ForsakenExplosion.DisplayName: Fiery Explosion
+			BBExplosionLarge.DisplayName: Extinction Blast
 			DevilsScythe.DisplayName: Devil Scythe
 			BBSpiritBolt.DisplayName: Lost Soul
+			ExtinctionHeaterProj.DisplayName: Extinction Heater
+			ExtinctionHeaterHook.DisplayName: Heater Hook
 			BBPurpleRune.DisplayName: B B Purple Rune
-			BBExplosionLarge.DisplayName: B B Explosion Large
+			BasaltBarrierFireWall.DisplayName: Basalt Barrier Fire Wall
+			BasaltBarrierFireWallCore.DisplayName: Basalt Barrier Fire Wall Core
+			BBRedRune.DisplayName: B B Red Rune
 		}
 
 		Buffs: {

@@ -7,9 +7,10 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
         private int animSpeed = 5;
         private int wallFrameY;
         float timer;
-        float heat;
-        float shieldOpacity;
+        float eyeOpacity;
         float jawRotation;
+
+        bool showEye;
 
         public override void FindFrame(int frameHeight)
         {
@@ -27,8 +28,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
             {
                 NPC.frame.Y = 0;
             }
-
-            jawRotation = MathHelper.SmoothStep(jawRotation, animState, 0.15f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -37,6 +36,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
             Texture2D textureMask = Request<Texture2D>(Texture + "Mask").Value;
             Texture2D wallTexture = Request<Texture2D>(Texture + "Wall").Value;
             Texture2D textureJaw = Request<Texture2D>(Texture + "Jaw").Value;
+
             Vector2 drawOrigin = new Vector2(NPC.frame.Width * 0.5f, NPC.frame.Height * 0.5f);
 
             Rectangle wallRect = new Rectangle(0, wallFrameY, wallTexture.Width, wallTexture.Height / 7);
@@ -70,7 +70,16 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
                 }
             }
 
-            // Shield Visuals.
+            // Drawing the head.
+
+            Main.spriteBatch.Draw(textureJaw, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation - jawRotation,
+            drawOrigin - new Vector2(NPC.frame.Width * (jawRotation * .25f) * NPC.spriteDirection, 0), NPC.scale, effects, 0); // Jaw.
+
+            Main.spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+            Main.spriteBatch.Draw(textureMask, NPC.Center - screenPos, NPC.frame, Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : Color.White,
+            NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+
+            // Eye overlay
 
             timer += 0.1f;
 
@@ -79,47 +88,21 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
                 timer = 0f;
             }
 
-            if (shieldOpacity > 0.01f)
-            {
-                for (int i = 0; i < 4; i++)
-                { // Include code for both the jaw and skull.
-                    Main.EntitySpriteDraw(textureJaw, NPC.Center + new Vector2(72 - (60 * heat), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - screenPos, NPC.frame,
-                    Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : new Color(0, 0, 0, 20) * shieldOpacity, NPC.rotation - jawRotation,
-                    drawOrigin - new Vector2(NPC.frame.Width * (jawRotation * .25f) * NPC.spriteDirection, 0), NPC.scale, effects, 0);
+            Texture2D star = Request<Texture2D>("GloryMod/CoolEffects/Textures/SemiStar").Value;
+            Texture2D glow = Request<Texture2D>("GloryMod/CoolEffects/Textures/Glow_1").Value;
 
-                    Main.EntitySpriteDraw(texture, NPC.Center + new Vector2(72 - (60 * heat), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - screenPos, NPC.frame,
-                    Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : new Color(0, 0, 0, 20) * shieldOpacity, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
-                }
-            }           
+            Main.EntitySpriteDraw(star, NPC.Center + new Vector2(-14, 8 * -NPC.spriteDirection).RotatedBy(NPC.rotation) - screenPos, null,
+            Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= .1f ? Color.Black : Color.Orange * eyeOpacity, NPC.rotation, star.Size() / 2, new Vector2(.7f, .35f) * mult, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(star, NPC.Center + new Vector2(-14, 8 * -NPC.spriteDirection).RotatedBy(NPC.rotation) - screenPos, null,
+            Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= .1f ? Color.Black : Color.Orange * eyeOpacity, NPC.rotation + MathHelper.PiOver2, star.Size() / 2, new Vector2(.7f, .35f) * mult, SpriteEffects.None, 0);
 
-            // Drawing the head.
+            Main.EntitySpriteDraw(star, NPC.Center + new Vector2(-14, 8 * -NPC.spriteDirection).RotatedBy(NPC.rotation) - screenPos, null,
+            Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= .1f ? Color.Black : Color.White * eyeOpacity, NPC.rotation, star.Size() / 2, new Vector2(.7f, .35f) * .6f * mult, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(star, NPC.Center + new Vector2(-14, 8 * -NPC.spriteDirection).RotatedBy(NPC.rotation) - screenPos, null,
+            Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= .1f ? Color.Black : Color.White * eyeOpacity, NPC.rotation + MathHelper.PiOver2, star.Size() / 2, new Vector2(.7f, .35f) * .6f * mult, SpriteEffects.None, 0);
 
-            Main.spriteBatch.Draw(textureJaw, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation - jawRotation,
-            drawOrigin - new Vector2(NPC.frame.Width * (jawRotation * .25f) * NPC.spriteDirection, 0), NPC.scale, effects, 0); // Jaw.
-
-            Main.spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
-            Main.spriteBatch.Draw(textureMask, NPC.Center - screenPos, NPC.frame, Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : Color.White,
-            NPC.rotation, drawOrigin, NPC.scale, effects, 0); // Skull.
-
-            // Purple shield overlay.
-
-            if (shieldOpacity > 0.01f)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    Main.EntitySpriteDraw(textureJaw, NPC.Center + new Vector2(24 - (20 * heat), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - screenPos, NPC.frame,
-                    Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : new Color(25, 10, 40, 75) * shieldOpacity, NPC.rotation - jawRotation,
-                    drawOrigin - new Vector2(NPC.frame.Width * (jawRotation * .25f) * NPC.spriteDirection, 0), NPC.scale, effects, 0); // Jaw.
-
-                    Main.EntitySpriteDraw(texture, NPC.Center + new Vector2(24 - (20 * heat), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - screenPos, NPC.frame,
-                    Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : new Color(25, 10, 40, 75) * shieldOpacity, NPC.rotation, drawOrigin, NPC.scale, effects, 0); // Skull.
-                }
-
-                Main.EntitySpriteDraw(textureMask, NPC.Center - screenPos, NPC.frame,
-                Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= 0.1f ? Color.Black : Color.Purple * heat, NPC.rotation, drawOrigin, NPC.scale, effects, 0); // Extra mask.
-
-                Lighting.AddLight(NPC.Center, new Vector3(.25f, .1f, .4f) * heat);
-            }
+            Main.EntitySpriteDraw(glow, NPC.Center + new Vector2(-14, 8 * -NPC.spriteDirection).RotatedBy(NPC.rotation) - screenPos, null,
+            Lighting.Brightness((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16) <= .1f ? Color.Black : Color.Orange * .1f * eyeOpacity, 0, glow.Size() / 2, .5f, SpriteEffects.None, 0);
 
             return false;
         }

@@ -49,6 +49,11 @@ namespace GloryMod.Items.Sightseer
             return false;
         }
 
+        public override bool NeedsAmmo(Player player)
+        {
+            return true;
+        }
+
         public override Vector2? HoldoutOffset()
         {
             return new Vector2(-2, 0);

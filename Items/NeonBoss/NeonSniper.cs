@@ -6,7 +6,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using static Terraria.ModLoader.ModContent;
 
 namespace GloryMod.Items.NeonBoss
 {

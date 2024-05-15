@@ -1,14 +1,10 @@
 ﻿using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using GloryMod.Systems;
-using Terraria.GameContent.ItemDropRules;
-using GloryMod.Systems.BossBars;
 using System.IO;
-using Terraria;
 using Terraria.GameContent;
-using Terraria.DataStructures;
-using ReLogic.Content;
 using GloryMod.NPCs.BasaltBarriers.Projectiles;
+using Terraria.DataStructures;
 
 namespace GloryMod.NPCs.BasaltBarriers.Minions
 {
@@ -61,6 +57,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Minions
 
         NPC owner;
 
+        public ref float HitCooldown => ref NPC.ai[0];
         public ref float AITimer => ref NPC.ai[1];
         public ref float SpawnOrder => ref NPC.ai[2];
         public ref float WhoIsOwner => ref NPC.ai[3];
@@ -68,11 +65,27 @@ namespace GloryMod.NPCs.BasaltBarriers.Minions
         private Vector2 positionPoint;
         private Vector2 positionModifier;
         private float AIState;
-        private float HitCooldown;
 
         public override bool CheckActive()
         {
             return Main.player[NPC.target].dead;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            base.SendExtraAI(writer);
+            if (Main.netMode == NetmodeID.Server || Main.dedServ)
+            {
+                writer.Write(AIState);
+            }
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            base.ReceiveExtraAI(reader);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                AIState = reader.ReadInt32();
+            }
         }
 
         public override void AI()
@@ -135,6 +148,8 @@ namespace GloryMod.NPCs.BasaltBarriers.Minions
                             trueVelocity = trueVelocity.RotatedBy(NPC.rotation) - new Vector2(4, 0).RotatedBy(NPC.rotation);
                             Main.dust[dust].velocity = trueVelocity;
                         }
+
+                        NPC.velocity += new Vector2(-2 * NPC.spriteDirection, 0).RotatedBy(NPC.rotation);
 
                         SoundEngine.PlaySound(SoundID.DD2_DrakinShot, NPC.Center);
                         int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-8, -10 * NPC.spriteDirection).RotatedBy(NPC.rotation), new Vector2(1, 0).RotatedBy(NPC.rotation + MathHelper.Pi), ProjectileType<BBSpiritBolt>(), 80, 0, target.whoAmI);

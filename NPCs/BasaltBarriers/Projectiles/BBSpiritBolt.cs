@@ -17,7 +17,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 360;
             Projectile.alpha = 0;
         }
 
@@ -41,7 +41,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void AI()
         {
-            opacity = Projectile.timeLeft <= 15 ? MathHelper.SmoothStep(opacity, 0, 0.2f) : MathHelper.SmoothStep(opacity, 1, 0.2f);
+            opacity = MathHelper.SmoothStep(opacity, Projectile.timeLeft <= 10 ? 0 : 1, 0.2f);
             Projectile.spriteDirection = Projectile.direction = Projectile.velocity.X > 0 ? 1 : -1;
 
             goalPosition = startPosition + startVelocity.SafeNormalize(Vector2.Zero) * Projectile.ai[2] * Projectile.localAI[0] + startVelocity.RotatedBy(MathHelper.PiOver2).SafeNormalize(Vector2.Zero) * 20f * (float)Math.Sin(Projectile.ai[1] + Projectile.localAI[0] / 5f) * (float)Math.Sin(MathHelper.Pi * Projectile.localAI[0] / 50f);

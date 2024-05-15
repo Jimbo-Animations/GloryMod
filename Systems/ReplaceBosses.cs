@@ -2,6 +2,7 @@
 using Terraria.Audio;
 using GloryMod.NPCs.BloodMoon.Hemolitionist;
 using GloryMod.NPCs.Sightseer;
+using GloryMod.NPCs.BasaltBarriers.Boss;
 
 namespace GloryMod.Systems
 {
@@ -79,6 +80,14 @@ namespace GloryMod.Systems
 
             if (npc.type == NPCID.Tim || npc.type == NPCID.RuneWizard)
             {
+                npc.damage = 0;
+                npc.dontTakeDamage = true;
+                npc.active = false;
+            }
+
+            if (npc.type == NPCID.WallofFlesh && ShouldICallReworkCode(true))
+            {
+                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<BasaltBarrier>(), npc.whoAmI, 0, 0, 0, 0, 255);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;

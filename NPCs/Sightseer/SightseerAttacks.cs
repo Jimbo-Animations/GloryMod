@@ -554,7 +554,7 @@ namespace GloryMod.NPCs.Sightseer
         {
             if (AITimer == 0)
             {
-                ChangePosition(target.Center + new Vector2(0, -400).RotatedByRandom(MathHelper.TwoPi), true);
+                ChangePosition(target.Center + new Vector2(0, -400).RotatedByRandom(MathHelper.ToRadians(10)), true);
                 NPC.velocity = NPC.DirectionTo(target.Center).RotatedBy(MathHelper.PiOver4 * AIRandomizer) * 5f;
 
                 animState = 5;
@@ -692,7 +692,7 @@ namespace GloryMod.NPCs.Sightseer
             if (AITimer == 0)
             {
                 NPC.rotation = NPC.DirectionTo(target.Center).ToRotation() + MathHelper.PiOver2;
-                ChangePosition(target.Center + new Vector2(400, 0).RotatedByRandom(MathHelper.TwoPi), true);
+                ChangePosition(target.Center + new Vector2(400 * AIRandomizer, 0).RotatedByRandom(MathHelper.ToRadians(15)), true);
 
                 animState = 3;
                 animSpeed = 5;

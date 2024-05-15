@@ -31,7 +31,7 @@ namespace GloryMod.NPCs.Sightseer.Projectiles
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
             Projectile.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
 
-            randomizer = new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi);
+            randomizer = new Vector2(Main.rand.NextBool() ? 1 : -1, 0);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

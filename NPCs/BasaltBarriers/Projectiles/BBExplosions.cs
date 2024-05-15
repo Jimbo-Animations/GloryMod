@@ -1,16 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Utilities;
 using System.Collections.Generic;
-using System.Data;
 
 namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 {
@@ -132,6 +123,8 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                 {
                     Projectile.frame = 9;
                 }
+
+                if (Projectile.frame > 5) Projectile.hostile = false;
             }
 
             visibility = MathHelper.Lerp(visibility, Projectile.timeLeft <= 10 ? 0 : 1, .1f);

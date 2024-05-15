@@ -94,6 +94,11 @@ namespace GloryMod.Systems
 
             return returned;
         }
+
+        public static bool CloseTo(this float f, float target, float range = 1f)
+        {
+            return f > target - range && f < target + range;
+        }
     }
 
     class ScreenUtils : ModSystem

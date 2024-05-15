@@ -26,6 +26,13 @@
     <None Remove="Gores\SightseerGore9.png" />
     <None Remove="icon_small.png" />
     <None Remove="icon_workshop.png" />
+    <None Remove="Items\BasaltBarriers\DivineIntervention.png" />
+    <None Remove="Items\BasaltBarriers\DivineSword1.png" />
+    <None Remove="Items\BasaltBarriers\DivineSword2.png" />
+    <None Remove="Items\BasaltBarriers\ExtinctionHeater.png" />
+    <None Remove="Items\BasaltBarriers\ExtinctionHeaterChain.png" />
+    <None Remove="Items\BasaltBarriers\ExtinctionHeaterFlash.png" />
+    <None Remove="Items\BasaltBarriers\ExtinctionHeaterHook.png" />
     <None Remove="Items\BloodMoon\HemolicLance.png" />
     <None Remove="Items\BloodMoon\HemolicLanceMask.png" />
     <None Remove="Items\Sightseer\DeadEyesBow.png" />
@@ -54,6 +61,8 @@
     <None Remove="NPCs\BasaltBarriers\Minions\Forsaken.png" />
     <None Remove="NPCs\BasaltBarriers\Minions\ForsakenChain.png" />
     <None Remove="NPCs\BasaltBarriers\Minions\ForsakenMask.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierFireWall.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierFireWallCore.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierJaw.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBDebris.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBExplosionLarge0.png" />
@@ -68,6 +77,7 @@
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBFireBallSmall.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBPurpleRune.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBPurpleRuneHead.png" />
+    <None Remove="NPCs\BasaltBarriers\Projectiles\BBRedRune.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BBSpiritBolt.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\DevilsScythe.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\ForsakenExplosion.png" />

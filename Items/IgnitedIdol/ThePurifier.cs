@@ -75,7 +75,15 @@ namespace GloryMod.Items.IgnitedIdol
             {
                 timer = 0;
                 SoundEngine.PlaySound(SoundID.DD2_BetsyWindAttack);
-                CombatText.NewText(player.getRect(), new Color(255, 175, 100), "Weapon fully charged!", true, false);
+
+                for (int i = 0; i < 24; i++)
+                {
+                    int dust = Dust.NewDust(player.Center, 0, 0, DustID.Torch, Scale: 3f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].noLight = true;
+                    Main.dust[dust].velocity = new Vector2(6, 0).RotatedBy(i * MathHelper.TwoPi / 24);
+                }
+
             }
 
             if (timer >= 120)
