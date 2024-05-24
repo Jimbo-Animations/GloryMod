@@ -1,5 +1,4 @@
 ﻿using Terraria.Audio;
-using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
 
 namespace GloryMod.NPCs.Geomancer

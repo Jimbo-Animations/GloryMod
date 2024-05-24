@@ -74,7 +74,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                     Main.dust[dust].velocity = new Vector2(8, 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
                 }
 
-                Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -10).RotatedByRandom(MathHelper.ToRadians(5)), ProjectileType<BBFireBallSmall>(), Projectile.damage, 0, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0, -10).RotatedByRandom(MathHelper.ToRadians(5)), ProjectileType<BBFireBallSmall>(), Projectile.damage, 0, Projectile.owner);
                 SoundEngine.PlaySound(SoundID.Item117, Projectile.position);
             }
         }

@@ -92,7 +92,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top + new Vector2 (0, 4), Vector2.Zero, ProjectileType<BBExplosionSmall>(), Projectile.damage, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Top + new Vector2 (0, 4), Vector2.Zero, ProjectileType<BBExplosionSmall>(), Projectile.damage, 0, Projectile.owner);
         }
 
         float visibility = 0;
@@ -207,7 +207,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top - new Vector2(0, 12), Vector2.Zero, ProjectileType<BBExplosionMedium>(), Projectile.damage, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Top - new Vector2(0, 12), Vector2.Zero, ProjectileType<BBExplosionMedium>(), Projectile.damage, 0, Projectile.owner);
         }
 
         float visibility = 0;
@@ -317,7 +317,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Top - new Vector2(15, 150), Vector2.Zero, ProjectileType<BBExplosionLarge>(), Projectile.damage / 2, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Top - new Vector2(15, 150), Vector2.Zero, ProjectileType<BBExplosionLarge>(), Projectile.damage / 2, 0, Projectile.owner);
         }
 
         float visibility = 0;

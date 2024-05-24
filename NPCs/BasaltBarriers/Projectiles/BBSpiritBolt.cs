@@ -31,7 +31,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             startPosition = Projectile.Center;
             startVelocity = Projectile.velocity;
 
-            if (source != Projectile.GetSource_ReleaseEntity()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
+            if (source != Projectile.GetSource_FromThis()) Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
 
         public override bool CanHitPlayer(Player target)

@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CoolEffects\Textures\laser2.png" />
     <None Remove="CoolEffects\Textures\twirl.png" />
     <None Remove="Gores\BloodDroneGore1.png" />
     <None Remove="Gores\BloodDroneGore2.png" />
@@ -58,9 +59,6 @@
     <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall4.png" />
     <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrierWall4Mask.png" />
     <None Remove="NPCs\BasaltBarriers\Boss\BasaltBarrier_Head_Boss.png" />
-    <None Remove="NPCs\BasaltBarriers\Minions\Forsaken.png" />
-    <None Remove="NPCs\BasaltBarriers\Minions\ForsakenChain.png" />
-    <None Remove="NPCs\BasaltBarriers\Minions\ForsakenMask.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierFireWall.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierFireWallCore.png" />
     <None Remove="NPCs\BasaltBarriers\Projectiles\BasaltBarrierJaw.png" />
@@ -85,6 +83,14 @@
     <None Remove="NPCs\BloodMoon\BloodDrone\BloodDroneMask.png" />
     <None Remove="NPCs\BloodMoon\BloodDrone\BloodDroneRotor.png" />
     <None Remove="NPCs\BloodMoon\BloodDrone\DroneMissile.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBBody.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBBody2.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBBottomSpike.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBHead.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBHeadMask.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTail.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpike.png" />
+    <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpikeMask.png" />
     <None Remove="NPCs\Geomancer\GeomancerDefeatedCape.png" />
     <None Remove="NPCs\Nerd\Nerd.png" />
     <None Remove="NPCs\Nerd\Nerd_Head_Boss.png" />

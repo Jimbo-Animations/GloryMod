@@ -2,7 +2,9 @@
 using Terraria.Audio;
 using GloryMod.NPCs.BloodMoon.Hemolitionist;
 using GloryMod.NPCs.Sightseer;
-using GloryMod.NPCs.BasaltBarriers.Boss;
+using Terraria.DataStructures;
+using GloryMod.NPCs.Geomancer;
+using GloryMod.NPCs.Nerd;
 
 namespace GloryMod.Systems
 {
@@ -56,7 +58,7 @@ namespace GloryMod.Systems
 
             if (npc.type == NPCID.KingSlime && ShouldICallReworkCode(true))
             {
-                NPC.NewNPC(npc.GetSource_FromAI(), (int)player.Center.X, (int)player.Center.Y, NPCType<NeonTyrant>(), npc.whoAmI, 0, 0, 0, 0, 255);
+                NPC.NewNPC(npc.GetSource_FromAI(), (int)player.Center.X, (int)player.Center.Y, NPCType<NeonTyrant>(), Target: npc.target);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;
@@ -64,7 +66,7 @@ namespace GloryMod.Systems
 
             if (npc.type == NPCID.EyeofCthulhu && ShouldICallReworkCode(true))
             {
-                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<Sightseer>(), npc.whoAmI, 0, 0, 0, 0, 255);
+                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<Sightseer>(), Target: npc.target);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;
@@ -72,7 +74,7 @@ namespace GloryMod.Systems
 
             if (npc.type == NPCID.BloodNautilus)
             {
-                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<Hemolitionist>(), npc.whoAmI, 0, 0, 0, 0, 255);
+                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<Hemolitionist>(), Target: npc.target);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;
@@ -80,14 +82,6 @@ namespace GloryMod.Systems
 
             if (npc.type == NPCID.Tim || npc.type == NPCID.RuneWizard)
             {
-                npc.damage = 0;
-                npc.dontTakeDamage = true;
-                npc.active = false;
-            }
-
-            if (npc.type == NPCID.WallofFlesh && ShouldICallReworkCode(true))
-            {
-                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<BasaltBarrier>(), npc.whoAmI, 0, 0, 0, 0, 255);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;

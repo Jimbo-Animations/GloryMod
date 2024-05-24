@@ -1,14 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Audio;
-using Terraria.DataStructures;
-using GloryMod.Systems;
-using System.Collections.Generic;
-using System;
+﻿using Terraria.DataStructures;
 
 namespace GloryMod.NPCs.BloodMoon.BloodDrone
 {
@@ -68,12 +58,12 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, Vector2.Zero, ProjectileType<DroneExplosion>(), Projectile.damage, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<DroneExplosion>(), Projectile.damage, 0, Projectile.owner);
         }
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, Vector2.Zero, ProjectileType<DroneExplosion>(), Projectile.damage, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileType<DroneExplosion>(), Projectile.damage, 0, Projectile.owner);
         }
 
         float visibility;

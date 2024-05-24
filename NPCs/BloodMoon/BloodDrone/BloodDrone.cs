@@ -60,7 +60,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
             FlyAbout = 1,
             QuickBurst = 2,
             HomingBlast = 3,
-            Desparation = 4,
+            Desperation = 4,
             Kamikaze = 5
         }
 
@@ -365,7 +365,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
 
                     break;
 
-                case AttackPattern.Desparation:
+                case AttackPattern.Desperation:
 
                     if (NPC.Distance(moveTo) <= 10 || NPC.Distance(HybridGround) > 300) SetGoal(new Vector2(target.Center.X, HybridGround.Y - 300), AIDifficulty * 10 + 80, AIDifficulty * 10 + 40);
                     NPC.velocity += NPC.DirectionTo(moveTo) * (AIDifficulty * 0.1f + 0.25f);

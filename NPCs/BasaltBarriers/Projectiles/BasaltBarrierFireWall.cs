@@ -57,7 +57,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
                         {
                             if (ScreenUtils.screenShaking < 2) ScreenUtils.screenShaking = 2;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), new Vector2(Projectile.Center.X, Projectile.Center.Y - (1720 * (frameTimer - 8) / 8)), new Vector2(1 * i > 0 ? 1 : -1, 0), ProjectileType<BBSpiritBolt>(), 75, 0, Projectile.owner);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Projectile.Center.Y - (1720 * (frameTimer - 8) / 8)), new Vector2(1 * i > 0 ? 1 : -1, 0), ProjectileType<BBSpiritBolt>(), 75, 0, Projectile.owner);
                             Main.projectile[proj].ai[1] = Main.rand.NextFloat(-3, 4);
                             Main.projectile[proj].ai[2] = Main.rand.NextFloat(6, 9);
                         }

@@ -5,12 +5,11 @@ using Terraria.GameContent.ItemDropRules;
 using GloryMod.Systems.BossBars;
 using System.IO;
 using Terraria.DataStructures;
-using GloryMod.NPCs.BasaltBarriers.Minions;
 using ReLogic.Utilities;
 using GloryMod.NPCs.BasaltBarriers.Projectiles;
 using System.Data;
 using System.Collections.Generic;
-
+/*
 namespace GloryMod.NPCs.BasaltBarriers.Boss
 {
     [AutoloadBossHead]
@@ -42,7 +41,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
 
             NPC.damage = 0;
             NPC.defense = 25;
-            NPC.lifeMax = Main.getGoodWorld ? 15000 : 12000;
+            NPC.lifeMax = Main.getGoodWorld ? 20000 : 16000;
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(1, 0, 0, 0);
             NPC.npcSlots = 50f;
@@ -113,8 +112,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
         private float targetHeadPlacement;
         private float aimTowards;
 
-        SlotId ShieldNoise = SlotId.Invalid;
-
         public override void SendExtraAI(BinaryWriter writer)
         {
             base.SendExtraAI(writer);
@@ -156,8 +153,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
 
         public override void OnSpawn(IEntitySource source)
         {
-            ShieldNoise = SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop with { IsLooped = true }, NPC.Center);
-
             if (WhichWall > 0) NPC.ai[0] = 9;
 
             spawnCenterY = NPC.Center.Y;
@@ -173,8 +168,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
 
             if (NPC.target < 0 || NPC.target == 255 || target.dead || !target.active)
                 NPC.TargetClosest();
-
-            ManageForsaken();
 
             // Remove all buffs when invulnerable.
 
@@ -194,6 +187,12 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
                     Intro();
 
                     break;
+
+                case AttackPattern.SoulBlast:
+
+                    SoulBlast();
+
+                    break;
             }
         }
 
@@ -203,3 +202,4 @@ namespace GloryMod.NPCs.BasaltBarriers.Boss
         }
     }
 }
+*/

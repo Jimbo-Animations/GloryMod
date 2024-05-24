@@ -199,7 +199,7 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
                     for (int i = -1; i < 2; i++)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(5, 10)).RotatedBy((i * MathHelper.PiOver2 / 3)).RotatedByRandom(MathHelper.ToRadians(10)), 
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(5, 10)).RotatedBy((i * MathHelper.PiOver2 / 3)).RotatedByRandom(MathHelper.ToRadians(10)), 
                             ProjectileType<BBFireBallSmall>(), 75, 0, Projectile.owner);
                     }
                 }
@@ -304,13 +304,13 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
 
                     for (int i = -2; i < 2; i++)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 4).RotatedByRandom(MathHelper.ToRadians(15)), 
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 4).RotatedByRandom(MathHelper.ToRadians(15)), 
                             ProjectileType<BBFireBallSmall>(), 75, 0, Projectile.owner);
                     }
 
                     for (int i = -1; i < 2; i++)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_ReleaseEntity(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 3).RotatedByRandom(MathHelper.ToRadians(15)), 
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0, -Main.rand.NextFloat(15, 21)).RotatedBy(i * MathHelper.PiOver2 / 3).RotatedByRandom(MathHelper.ToRadians(15)), 
                             ProjectileType<BBFireBallMedium>(), 100, 0, Projectile.owner);
                     }
                 }

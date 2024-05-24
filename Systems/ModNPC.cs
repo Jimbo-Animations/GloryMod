@@ -6,7 +6,7 @@ using static Terraria.ModLoader.ModContent;
 namespace GloryMod.Systems
 {
 	class GloryNPC : GlobalNPC
-    {
+	{
 		public override bool InstancePerEntity
 		{
 			get
@@ -15,4 +15,4 @@ namespace GloryMod.Systems
 			}
 		}
 	}
-} 
+}

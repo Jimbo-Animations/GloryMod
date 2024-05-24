@@ -251,10 +251,12 @@ Mods: {
 			BBSpiritBolt.DisplayName: Lost Soul
 			ExtinctionHeaterProj.DisplayName: Extinction Heater
 			ExtinctionHeaterHook.DisplayName: Heater Hook
-			BBPurpleRune.DisplayName: B B Purple Rune
+			BBPurpleRune.DisplayName: Purple Rune
 			BasaltBarrierFireWall.DisplayName: Basalt Barrier Fire Wall
 			BasaltBarrierFireWallCore.DisplayName: Basalt Barrier Fire Wall Core
-			BBRedRune.DisplayName: B B Red Rune
+			BBRedRune.DisplayName: Red Rune
+			BSBVortex.DisplayName: Bloody Vortex
+			BSBSpineRocket.DisplayName: Spine Rocket
 		}
 
 		Buffs: {
@@ -313,7 +315,9 @@ Mods: {
 			BloodDrone.DisplayName: Steel Seraph
 			Nerd.DisplayName: Nerd
 			BasaltBarrier.DisplayName: Basalt Barrier
-			Forsaken.DisplayName: Forsaken
+			BSBBody.DisplayName: Bloodseeker Beast
+			BSBHead.DisplayName: Bloodseeker Beast
+			BSBTail.DisplayName: Bloodseeker Beast
 		}
 	}
 }
