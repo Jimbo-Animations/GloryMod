@@ -47,7 +47,7 @@ namespace GloryMod.Systems
                 new Conditions.IsSolid()
                 }), out _))
             {
-                returned.Y++;
+                returned.Y--;
             }
 
             return returned;

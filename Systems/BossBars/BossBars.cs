@@ -2,7 +2,8 @@
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
 using Terraria.DataStructures;
-using static Terraria.ModLoader.ModContent;
+using GloryMod.NPCs.BloodMoon.BloodSeekerBeast;
+using GloryMod.NPCs.BloodMoon.Hemolitionist;
 
 namespace GloryMod.Systems.BossBars
 {
@@ -76,6 +77,9 @@ namespace GloryMod.Systems.BossBars
             if (!npc.active || npc.ai[0] == 0)
                 return false;
 
+            if (npc.type == NPCType<BSBHead>() && npc.ai[2] == 0)
+                return false;
+
             bossHeadIndex = npc.GetBossHeadTextureIndex();
 
             life = npc.life;
@@ -86,25 +90,28 @@ namespace GloryMod.Systems.BossBars
 
         public override bool PreDraw(SpriteBatch spriteBatch, NPC npc, ref BossBarDrawParams drawParams)
         {
-            drawParams.IconScale = 0.9f;
+            drawParams.IconScale = 0.9f;        
 
-            // Make the bar shake as it loses health in its final phase.
-            float lifePercent = 1;
-
-            if (drawParams.Life < (drawParams.LifeMax / 3) * 2)
+            if (npc.type == NPCType<Hemolitionist>())
             {
-                lifePercent = 0.75f;
+                // Make the bar shake as it loses health in its final phase.
+                float lifePercent = 1;
 
-                if (drawParams.Life < (drawParams.LifeMax / 3))
+                if (drawParams.Life < (drawParams.LifeMax / 3) * 2)
                 {
-                    lifePercent = 0.25f;
+                    lifePercent = 0.75f;
+
+                    if (drawParams.Life < (drawParams.LifeMax / 3))
+                    {
+                        lifePercent = 0.25f;
+                    }
                 }
+
+                float shakeIntensity = Terraria.Utils.Clamp(1f - lifePercent - 0.2f, 0f, 1f);
+
+                drawParams.BarCenter.Y -= 20f;
+                drawParams.BarCenter += Main.rand.NextVector2Circular(0.5f, 0.5f) * shakeIntensity * 5;
             }
-
-            float shakeIntensity = Terraria.Utils.Clamp(1f - lifePercent - 0.2f, 0f, 1f);
-
-            drawParams.BarCenter.Y -= 20f;
-            drawParams.BarCenter += Main.rand.NextVector2Circular(0.5f, 0.5f) * shakeIntensity * 5;
 
             return true;
         }

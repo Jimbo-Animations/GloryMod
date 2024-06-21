@@ -16,6 +16,7 @@ namespace GloryMod.NPCs.Geomancer
             Main.npcFrameCount[NPC.type] = 16;
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
@@ -30,7 +31,6 @@ namespace GloryMod.NPCs.Geomancer
                 "Whatever you do, do not call him 'Timothy.'")
             });
         }
-
 
         private enum AttackPattern
         {
@@ -178,7 +178,7 @@ namespace GloryMod.NPCs.Geomancer
 
         public override void BossLoot(ref string name, ref int potionType)
         {
-            potionType = Main.hardMode ? ItemID.GreaterHealingPotion : ItemID.HealingPotion;
+            potionType = Main.hardMode ? ItemID.HealingPotion : ItemID.LesserHealingPotion;
         }
 
         public override void AI()
@@ -560,22 +560,22 @@ namespace GloryMod.NPCs.Geomancer
 
                 if (!hasDied)
                 {
-                    spriteBatch.Draw(cape, drawPos - new Vector2(12 * NPC.spriteDirection, -20), capeRect, NPC.GetAlpha(drawColor) * visibility, NPC.rotation, capeOrigin, NPC.scale, effects, 0f);
-                    spriteBatch.Draw(texture, drawPos + new Vector2(2 * NPC.spriteDirection, -2), NPC.frame, NPC.GetAlpha(drawColor) * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-                    spriteBatch.Draw(mask, drawPos + new Vector2(2 * NPC.spriteDirection, -2), NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(cape, drawPos - new Vector2(12 * NPC.spriteDirection, -20), capeRect, drawColor * visibility, NPC.rotation, capeOrigin, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(texture, drawPos + new Vector2(2 * NPC.spriteDirection, -2), NPC.frame, drawColor * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(mask, drawPos + new Vector2(2 * NPC.spriteDirection, -2), NPC.frame, new Color(255, 255, 255) * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
                 }
                 else
                 {
-                    spriteBatch.Draw(capeDefeat, drawPos - new Vector2(12 * NPC.spriteDirection, -20), null, NPC.GetAlpha(drawColor), NPC.rotation, capeDefeat.Size() / 2, NPC.scale, effects, 0f);
-                    spriteBatch.Draw(textureDefeat, drawPos + new Vector2(2 * NPC.spriteDirection, -2), null, NPC.GetAlpha(drawColor), NPC.rotation, textureDefeat.Size() / 2, NPC.scale, effects, 0f);
-                    spriteBatch.Draw(maskDefeat, drawPos + new Vector2(2 * NPC.spriteDirection, -2), null, NPC.GetAlpha(new Color(255, 255, 255)), NPC.rotation, maskDefeat.Size() / 2, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(capeDefeat, drawPos - new Vector2(12 * NPC.spriteDirection, -20), null, drawColor, NPC.rotation, capeDefeat.Size() / 2, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(textureDefeat, drawPos + new Vector2(2 * NPC.spriteDirection, -2), null, drawColor, NPC.rotation, textureDefeat.Size() / 2, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(maskDefeat, drawPos + new Vector2(2 * NPC.spriteDirection, -2), null, new Color(255, 255, 255), NPC.rotation, maskDefeat.Size() / 2, NPC.scale, effects, 0f);
                 }
             }
             else
             {
-                spriteBatch.Draw(cape, drawPos - new Vector2(12 * NPC.spriteDirection, -22), capeRect, NPC.GetAlpha(drawColor) * visibility, NPC.rotation, capeOrigin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(texture, drawPos + new Vector2(2 * NPC.spriteDirection, 4), NPC.frame, NPC.GetAlpha(drawColor) * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(mask, drawPos + new Vector2(2 * NPC.spriteDirection, 4), NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * visibility, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(cape, drawPos - new Vector2(12 * NPC.spriteDirection, -22), capeRect, drawColor, NPC.rotation, capeOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(texture, drawPos + new Vector2(2 * NPC.spriteDirection, 4), NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(mask, drawPos + new Vector2(2 * NPC.spriteDirection, 4), NPC.frame, new Color(255, 255, 255), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
             }        
 
             return false;

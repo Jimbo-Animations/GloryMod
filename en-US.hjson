@@ -257,6 +257,8 @@ Mods: {
 			BBRedRune.DisplayName: Red Rune
 			BSBVortex.DisplayName: Bloody Vortex
 			BSBSpineRocket.DisplayName: Spine Rocket
+			HMShockwave.DisplayName: H M Shockwave
+			BlueRoar.DisplayName: Blue Roar
 		}
 
 		Buffs: {
@@ -318,6 +320,7 @@ Mods: {
 			BSBBody.DisplayName: Bloodseeker Beast
 			BSBHead.DisplayName: Bloodseeker Beast
 			BSBTail.DisplayName: Bloodseeker Beast
+			HM.DisplayName: H M
 		}
 	}
 }

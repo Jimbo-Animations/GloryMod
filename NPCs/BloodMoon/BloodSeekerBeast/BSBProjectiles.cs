@@ -188,7 +188,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodSeekerBeast
             for (int i = 0; i < 4; i++)
             {
                 Main.EntitySpriteDraw(Projectile.ai[1] == 1 ? bottomSpikes : topSpikes, Projectile.Center + spikeOffset + new Vector2(4 * glowOpacity, 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - Main.screenPosition, spikeFrame,
-                new Color(255, 100, 100, 100) * glowOpacity, Projectile.rotation + (MathHelper.PiOver2 * (Projectile.ai[1] == 1 ? -1 : 1)), spikeOrigin, Projectile.scale, SpriteEffects.None, 0);
+                new Color(255, 100, 100, 125) * glowOpacity, Projectile.rotation + (MathHelper.PiOver2 * (Projectile.ai[1] == 1 ? -1 : 1)), spikeOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             Main.spriteBatch.Draw(Projectile.ai[1] == 1 ? bottomSpikes : topSpikes, Projectile.Center + spikeOffset - Main.screenPosition, spikeFrame, lightColor, Projectile.rotation + (MathHelper.PiOver2 * (Projectile.ai[1] == 1 ? -1 : 1)), spikeOrigin, Projectile.scale, SpriteEffects.None, 0f);

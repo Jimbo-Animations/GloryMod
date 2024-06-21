@@ -15,6 +15,10 @@
     <None Remove="Gores\BloodDroneGore3.png" />
     <None Remove="Gores\BloodDroneGore4.png" />
     <None Remove="Gores\BloodDroneGore5.png" />
+    <None Remove="Gores\BSBGore1.png" />
+    <None Remove="Gores\BSBGore2.png" />
+    <None Remove="Gores\BSBGore3.png" />
+    <None Remove="Gores\BSBGore4.png" />
     <None Remove="Gores\GeomancerStaff.png" />
     <None Remove="Gores\SightseerGore1.png" />
     <None Remove="Gores\SightseerGore2.png" />
@@ -92,6 +96,7 @@
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpike.png" />
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpikeMask.png" />
     <None Remove="NPCs\Geomancer\GeomancerDefeatedCape.png" />
+    <None Remove="NPCs\IceFish\HM.png" />
     <None Remove="NPCs\Nerd\Nerd.png" />
     <None Remove="NPCs\Nerd\Nerd_Head_Boss.png" />
     <None Remove="NPCs\Sightseer\Minions\SeersTag.png" />

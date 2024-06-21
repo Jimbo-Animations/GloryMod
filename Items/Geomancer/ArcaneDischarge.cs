@@ -200,6 +200,7 @@ namespace GloryMod.Items.Geomancer
 
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }

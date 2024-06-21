@@ -312,6 +312,7 @@ namespace GloryMod.Items.IgnitedIdol
 
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }

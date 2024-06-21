@@ -1,6 +1,4 @@
-﻿using static Terraria.ModLoader.ModContent;
-using Terraria.DataStructures;
-using System.Collections.Generic;
+﻿using Terraria.DataStructures;
 using Terraria.Audio;
 
 namespace GloryMod.NPCs.Sightseer.Projectiles

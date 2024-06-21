@@ -54,7 +54,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
 
             for (int i = 1; i < Projectile.oldPos.Length; i++)
             {
-                Main.EntitySpriteDraw(texture, Projectile.oldPos[i] - Projectile.position + Projectile.Center - Main.screenPosition, null, new Color(255, 30, 15, 255) * visibility, Projectile.rotation, texture.Size() / 2, new Vector2(visibility - (i / (float)Projectile.oldPos.Length), visibility + 0.5f - (i / (float)Projectile.oldPos.Length) * 0.75f), SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(texture, Projectile.oldPos[i] - Projectile.position + Projectile.Center - Main.screenPosition, null, new Color(255, 30, 15, 255) * visibility, Projectile.rotation, texture.Size() / 2, new Vector2(visibility - (i / (float)Projectile.oldPos.Length), visibility + 0.5f - i / (float)Projectile.oldPos.Length * 0.75f * (1 + (Projectile.velocity.ToRotation() * .01f))), SpriteEffects.None, 0);
             }
                 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 225, 255) * visibility, Projectile.rotation, texture.Size() / 2, new Vector2(visibility - 0.5f, visibility), SpriteEffects.None, 0);

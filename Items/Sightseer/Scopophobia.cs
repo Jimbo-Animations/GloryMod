@@ -76,6 +76,7 @@ namespace GloryMod.Items.Sightseer
 
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
             Main.projFrames[Projectile.type] = 7;
         }
 

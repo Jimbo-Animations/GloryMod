@@ -3,7 +3,6 @@ using Terraria.GameContent.Creative;
 using Terraria.DataStructures;
 using System.IO;
 using System.Collections.Generic;
-using Terraria;
 
 namespace GloryMod.Items.IgnitedIdol
 {
@@ -428,7 +427,6 @@ namespace GloryMod.Items.IgnitedIdol
         {
             Projectile.width = 10;
             Projectile.height = 10;
-            Projectile.scale = 1f * Owner.GetAdjustedItemScale(Owner.HeldItem);
 
             Projectile.friendly = true;
             Projectile.timeLeft = 10;
@@ -441,6 +439,12 @@ namespace GloryMod.Items.IgnitedIdol
         }
 
         private Player Owner => Main.player[Projectile.owner];
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.scale = 1f * Owner.GetAdjustedItemScale(Owner.HeldItem);
+        }
+
 
         float opacity;
         public override void AI()

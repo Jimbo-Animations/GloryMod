@@ -11,8 +11,6 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
         {
             Main.npcFrameCount[NPC.type] = 19;
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
-            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
-            NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;

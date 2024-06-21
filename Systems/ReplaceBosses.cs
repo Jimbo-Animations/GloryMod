@@ -5,6 +5,7 @@ using GloryMod.NPCs.Sightseer;
 using Terraria.DataStructures;
 using GloryMod.NPCs.Geomancer;
 using GloryMod.NPCs.Nerd;
+using GloryMod.NPCs.BloodMoon.BloodSeekerBeast;
 
 namespace GloryMod.Systems
 {
@@ -75,6 +76,14 @@ namespace GloryMod.Systems
             if (npc.type == NPCID.BloodNautilus)
             {
                 NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<Hemolitionist>(), Target: npc.target);
+                npc.damage = 0;
+                npc.dontTakeDamage = true;
+                npc.active = false;
+            }
+
+            if (npc.type == NPCID.BloodEelHead)
+            {
+                NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCType<BSBHead>(), Target: npc.target);
                 npc.damage = 0;
                 npc.dontTakeDamage = true;
                 npc.active = false;

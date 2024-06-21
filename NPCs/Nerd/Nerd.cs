@@ -1,8 +1,6 @@
 ﻿using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using System.IO;
-using static Terraria.ModLoader.ModContent;
-using GloryMod.Items.Sightseer;
 
 namespace GloryMod.NPCs.Nerd
 {

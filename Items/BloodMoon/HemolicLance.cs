@@ -17,7 +17,7 @@ namespace GloryMod.Items.BloodMoon
 
         public override void SetDefaults()
         {
-            Item.damage = 75;
+            Item.damage = 80;
             Item.DamageType = DamageClass.Melee;
             Item.width = 62;
             Item.height = 62;

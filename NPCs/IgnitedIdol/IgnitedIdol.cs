@@ -1,16 +1,7 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Audio;
-using Terraria.DataStructures;
+﻿using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using GloryMod.Systems;
 using System.Collections.Generic;
-using System;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using GloryMod.Items.IgnitedIdol;

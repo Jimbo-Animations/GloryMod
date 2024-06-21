@@ -94,28 +94,7 @@ namespace GloryMod.Systems
 
             if (SegmentType == WormSegmentType.Head)
             {
-                HeadAI();
-
-                if (!NPC.HasValidTarget)
-                {
-                    NPC.TargetClosest(true);
-
-                    // If the NPC is a boss and it has no target, force it to fall to the underworld quickly
-                    if (!NPC.HasValidTarget && NPC.boss)
-                    {
-                        NPC.velocity.Y += 8f;
-
-                        MoveSpeed = 1000f;
-
-                        if (!startDespawning)
-                        {
-                            startDespawning = true;
-
-                            // Despawn after 90 ticks (1.5 seconds) if the NPC gets far enough away
-                            NPC.timeLeft = 90;
-                        }
-                    }
-                }
+                HeadAI();          
             }
             else
             {
@@ -239,12 +218,15 @@ namespace GloryMod.Systems
         {
             HeadAI_SpawnSegments();
 
-            bool collision = HeadAI_CheckCollisionForDustSpawns();
+            if (!CustomBehavior)
+            {
+                bool collision = HeadAI_CheckCollisionForDustSpawns();
 
-            HeadAI_CheckTargetDistance(ref collision);
+                HeadAI_CheckTargetDistance(ref collision);
+                HeadAI_Movement(collision);
 
-            if (!CustomBehavior) HeadAI_Movement(collision);
-            else HeadAI_Movement_SetRotation(collision);
+                HeadAI_Movement_SetRotation(collision);
+            }         
         }
 
         private void HeadAI_SpawnSegments()
@@ -287,7 +269,7 @@ namespace GloryMod.Systems
                     }
 
                     // Spawn the tail segment
-                    SpawnSegment(source, TailType, latestNPC);
+                    SpawnSegment(source, TailType, latestNPC, NumberBodySegments ? randomWormLength - 1 : 0);
 
                     NPC.netUpdate = true;
 
@@ -633,6 +615,7 @@ namespace GloryMod.Systems
                 // Kill the segment if the segment NPC it's following is no longer valid
                 if (following is null || !following.active || following.friendly || following.townNPC || following.lifeMax <= 5)
                 {
+                    worm.NPC.dontTakeDamage = false;
                     worm.NPC.life = 0;
                     worm.NPC.HitEffect(0, 10);
                     worm.NPC.active = false;

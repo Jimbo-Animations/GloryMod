@@ -61,14 +61,11 @@ namespace GloryMod.NPCs.Geomancer
 
                 if (NPC.ai[1] >= 7200) sound.Stop();
             }
-
-            //else if (sound is null)
-                //napTime = SoundEngine.PlaySound(new SoundStyle("GloryMod/Music/Nap_Time") with { IsLooped = true }, NPC.Center);
         }
 
         public override bool CheckActive()
         {
-            return false;
+            return NPC.ai[1] >= 7200;
         }
 
         public override void AI()
@@ -102,23 +99,6 @@ namespace GloryMod.NPCs.Geomancer
             }
 
             UpdateSound();
-
-            if (NPC.ai[1] >= 7200)
-            {
-                NPC.active = false;
-                NPC.netUpdate = true;
-
-                int numDusts = 24;
-
-                for (int i = 0; i < numDusts; i++)
-                {
-                    int dust = Dust.NewDust(NPC.Center, 0, 0, 110, Scale: 2f);
-                    Main.dust[dust].noGravity = true;
-                    Main.dust[dust].noLight = true;
-                    Main.dust[dust].velocity = new Vector2(8, 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
-                    Main.dust[dust].velocity.X *= 0.75f;
-                }
-            }
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -186,7 +166,7 @@ namespace GloryMod.NPCs.Geomancer
         {
             if (spawnInfo.PlayerSafe) return 0f;
             if (spawnInfo.Player.ZoneRockLayerHeight) return 0.01f;
-            if (NPC.AnyNPCs(NPCType<Geomancer>())) return 0f;
+            if (NPC.AnyNPCs(NPCType<Geomancer>()) || NPC.AnyNPCs(NPCType<Geomancer_Sleep>())) return 0f;
             else return 0f;
         }
 
