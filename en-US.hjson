@@ -320,7 +320,8 @@ Mods: {
 			BSBBody.DisplayName: Bloodseeker Beast
 			BSBHead.DisplayName: Bloodseeker Beast
 			BSBTail.DisplayName: Bloodseeker Beast
-			HM.DisplayName: H M
+			HM.DisplayName: Hoarfrost Mutilator
+			BorealCharge.DisplayName: Boreal Charge
 		}
 	}
 }

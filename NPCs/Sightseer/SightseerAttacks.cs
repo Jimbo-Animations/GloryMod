@@ -183,12 +183,14 @@ namespace GloryMod.NPCs.Sightseer
                     int whichWallIsFake = Main.rand.NextBool() ? -1 : 1;
                     for (int i = -3; i < 5; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + new Vector2(500 * target.direction, 120 * i), new Vector2(-5 * target.direction, 0), ProjectileType<WigglyShot>(), 75, 0, target.whoAmI, 0, whichWallIsFake, Main.rand.NextBool() ? -1 : 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + new Vector2(500 * target.direction, 120 * i), new Vector2(-5 * target.direction, 0), ProjectileType<WigglyShot>(), 75, 0, target.whoAmI, 0, whichWallIsFake, Main.rand.NextBool() ? -1 : 1);
                     }
 
                     for (int i = -5; i < 6; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + new Vector2(90 * i, -500), new Vector2(0, 5), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 0, -whichWallIsFake, Main.rand.NextBool() ? -1 : 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + new Vector2(90 * i, -500), new Vector2(0, 5), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 0, -whichWallIsFake, Main.rand.NextBool() ? -1 : 1);
                     }
 
                     SoundEngine.PlaySound(new SoundStyle("GloryMod/Music/SightseerAttack"), target.Center);
@@ -251,7 +253,8 @@ namespace GloryMod.NPCs.Sightseer
 
                     for (int i = 0; i < projCount; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(1).RotatedBy(MathHelper.TwoPi * i / projCount), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 1, 0, Main.rand.NextBool() ? -1 : 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(1).RotatedBy(MathHelper.TwoPi * i / projCount), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 1, 0, Main.rand.NextBool() ? -1 : 1);
                     }
 
                     NPC.netUpdate = true;
@@ -285,8 +288,11 @@ namespace GloryMod.NPCs.Sightseer
                 {
                     for (int j = 0; j < 5 + i; j++)
                     {
-                        int Proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center, i % 2 == 1 ? new Vector2(1) : new Vector2(-1), ProjectileType<OrbitShot>(), 60, 0, target.whoAmI, 55 + (110 * i), j, 5 + i);
-                        Main.projectile[Proj].hostile = j % 3 != 1;
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            int Proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center, i % 2 == 1 ? new Vector2(1) : new Vector2(-1), ProjectileType<OrbitShot>(), 60, 0, target.whoAmI, 55 + (110 * i), j, 5 + i);
+                            Main.projectile[Proj].hostile = j % 3 != 1;
+                        }                         
                     }
                 }
 
@@ -359,7 +365,8 @@ namespace GloryMod.NPCs.Sightseer
 
                 for (int i = 0; i < 8; i++)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(1).RotatedBy(MathHelper.TwoPi * i / 8), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 1, 0, Main.rand.NextBool() ? -1 : 1);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(1).RotatedBy(MathHelper.TwoPi * i / 8), ProjectileType<WigglyShot>(), 60, 0, target.whoAmI, 1, 0, Main.rand.NextBool() ? -1 : 1);
                 }
                 SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt with { Pitch = -0.35f }, NPC.Center);
                 NPC.netUpdate = true;
@@ -572,7 +579,8 @@ namespace GloryMod.NPCs.Sightseer
 
                     for (int i = 0; i < 9; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + randomizer.RotatedBy(i * MathHelper.TwoPi / 9), target.velocity * 0.25f, ProjectileType<HomingShot>(), 75, 0, target.whoAmI, 0, 0, i % 3 == 1 ? 1 : 0);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center + randomizer.RotatedBy(i * MathHelper.TwoPi / 9), target.velocity * 0.25f, ProjectileType<HomingShot>(), 75, 0, target.whoAmI, 0, 0, i % 3 == 1 ? 1 : 0);
                     }
 
                     SoundEngine.PlaySound(new SoundStyle("GloryMod/Music/SightseerAttack"), NPC.Center);
@@ -584,7 +592,8 @@ namespace GloryMod.NPCs.Sightseer
 
                     for (int i = -2; i < 3; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(target.Center).RotatedBy(i * MathHelper.Pi / 5), ProjectileType<HomingShot>(), 75, 0, target.whoAmI, 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(target.Center).RotatedBy(i * MathHelper.Pi / 5), ProjectileType<HomingShot>(), 75, 0, target.whoAmI, 1);
                     }
 
                     SoundEngine.PlaySound(new SoundStyle("GloryMod/Music/SightseerAttack"), NPC.Center);
@@ -625,7 +634,8 @@ namespace GloryMod.NPCs.Sightseer
                     ramming = true;
                     for (int i = -2; i < 3; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(target.Center).RotatedBy(i * MathHelper.Pi / 5), ProjectileType<WigglyShot>(), 75, 0, target.whoAmI, 0, 0, Main.rand.NextBool() ? -1 : 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(target.Center).RotatedBy(i * MathHelper.Pi / 5), ProjectileType<WigglyShot>(), 75, 0, target.whoAmI, 0, 0, Main.rand.NextBool() ? -1 : 1);
                     }
                     SoundEngine.PlaySound(SoundID.DD2_LightningBugHurt with { Pitch = -0.35f }, NPC.Center);
                 }
@@ -657,7 +667,10 @@ namespace GloryMod.NPCs.Sightseer
 
             if (AITimer == 15)
             {
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<SightseerAnomaly>(), 75, 0, target.whoAmI, 0, attackRate);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<SightseerAnomaly>(), 75, 0, target.whoAmI, 0, attackRate);
+                }                    
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, NPC.Center);
                 NPC.netUpdate = true;
             }
@@ -758,7 +771,8 @@ namespace GloryMod.NPCs.Sightseer
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0, 5).RotatedByRandom(MathHelper.TwoPi), ProjectileType<WigglyShot>(), 0, 0, target.whoAmI, 1, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0, 5).RotatedByRandom(MathHelper.TwoPi), ProjectileType<WigglyShot>(), 0, 0, target.whoAmI, 1, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
                 }
 
                 for (int i = 0; i < 5; i++) Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, 33, Scale: 2f)].noGravity = true;

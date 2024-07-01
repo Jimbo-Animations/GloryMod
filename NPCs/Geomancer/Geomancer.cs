@@ -308,7 +308,6 @@ namespace GloryMod.NPCs.Geomancer
 
                     if (AITimer == 90)
                     {
-
                         for (int i = Main.hardMode ? -7 : -5; i < (Main.hardMode ? 8 : 6); i++)
                         {
                             int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center + new Vector2(40 * i, Main.hardMode ? -200 + Math.Abs(15 * i) : -200), Vector2.Zero, ProjectileType<GeomancerYellowProjectile>(), Main.hardMode ? 150 : 50, 0, player.whoAmI, player.whoAmI, i);

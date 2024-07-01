@@ -491,7 +491,6 @@ namespace GloryMod.NPCs.BloodMoon.BloodSeekerBeast
 
             Color color = new Color(255, 0, 0) * laserOpacity;
             Terraria.Utils.DrawLine(Main.spriteBatch, NPC.Center + new Vector2(NPC.spriteDirection > 0 ? -164 : 164, 0).RotatedBy(NPC.rotation), NPC.Center + new Vector2(NPC.spriteDirection > 0 ? -14 : 14, 0).RotatedBy(NPC.rotation), color);
-            Terraria.Utils.DrawLine(Main.spriteBatch, NPC.Center - new Vector2(NPC.spriteDirection > 0 ? -164 : 164, 0).RotatedBy(NPC.rotation), NPC.Center - new Vector2(NPC.spriteDirection > 0 ? -14 : 14, 0).RotatedBy(NPC.rotation), color);
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);

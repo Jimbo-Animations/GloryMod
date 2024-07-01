@@ -1,6 +1,4 @@
-﻿using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
@@ -10,16 +8,14 @@ namespace GloryMod.NPCs.IceFish
     {
         private enum AttackPattern
         {
-            Enraged = -1,
             StartBattle = 0,
             Idle = 1,
             JumpStrike = 2,
             SpikeSkim = 3,
             DebrisShower = 4,
-            ChargeLaunch = 5,
-            SuperJump = 6,
-            Stun = 7,
-            DeathAnim = 8
+            SuperJump = 5,
+            Stun = 6,
+            DeathAnim = 7
         }
 
         private AttackPattern AIstate
@@ -30,15 +26,18 @@ namespace GloryMod.NPCs.IceFish
 
         public ref float AITimer => ref NPC.ai[1];
         public ref float TimerRand => ref NPC.ai[2];
-        public ref float ChargeCount => ref NPC.ai[3];
+        public ref float AggravationCount => ref NPC.ai[3];
 
         public bool hasJumped;
         public bool jumping;
+        public bool shouldDie;
 
         public Vector2 moveToZone;
+        public NPC minion;
 
-        public float enrageTimer;
         public float blurAlpha;
+        public int enrageTimer;
+        public int damageScale;
 
         private int animState = 0;
         public override void FindFrame(int frameHeight)
@@ -98,11 +97,33 @@ namespace GloryMod.NPCs.IceFish
 
                     if (NPC.frame.Y >= frameHeight * 6)
                     {
-                        NPC.frame.Y = 0;
+                        NPC.frame.Y = frameHeight;
                     }
 
                     break;
             }
+        }
+
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life <= 0 && !shouldDie)
+            {
+                NPC.life = 1;
+                NPC.dontTakeDamage = true;
+                AggravationCount++;
+                shouldDie = true;
+
+                //cancel all buffs
+                for (int i = 0; i < NPC.buffTime.Length; i++)
+                {
+                    NPC.buffTime[i] = 0;
+                }
+            }
+        }
+
+        public override void BossLoot(ref string name, ref int potionType)
+        {
+            potionType = Main.hardMode ? ItemID.GreaterHealingPotion : ItemID.HealingPotion;
         }
 
         private bool CheckTileCollision()
@@ -131,9 +152,9 @@ namespace GloryMod.NPCs.IceFish
                 {
                     Tile tile = Main.tile[i, j];
 
-                    // If the tile is solid or is considered a platform, then there's valid collision
-                    if (tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] && tile.TileFrameY == 0) || tile.LiquidAmount > 64)
-                    {
+                    // If the tile is solid or is a filled liquid, then there's valid collision
+                    if (tile.HasUnactuatedTile && Main.tileSolid[tile.TileType] || tile.LiquidAmount > 64)
+                    {                      
                         Vector2 tileWorld = new Point16(i, j).ToWorldCoordinates(0, 0);
 
                         if (NPC.Right.X > tileWorld.X && NPC.Left.X < tileWorld.X + 16 && NPC.Bottom.Y > tileWorld.Y && NPC.Top.Y < tileWorld.Y + 16)
@@ -156,14 +177,14 @@ namespace GloryMod.NPCs.IceFish
             bool collision = CheckTileCollision();
             bool cheese = false;
 
-            if ((Systems.Utils.findGroundUnder(target.Top).Y + 300 < (collision ? Systems.Utils.findSurfaceAbove(NPC.Center).Y : Systems.Utils.findGroundUnder(NPC.Center).Y))
-                || (target.Bottom.Y + 300 < Systems.Utils.findGroundUnder(target.Bottom).Y))
+            if ((Systems.Utils.findGroundUnder(target.Top).Y + 250 < (collision ? Systems.Utils.findSurfaceAbove(NPC.Center).Y : Systems.Utils.findGroundUnder(NPC.Center).Y))
+                || (target.Bottom.Y + 400 < Systems.Utils.findGroundUnder(target.Bottom).Y))
                 cheese = true;
 
             return cheese;
         }
 
-        private void TunnelAbout(Vector2 targetPos, ref bool collision, float maxSpeedH = 10, float maxSpeedV = 5, float leniency = 250, float depth = 250)
+        private void TunnelAbout(Vector2 targetPos, ref bool collision, bool forceBurrow, float maxSpeedH = 10, float maxSpeedV = 5, float leniency = 250, float depth = 250)
         {
             Vector2 goTo = new(targetPos.X, targetPos.Y + depth);
 
@@ -198,6 +219,8 @@ namespace GloryMod.NPCs.IceFish
                 }
 
                 // Controls Y velocity
+
+                if ((NPC.Distance(Systems.Utils.findSurfaceAbove(NPC.Center)) < 32 || !collision) && forceBurrow && NPC.Distance(target.Center) < 1000) NPC.velocity.Y += .3f;
 
                 if (Math.Abs(NPC.velocity.Y) < maxSpeedV)
                 {
@@ -256,21 +279,9 @@ namespace GloryMod.NPCs.IceFish
             NPC.ai[0] = enraged ? -1 : 1;
             AITimer = 0;
             animState = 0;
-            TimerRand = Main.rand.NextFloat(180, 241);
+            TimerRand = Main.rand.NextFloat(120, 181);
             hasJumped = false;
             jumping = false;
-
-            if (enraged)
-            {
-                enrageTimer = 0;
-                Systems.ScreenUtils.screenShaking = 5;
-                SoundEngine.PlaySound(SoundID.DD2_DrakinBreathIn with { Volume = 3 }, NPC.Center);
-
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<BlueRoar>(), 0, 1, target.whoAmI);
-                }
-            }
 
             NPC.netUpdate = true;
         }

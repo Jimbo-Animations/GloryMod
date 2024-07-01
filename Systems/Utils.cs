@@ -99,6 +99,16 @@ namespace GloryMod.Systems
         {
             return f > target - range && f < target + range;
         }
+
+        public static Color ColorLerpCycle(float time, float cycleTime, params Color[] colors)
+        {
+            if (colors.Length == 0) return default(Color);
+
+            int index = (int)(time / cycleTime * colors.Length) % colors.Length;
+            float lerpAmount = time / cycleTime * colors.Length % 1;
+
+            return Color.Lerp(colors[index], colors[(index + 1) % colors.Length], lerpAmount);
+        }
     }
 
     class ScreenUtils : ModSystem
