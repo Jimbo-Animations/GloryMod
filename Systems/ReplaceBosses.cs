@@ -2,9 +2,6 @@
 using Terraria.Audio;
 using GloryMod.NPCs.BloodMoon.Hemolitionist;
 using GloryMod.NPCs.Sightseer;
-using Terraria.DataStructures;
-using GloryMod.NPCs.Geomancer;
-using GloryMod.NPCs.Nerd;
 using GloryMod.NPCs.BloodMoon.BloodSeekerBeast;
 
 namespace GloryMod.Systems
@@ -50,7 +47,12 @@ namespace GloryMod.Systems
                 npc.hide = true;
             }
 
-            return true;
+            if (npc.type == NPCID.IceGolem)
+            {
+                npc.hide = true;
+            }
+
+                return true;
         }
 
         public override void PostAI(NPC npc)
@@ -90,6 +92,13 @@ namespace GloryMod.Systems
             }
 
             if (npc.type == NPCID.Tim || npc.type == NPCID.RuneWizard)
+            {
+                npc.damage = 0;
+                npc.dontTakeDamage = true;
+                npc.active = false;
+            }
+
+            if (npc.type == NPCID.IceGolem)
             {
                 npc.damage = 0;
                 npc.dontTakeDamage = true;

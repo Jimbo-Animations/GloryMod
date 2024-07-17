@@ -165,8 +165,8 @@ namespace GloryMod.NPCs.Geomancer
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.PlayerSafe) return 0f;
-            if (spawnInfo.Player.ZoneRockLayerHeight) return 0.01f;
             if (NPC.AnyNPCs(NPCType<Geomancer>()) || NPC.AnyNPCs(NPCType<Geomancer_Sleep>())) return 0f;
+            if (spawnInfo.Player.ZoneRockLayerHeight) return 0.01f;       
             else return 0f;
         }
 

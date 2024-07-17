@@ -322,6 +322,7 @@ Mods: {
 			BSBTail.DisplayName: Bloodseeker Beast
 			HM.DisplayName: Hoarfrost Mutilator
 			BorealCharge.DisplayName: Boreal Charge
+			HMIdle.DisplayName: Roaming Predator
 		}
 	}
 }

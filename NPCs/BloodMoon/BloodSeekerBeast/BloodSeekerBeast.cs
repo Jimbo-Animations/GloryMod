@@ -55,6 +55,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodSeekerBeast
             NPC.DeathSound = SoundID.NPCDeath14;
 
             NPC.BossBar = GetInstance<HemolitionistBossBar>();
+            Music = MusicID.OtherworldlyInvasion;
         }
 
         public Player target
@@ -246,7 +247,6 @@ namespace GloryMod.NPCs.BloodMoon.BloodSeekerBeast
                             if ((n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
                             {
                                 n.active = false;
-                                n.netUpdate = true;
                             }
                         }
                     }

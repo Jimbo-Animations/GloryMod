@@ -1,5 +1,9 @@
 ﻿using GloryMod.Systems;
+using Microsoft.VisualBasic;
+using rail;
+using Terraria;
 using Terraria.Audio;
+using Terraria.ModLoader;
 
 namespace GloryMod.NPCs.IceFish
 {
@@ -28,7 +32,7 @@ namespace GloryMod.NPCs.IceFish
 
             NPC.damage = 0;
             NPC.defense = Main.hardMode ? 20 : 10;
-            NPC.lifeMax = Main.getGoodWorld ? (Main.hardMode ? 14400 : 1800) : (Main.hardMode ? 12000 : 1500);
+            NPC.lifeMax = Main.getGoodWorld ? (Main.hardMode ? 14400 : 2400) : (Main.hardMode ? 12000 : 2000);
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 0, 50, 0);
             NPC.npcSlots = 50f;
@@ -38,9 +42,10 @@ namespace GloryMod.NPCs.IceFish
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.DD2_WitherBeastCrystalImpact;
             NPC.DeathSound = null;
-
             NPC.coldDamage = true;
-            NPC.netAlways = true;
+
+            Music = MusicID.OtherworldlyUGHallow;
+
         }
 
         public Player target
@@ -50,7 +55,7 @@ namespace GloryMod.NPCs.IceFish
 
         public override bool CheckActive()
         {
-            return Main.player[NPC.target].dead;
+            return NPC.HasValidTarget;
         }
 
         public override void PostAI()
@@ -58,7 +63,7 @@ namespace GloryMod.NPCs.IceFish
             bool collision = CheckTileCollision();
             bool cheese = platformCheese();
 
-            if (NPC.soundDelay == 0 && collision)
+            if (NPC.soundDelay == 0 && collision && NPC.ai[0] != 7)
             {
                 // Play sounds quicker the closer the NPC is to the target location
                 float num1 = NPC.Distance(target.Center) / 40f;
@@ -74,42 +79,25 @@ namespace GloryMod.NPCs.IceFish
                 SoundEngine.PlaySound(SoundID.WormDig, NPC.position);
             }
 
-            if (cheese)
-            {
-                enrageTimer++;
-                target.RemoveAllGrapplingHooks();
-            }
-            else enrageTimer--;
+            if (cheese) enrageTimer++;
+            else enrageTimer--; 
 
             MathHelper.Clamp(enrageTimer, 0, 150);
 
-            if (enrageTimer >= 150)
+            if (NPC.ai[0] != 0 && (enrageTimer >= 150 || !NPC.HasValidTarget || !target.ZoneSnow))
             {
-                enrageTimer = 0;
-                target.velocity.Y += 8;
-                target.position.Y += 1;
-
-                target.releaseHook = true;
-                target.AddBuff(BuffID.Frozen, 60 / (Main.expertMode ? Main.masterMode ? 3 : 2 : 1));
-
-                SoundEngine.PlaySound(SoundID.Item30, target.Center);
-
-                int numDusts = 30;
-
-                for (int i = 0; i < numDusts; i++)
+                if (NPC.timeLeft > 10)
                 {
-                    int dust = Dust.NewDust(target.Center, 0, 0, 92, Scale: 3f);
-                    Main.dust[dust].noGravity = true;
-                    Main.dust[dust].noLight = true;
-                    Main.dust[dust].velocity = new Vector2(8, 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
+                    NPC.timeLeft = 10;
                 }
 
-                NPC.netUpdate = true;
+                NPC.velocity.Y += 0.1f;
             }
 
             damageScale = Main.hardMode ? 2 : 1;
-            NPC.damage = jumping ? 90 * damageScale : 0;
+            NPC.damage = jumping ? 105 * damageScale : 0;
             NPC.HitSound = NPC.ai[0] == 6 ? SoundID.DD2_DrakinHurt : SoundID.DD2_WitherBeastCrystalImpact;
+            rampUp = MathHelper.Clamp(NPC.GetLifePercent() + .2f, .4f, 1f);
 
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = NPC.ai[0] == 6 ? 1 : .1f;
@@ -141,6 +129,7 @@ namespace GloryMod.NPCs.IceFish
                 case AttackPattern.Idle:
 
                     AITimer++;
+
                     TunnelAbout(standardTarget, ref collision, true);
 
                     if (AggravationCount > 0)
@@ -185,7 +174,7 @@ namespace GloryMod.NPCs.IceFish
                             NPC.netUpdate = true;
                         }
 
-                        if (collision || Math.Abs(NPC.Center.Y - target.Center.Y) > 400)
+                        if (collision || Math.Abs(NPC.Center.Y - target.Center.Y) > 350)
                         {
                             float jumpSpeed = Main.hardMode ? .45f : .4f;
 
@@ -215,7 +204,7 @@ namespace GloryMod.NPCs.IceFish
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     var proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), Systems.Utils.findGroundUnder(NPC.Center + new Vector2(Main.rand.NextFloat(10, 21) * i, 0)),
-                                    new Vector2(NPC.velocity.X * .5f + Main.rand.NextFloat(-2, 3), NPC.velocity.Y * .65f + Main.rand.NextFloat(-4, 1)), ProjectileID.DeerclopsRangedProjectile, (75 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
+                                    new Vector2(NPC.velocity.X * .5f + Main.rand.NextFloat(-2, 3), NPC.velocity.Y * .65f + Main.rand.NextFloat(-4, 1)), ProjectileID.DeerclopsRangedProjectile, (90 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
                                     Main.projectile[proj].scale = Main.hardMode ? 1.25f : 1;
                                 }
                             }
@@ -249,12 +238,12 @@ namespace GloryMod.NPCs.IceFish
                     {
                         jumping = false;
                         animState = 0;
-                        Systems.ScreenUtils.screenShaking += 3;
+                        ScreenUtils.screenShaking += 3;
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, NPC.Center);
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), (60 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), (75 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
                         }
 
                         NPC.netUpdate = true;
@@ -289,7 +278,7 @@ namespace GloryMod.NPCs.IceFish
                         }
 
                         NPC.netUpdate = true;
-                    }
+                    }                 
 
                     TunnelAbout(jumping ? standardTarget : moveToZone, ref collision, true, jumping ? 12 : 8, 4, jumping ? 500 : 10, jumping ? 32 : 50);
 
@@ -308,7 +297,7 @@ namespace GloryMod.NPCs.IceFish
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), cheese ? Systems.Utils.findGroundUnder(new Vector2(NPC.Center.X, target.Top.Y)) : Systems.Utils.findSurfaceAbove(NPC.Center), new Vector2(NPC.velocity.X * .1f, -1).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileID.DeerclopsIceSpike, (75 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, (.5f * damageScale) + (AITimer * .005f));
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), cheese ? Systems.Utils.findGroundUnder(new Vector2(NPC.Center.X, target.Top.Y)) : Systems.Utils.findSurfaceAbove(NPC.Center), new Vector2(NPC.velocity.X * .1f, -1).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileID.DeerclopsIceSpike, (90 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, (.6f * damageScale) + (AITimer * .005f));
                         }
 
                         ScreenUtils.screenShaking += 1;
@@ -361,8 +350,10 @@ namespace GloryMod.NPCs.IceFish
 
                     else if (!hasJumped)
                     {
-                        if (collision || Math.Abs(NPC.Center.Y - target.Center.Y) > 350)
+                        if (collision || NPC.Center.Y + 350 < target.Center.Y)
                         {
+                            collision = true;
+
                             TunnelAbout(standardTarget, ref collision, false, Main.hardMode ? 4 : 3, Main.hardMode ? 18 : 17, 20, -300);
 
                             animState = 1;
@@ -383,7 +374,7 @@ namespace GloryMod.NPCs.IceFish
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     var proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), Systems.Utils.findGroundUnder(NPC.Center + new Vector2(Main.rand.NextFloat(-40, 41), 0)),
-                                    new Vector2(Main.rand.NextFloat(3, 5) * (target.Center.X > NPC.Center.X ? 1 : -1), - 10 - (i / 2)), ProjectileID.DeerclopsRangedProjectile, (75 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
+                                    new Vector2(Main.rand.NextFloat(3, 5) * (target.Center.X > NPC.Center.X ? 1 : -1), - 10 - (i / 2)), ProjectileID.DeerclopsRangedProjectile, (90 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
                                     Main.projectile[proj].scale = Main.hardMode ? 1.25f : 1;
                                 }
                             }
@@ -393,6 +384,7 @@ namespace GloryMod.NPCs.IceFish
 
                             minion.ai[0] = NPC.whoAmI;
                             minion.velocity = new Vector2(Main.rand.NextFloat(3, 5) * (target.Center.X > NPC.Center.X ? 1 : -1), -20);
+                            minion.ai[1] = 300 - ((int)(300 * rampUp));
 
                             hasJumped = true;
                             jumping = true;
@@ -428,7 +420,7 @@ namespace GloryMod.NPCs.IceFish
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), (60 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), 75 * damageScale / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
                         }
 
                         NPC.netUpdate = true;
@@ -504,7 +496,7 @@ namespace GloryMod.NPCs.IceFish
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     var proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), Systems.Utils.findGroundUnder(NPC.Center + new Vector2(Main.rand.NextFloat(10, 21) * i, 0)),
-                                    new Vector2(NPC.velocity.X * .5f + Main.rand.NextFloat(-2, 3), NPC.velocity.Y * .65f + Main.rand.NextFloat(-4, 1)), ProjectileID.DeerclopsRangedProjectile, (75 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
+                                    new Vector2(NPC.velocity.X * .5f + Main.rand.NextFloat(-2, 3), NPC.velocity.Y * .65f + Main.rand.NextFloat(-4, 1)), ProjectileID.DeerclopsRangedProjectile, 90 * damageScale / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, num5);
                                     Main.projectile[proj].scale = Main.hardMode ? 1.25f : 1;
                                 }
                             }
@@ -548,7 +540,7 @@ namespace GloryMod.NPCs.IceFish
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), (90 * damageScale) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileType<HMShockwave>(), 105 * damageScale / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI);
                         }
 
                         NPC.netUpdate = true;
@@ -587,7 +579,7 @@ namespace GloryMod.NPCs.IceFish
                 case AttackPattern.DeathAnim:
 
                     AITimer++;
-                    NPC.rotation = AITimer * 0.01f;
+                    NPC.rotation = AITimer * (NPC.spriteDirection * 0.025f);
                     NPC.velocity.Y += .3f;
 
                     if (AITimer == 1)
@@ -595,7 +587,12 @@ namespace GloryMod.NPCs.IceFish
                         NPC.NPCLoot();
                         SoundEngine.PlaySound(SoundID.DD2_DrakinDeath with { Volume = 4, Pitch = -.4f }, NPC.Center);
                         NPC.spriteDirection = target.Center.X > NPC.Center.X ? 1 : -1;                           
-                        NPC.velocity = new Vector2(5 * -NPC.spriteDirection, -10);
+                        NPC.velocity.Y = -14;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ProjectileID.DD2ExplosiveTrapT3Explosion, 0, 0, target.whoAmI);
+                        }
 
                         int numDusts = 40;
 
@@ -623,8 +620,6 @@ namespace GloryMod.NPCs.IceFish
             }
         }
 
-
-
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -636,14 +631,8 @@ namespace GloryMod.NPCs.IceFish
 
             blurAlpha = MathHelper.SmoothStep(blurAlpha, animState == 1 || animState == 2 ? 1 : 0, .15f);
 
-            if (NPC.spriteDirection > 0)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                effects = SpriteEffects.None;
-            }
+            if (NPC.spriteDirection > 0) effects = SpriteEffects.FlipHorizontally;
+            else effects = SpriteEffects.None;
 
             for (int i = 1; i < NPC.oldPos.Length; i++)
             {

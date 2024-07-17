@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Terraria.DataStructures;
 
 namespace GloryMod.NPCs.IceFish
 {
@@ -11,6 +10,7 @@ namespace GloryMod.NPCs.IceFish
         {
             Projectile.CloneDefaults(ProjectileID.DD2OgreSmash);
             AIType = ProjectileID.DD2OgreSmash;
+            Projectile.coldDamage = true;
         }
 
         public override bool CanHitPlayer(Player target)

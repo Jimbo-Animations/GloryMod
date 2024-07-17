@@ -1,7 +1,6 @@
 ﻿using Terraria.Audio;
 using System.Collections.Generic;
 using Terraria.GameContent.Creative;
-using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent;
 
 namespace GloryMod.Items.NeonBoss
@@ -94,7 +93,6 @@ namespace GloryMod.Items.NeonBoss
             Projectile.width = 26;
             Projectile.height = 26;
             Projectile.friendly = true;
-            Projectile.hostile = false;
             Projectile.DamageType = DamageClass.SummonMeleeSpeed;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;

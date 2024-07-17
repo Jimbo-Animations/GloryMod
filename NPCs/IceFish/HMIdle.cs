@@ -1,46 +1,63 @@
-﻿using GloryMod.Items.BloodMoon;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.Utilities;
 
 namespace GloryMod.NPCs.IceFish
 {
-    partial class HM : ModNPC
+    internal class HMIdle : ModNPC
     {
-        private enum AttackPattern
+        public override string Texture => "GloryMod/NPCs/IceFish/HM";
+
+        public override void SetStaticDefaults()
         {
-            StartBattle = 0,
-            Idle = 1,
-            JumpStrike = 2,
-            SpikeSkim = 3,
-            DebrisShower = 4,
-            SuperJump = 5,
-            Stun = 6,
-            DeathAnim = 7
+            Main.npcFrameCount[NPC.type] = 8;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 6;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
+
+            NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
         }
 
-        private AttackPattern AIstate
+        public override void SetDefaults()
         {
-            get => (AttackPattern)NPC.ai[0];
-            set => NPC.localAI[0] = (float)value;
+            NPC.aiStyle = -1;
+            NPC.width = 54;
+            NPC.height = 54;
+
+            NPC.damage = 0;
+            NPC.defense = 0;
+            NPC.lifeMax = Main.getGoodWorld ? (Main.hardMode ? 14400 : 2400) : (Main.hardMode ? 12000 : 2000);
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(0, 0, 0, 0);
+            NPC.npcSlots = 50f;
+            NPC.lavaImmune = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
+            NPC.HitSound = SoundID.DD2_WitherBeastCrystalImpact;
+            NPC.DeathSound = null;
+            NPC.coldDamage = true;
+        }
+
+        public Player target
+        {
+            get => Main.player[NPC.target];
         }
 
         public ref float AITimer => ref NPC.ai[1];
-        public ref float TimerRand => ref NPC.ai[2];
-        public ref float AggravationCount => ref NPC.ai[3];
+        public ref float AggroTimer => ref NPC.ai[2];
+        public ref float SoundCooldown => ref NPC.ai[3];
 
-        public bool hasJumped;
-        public bool jumping;
-        public bool shouldDie;
+        Vector2 patrolZone;
 
-        public Vector2 moveToZone;
-        public NPC minion;
-
-        public float rampUp = 1;
-        public float blurAlpha;
-        public int enrageTimer;
-        public int damageScale;
+        public override bool CheckActive()
+        {
+            return NPC.ai[1] >= 3600;
+        }
 
         private int animState = 0;
         public override void FindFrame(int frameHeight)
@@ -104,47 +121,8 @@ namespace GloryMod.NPCs.IceFish
                     }
 
                     break;
-            }
+            }           
         }
-
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (NPC.life <= 0 && !shouldDie)
-            {
-                NPC.life = 1;
-                NPC.dontTakeDamage = true;
-                AggravationCount++;
-                shouldDie = true;
-
-                //cancel all buffs
-                for (int i = 0; i < NPC.buffTime.Length; i++)
-                {
-                    NPC.buffTime[i] = 0;
-                }
-            }
-        }
-
-        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
-        {
-            target.AddBuff(BuffID.BrokenArmor, 360 / (Main.expertMode ? Main.masterMode ? 3 : 2 : 1));
-        }
-
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            potionType = Main.hardMode ? ItemID.GreaterHealingPotion : ItemID.HealingPotion;
-        }
-
-        public override void ModifyNPCLoot(NPCLoot npcLoot)
-        {
-            var SpawnRule = Main.ItemDropsDB.GetRulesForNPCID(NPCID.IceGolem, true);
-            foreach (var dropRule in SpawnRule)
-            {
-                npcLoot.Add(dropRule);
-            }
-
-            npcLoot.Add(ItemDropRule.Common(ItemID.FrostCore, 1, 2, 3));
-        }
-
         private bool CheckTileCollision()
         {
             int minTilePosX = (int)(NPC.Left.X / 16) - 1;
@@ -173,7 +151,7 @@ namespace GloryMod.NPCs.IceFish
 
                     // If the tile is solid or is a filled liquid, then there's valid collision
                     if (tile.HasUnactuatedTile && Main.tileSolid[tile.TileType] || tile.LiquidAmount > 64)
-                    {                      
+                    {
                         Vector2 tileWorld = new Point16(i, j).ToWorldCoordinates(0, 0);
 
                         if (NPC.Right.X > tileWorld.X && NPC.Left.X < tileWorld.X + 16 && NPC.Bottom.Y > tileWorld.Y && NPC.Top.Y < tileWorld.Y + 16)
@@ -189,18 +167,6 @@ namespace GloryMod.NPCs.IceFish
             }
 
             return collision;
-        }
-
-        private bool platformCheese()
-        {
-            bool collision = CheckTileCollision();
-            bool cheese = false;
-
-            if ((Systems.Utils.findGroundUnder(target.Top).Y + 250 < (collision ? Systems.Utils.findSurfaceAbove(NPC.Center).Y : Systems.Utils.findGroundUnder(NPC.Center).Y))
-                || (target.Bottom.Y + 350 < Systems.Utils.findGroundUnder(target.Bottom).Y))
-                cheese = true;
-
-            return cheese;
         }
 
         private void TunnelAbout(Vector2 targetPos, ref bool collision, bool forceBurrow, float maxSpeedH = 10, float maxSpeedV = 5, float leniency = 250, float depth = 250)
@@ -263,46 +229,95 @@ namespace GloryMod.NPCs.IceFish
             NPC.velocity *= .99f;
         }
 
-        // This is also from Star Construct
-
-        private float[] aiWeights = new float[5];
-        private void PickAttack()
+        public override void AI()
         {
-            WeightedRandom<int> aiStatePool = new WeightedRandom<int>();
-            for (int state = 1; state < aiWeights.Length; state++)
-            {
-                //weights are squared to bias more towards attacks that haven't been used in a while
-                aiStatePool.Add(state, Math.Pow(aiWeights[state], 2));
-            }
-            NPC.ai[0] = aiStatePool;
+            if (NPC.target < 0 || NPC.target == 255 || target.dead || !target.active)
+                NPC.TargetClosest();
 
-            for (int state = 1; state < aiWeights.Length; state++)
+            if (AITimer == 0) patrolZone = NPC.Center;
+
+            AITimer++;
+            SoundCooldown++;
+
+            bool collision = CheckTileCollision();
+
+            if (Math.Abs(target.Center.X - NPC.Center.X) < 400 && NPC.Distance(target.Center) < 1000)
             {
-                if (NPC.ai[0] != state)
-                    aiWeights[state] += aiWeights[(int)NPC.ai[0]] / (aiWeights.Length - 1);
+                AggroTimer++;
+
+                if (AggroTimer == 450 && SoundCooldown > 60) 
+                {
+                    SoundEngine.PlaySound(SoundID.DD2_DrakinDeath with { Volume = 3, Pitch = -.2f }, NPC.Center);
+                    SoundCooldown = 0;
+                    NPC.netUpdate = true;
+                }
+
+                if (AggroTimer > 600)
+                {
+                    NPC.Transform(NPCType<HM>());
+                    CombatText.NewText(NPC.getRect(), new Color(50, 100, 255), "!", true, false);
+                    NPC.netUpdate = true;
+                }
             }
-            aiWeights[(int)NPC.ai[0]] = 0f;
+            else AggroTimer--;
+
+            if (NPC.soundDelay == 0 && collision)
+            {
+                // Play sounds quicker the closer the NPC is to the target location
+                float num1 = NPC.Distance(target.Center) / 40f;
+
+                if (num1 < 15)
+                    num1 = 15f;
+
+                if (num1 > 20)
+                    num1 = 20f;
+
+                NPC.soundDelay = (int)num1;
+
+                SoundEngine.PlaySound(SoundID.WormDig, NPC.position);
+
+                SoundEngine.PlaySound(SoundID.WormDig, NPC.position);
+            }
+
+            TunnelAbout(Systems.Utils.findGroundUnder(patrolZone), ref collision, true, 4, 3, 300, 300);
+            MathHelper.Clamp(AggroTimer, 0, 600);        
         }
 
-        private void InitializeAIStates()
+        public override void HitEffect(NPC.HitInfo hit)
         {
-            aiWeights[0] = 0;
-            for (int state = 1; state < aiWeights.Length; state++)
-            {
-                aiWeights[state] = 1f;
-            }
-        }
-
-        private void ResetValues(bool enraged = false)
-        {
-            NPC.ai[0] = enraged ? -1 : 1;
-            AITimer = 0;
-            animState = 0;
-            TimerRand = Main.rand.NextFloat(120 - (50 - (50 * rampUp)), 181 - (150 - (150 * rampUp)));
-            hasJumped = false;
-            jumping = false;
-
+            SoundEngine.PlaySound(SoundID.DD2_DrakinHurt with { Volume = 2, Pitch = -.2f }, NPC.Center);
+            NPC.Transform(NPCType<HM>());
+            CombatText.NewText(NPC.getRect(), new Color(50, 100, 255), "!", true, false);
             NPC.netUpdate = true;
         }
-    }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.PlayerSafe) return 0f;
+            if (NPC.AnyNPCs(NPCType<HM>()) || NPC.AnyNPCs(NPCType<HMIdle>())) return 0f;
+            if (spawnInfo.Player.ZoneSnow && Main.raining)
+            {
+                if (!Main.dayTime) return 0.015f;
+                else return 0.01f;
+            }
+            else return 0f;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D texture = Request<Texture2D>(Texture).Value;
+            Vector2 drawOrigin = new Vector2((NPC.frame.Width * .5f) + (NPC.frame.Width * .35f * NPC.spriteDirection), NPC.frame.Height * .5f);
+            Vector2 drawPos = NPC.Center - screenPos;
+            SpriteEffects effects;
+
+            NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
+
+            if (NPC.spriteDirection > 0) effects = SpriteEffects.FlipHorizontally;
+            else effects = SpriteEffects.None;
+
+            spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+
+            return false;
+        }
+    }    
 }

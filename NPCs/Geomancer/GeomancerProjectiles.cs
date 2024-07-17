@@ -59,7 +59,7 @@ namespace GloryMod.NPCs.Geomancer
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(Main.rand.NextBool(2) ? BuffID.WitheredArmor : BuffID.WitheredWeapon, 150);
+            target.AddBuff(Main.hardMode ? BuffID.OnFire3 : BuffID.OnFire, Main.hardMode ?  200 : 200 / (Main.expertMode ? Main.masterMode ? 3 : 2 : 1));
         }
 
         float timer;
@@ -155,7 +155,7 @@ namespace GloryMod.NPCs.Geomancer
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(Main.rand.NextBool(2) ? BuffID.WitheredArmor : BuffID.WitheredWeapon, 150);
+            target.AddBuff(BuffID.Frozen, 30 / (Main.expertMode ? Main.masterMode ? 3 : 2 : 1));
         }
 
         float timer;
@@ -253,7 +253,7 @@ namespace GloryMod.NPCs.Geomancer
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(Main.rand.NextBool(2) ? BuffID.WitheredArmor : BuffID.WitheredWeapon, 150);
+            target.AddBuff(BuffID.BrokenArmor, 300 / (Main.expertMode ? Main.masterMode ? 3 : 2 : 1));
         }
 
         float timer;
@@ -366,7 +366,7 @@ namespace GloryMod.NPCs.Geomancer
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(Main.rand.NextBool(2) ? BuffID.WitheredArmor : BuffID.WitheredWeapon, 150);
+            target.AddBuff(BuffID.WitheredWeapon, 300);
         }
 
         float timer;

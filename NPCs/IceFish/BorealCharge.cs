@@ -30,7 +30,7 @@ namespace GloryMod.NPCs.IceFish
 
             NPC.damage = 0;
             NPC.defense = Main.hardMode ? 25 : 10;
-            NPC.lifeMax = Main.hardMode ? 3000 : 400;
+            NPC.lifeMax = Main.hardMode ? 3000 : 450;
             NPC.knockBackResist = 0f;
             NPC.npcSlots = 1f;
 
@@ -39,7 +39,6 @@ namespace GloryMod.NPCs.IceFish
             NPC.behindTiles = true;
             NPC.coldDamage = true;
             NPC.dontTakeDamage = true;
-            NPC.netAlways = true;
             NPC.noTileCollide = true;
 
             NPC.HitSound = SoundID.DD2_WitherBeastCrystalImpact;
@@ -158,7 +157,7 @@ namespace GloryMod.NPCs.IceFish
                         Vector2 spikePos = Systems.Utils.findGroundUnder(NPC.Top + new Vector2(-30 * i, 100).RotatedBy(NPC.rotation));
                         float spikePointTo = MathHelper.ToRadians(120) * i / 9;
 
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spikePos, new Vector2(0, -1).RotatedBy(spikePointTo), ProjectileID.DeerclopsIceSpike, 75 / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, Main.rand.NextFloat(1f, 1.36f) + (Main.hardMode ? .5f : 0));
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spikePos, new Vector2(0, -1).RotatedBy(spikePointTo), ProjectileID.DeerclopsIceSpike, (Main.hardMode ? 180 : 90) / (Main.expertMode ? Main.masterMode ? 6 : 4 : 2), 1, target.whoAmI, 0, Main.rand.NextFloat(1f, 1.36f) + (Main.hardMode ? .5f : 0));
                     }
                 }
 
