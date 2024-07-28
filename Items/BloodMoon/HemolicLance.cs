@@ -126,6 +126,8 @@ namespace GloryMod.Items.BloodMoon
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
@@ -249,6 +251,11 @@ namespace GloryMod.Items.BloodMoon
 
             Texture2D texture = Request<Texture2D>(Texture).Value;
             Texture2D mask = Request<Texture2D>(Texture + "Mask").Value;
+
+            for (int i = 1; i < Projectile.oldPos.Length; i++)
+            {
+                Main.EntitySpriteDraw(mask, Projectile.oldPos[i] - Projectile.position + Projectile.Center - Main.screenPosition, default, Color.Red * Projectile.Opacity * (1 - i / (float)Projectile.oldPos.Length) * 0.25f, Projectile.oldRot[i] + rotationOffset, origin, Projectile.scale, effects, 0);
+            }
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
             Main.spriteBatch.Draw(mask, Projectile.Center - Main.screenPosition, default, Color.White * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);

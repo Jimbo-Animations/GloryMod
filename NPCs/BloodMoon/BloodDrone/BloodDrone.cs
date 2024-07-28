@@ -99,7 +99,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
 
                     if (RotorFrameY < frameHeight * 3) RotorTilt = 0;
                     if (NPC.frame.Y >= frameHeight * 3 && NPC.frame.Y < frameHeight * 5) RotorTilt = frameHeight * 3;
-                    if (NPC.frame.Y >= frameHeight * 5) RotorTilt = frameHeight * 6;
+                    if (NPC.frame.Y == frameHeight * 5) RotorTilt = frameHeight * 6;
                     if (NPC.frame.Y >= frameHeight * 6) NPC.frame.Y = 0;
 
                     break;

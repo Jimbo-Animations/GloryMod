@@ -136,13 +136,11 @@ namespace GloryMod.NPCs.IceFish
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            var SpawnRule = Main.ItemDropsDB.GetRulesForNPCID(NPCID.IceGolem, true);
-            foreach (var dropRule in SpawnRule)
-            {
-                npcLoot.Add(dropRule);
-            }
+            LeadingConditionRule hardMode = new LeadingConditionRule(new Conditions.IsHardmode());
 
-            npcLoot.Add(ItemDropRule.Common(ItemID.FrostCore, 1, 2, 3));
+            hardMode.OnSuccess(npcLoot.Add(ItemDropRule.Common(ItemID.IceFeather, 1)));
+            hardMode.OnSuccess(npcLoot.Add(ItemDropRule.Common(ItemID.FrostCore, 1, 2, 4)));
+            npcLoot.Add(ItemDropRule.Common(Main.hardMode ? ItemID.FrozenCrateHard : ItemID.FrozenCrate, 1));
         }
 
         private bool CheckTileCollision()

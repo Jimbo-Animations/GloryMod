@@ -1,5 +1,4 @@
 ﻿using Terraria.Audio;
-using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
 using ReLogic.Utilities;
 
@@ -11,7 +10,7 @@ namespace GloryMod.NPCs.Geomancer
         {
             Main.npcFrameCount[NPC.type] = 15;
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
-
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.ImmuneToAllBuffs[Type] = true;
         }
 

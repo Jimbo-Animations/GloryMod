@@ -1,5 +1,6 @@
 ﻿using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 
 namespace GloryMod.NPCs.IceFish
 {
@@ -20,6 +21,14 @@ namespace GloryMod.NPCs.IceFish
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Venom] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Frostburn] = true;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
+                new FlavorTextBestiaryInfoElement("Crystalline cells of powerful, arctic energy. Their icy exteriors are too fragile to last.")
+            });
         }
 
         public override void SetDefaults()
@@ -186,50 +195,65 @@ namespace GloryMod.NPCs.IceFish
 
             Color auroraColor = Systems.Utils.ColorLerpCycle(Main.GlobalTimeWrappedHourly, hasCollided ? 3 : 2, new Color[] { Color.Lerp(new Color(40, 250, 60, 50), new Color(40, 60, 200, 50), nearingDetonation), Color.Lerp(new Color(150, 70, 130, 50), new Color(60, 90, 150, 50), nearingDetonation) });
 
-            if (AITimer >= lifeSpan)
+            if (!NPC.IsABestiaryIconDummy)
             {
-                nearingDetonation = MathHelper.SmoothStep(nearingDetonation, 0, .2f);
-                auraAlpha = MathHelper.SmoothStep(auraAlpha, 0, .2f);
-                rayAlpha = MathHelper.SmoothStep(rayAlpha, 0, .2f);             
+                if (AITimer >= lifeSpan)
+                {
+                    nearingDetonation = MathHelper.SmoothStep(nearingDetonation, 0, .2f);
+                    auraAlpha = MathHelper.SmoothStep(auraAlpha, 0, .2f);
+                    rayAlpha = MathHelper.SmoothStep(rayAlpha, 0, .2f);
+                }
+                else
+                {
+                    nearingDetonation = MathHelper.SmoothStep(nearingDetonation, AITimer > (lifeSpan * 2 / 3) ? 1 : 0, .1f);
+                    auraAlpha = MathHelper.SmoothStep(auraAlpha, 1, .1f);
+                    rayAlpha = MathHelper.SmoothStep(rayAlpha, hasCollided ? 1 : .33f, .15f);
+                }
+
+                timer += 0.1f;
+
+                if (NPC.spriteDirection > 0)
+                {
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                else
+                {
+                    effects = SpriteEffects.None;
+                }
+
+                if (timer >= MathHelper.Pi)
+                {
+                    timer = 0f;
+                }
+
+                for (int i = 0; i < NPC.oldPos.Length; i++)
+                {
+                    Vector2 trailVector = hasCollided ? new Vector2(0, (10 + nearingDetonation) * i).RotatedBy(NPC.rotation) + drawPos : NPC.oldPos[i] - NPC.position + drawPos;
+
+                    Main.EntitySpriteDraw(textureTrail, trailVector, null, auroraColor * (auraAlpha + nearingDetonation) * ((1 - i / (float)NPC.oldPos.Length) * 0.95f), NPC.rotation, textureTrail.Size() / 2, new Vector2(Main.rand.NextFloat(.9f, 1.2f), 1 + nearingDetonation), effects, 0);
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Main.EntitySpriteDraw(texture, drawPos + new Vector2((4 + nearingDetonation) * auraAlpha, 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, auroraColor * .5f * (auraAlpha + nearingDetonation), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+
+                Main.EntitySpriteDraw(texture, drawPos, NPC.frame, auroraColor * .3f * (auraAlpha + nearingDetonation), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
             }
             else
             {
-                nearingDetonation = MathHelper.SmoothStep(nearingDetonation, AITimer > (lifeSpan * 2 / 3) ? 1 : 0, .1f);
-                auraAlpha = MathHelper.SmoothStep(auraAlpha, 1, .1f);
-                rayAlpha = MathHelper.SmoothStep(rayAlpha, hasCollided ? 1 : .33f, .15f);              
-            }
+                auraAlpha = 1;
 
-            timer += 0.1f;          
+                for (int i = 0; i < 4; i++)
+                {
+                    Main.EntitySpriteDraw(texture, drawPos + new Vector2(4, 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, auroraColor * .5f, NPC.rotation, new Vector2(NPC.frame.Width * .5f, NPC.frame.Height * .5f), NPC.scale, SpriteEffects.None, 0);
+                }
 
-            if (NPC.spriteDirection > 0)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                effects = SpriteEffects.None;
-            }
-
-            if (timer >= MathHelper.Pi)
-            {
-                timer = 0f;
-            }
-
-            for (int i = 0; i < NPC.oldPos.Length; i++)
-            {
-                Vector2 trailVector = hasCollided ? new Vector2(0, (10 + nearingDetonation) * i).RotatedBy(NPC.rotation) + drawPos : NPC.oldPos[i] - NPC.position + drawPos;
-
-                Main.EntitySpriteDraw(textureTrail, trailVector, null, auroraColor * (auraAlpha + nearingDetonation) * ((1 - i / (float)NPC.oldPos.Length) * 0.95f), NPC.rotation, textureTrail.Size() / 2, new Vector2(Main.rand.NextFloat(.9f, 1.2f), 1 + nearingDetonation), effects, 0);
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                Main.EntitySpriteDraw(texture, drawPos + new Vector2((4 + nearingDetonation) * auraAlpha, 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, auroraColor * .5f * (auraAlpha + nearingDetonation), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
-            }
-
-            spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-
-            Main.EntitySpriteDraw(texture, drawPos, NPC.frame, auroraColor * .3f * (auraAlpha + nearingDetonation), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, new Vector2(NPC.frame.Width * .5f, NPC.frame.Height * .5f), NPC.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, drawPos, NPC.frame, auroraColor, NPC.rotation, new Vector2(NPC.frame.Width * .5f, NPC.frame.Height * .5f), NPC.scale, SpriteEffects.None, 0);
+            }    
 
             return false;
         }

@@ -15,8 +15,7 @@ namespace GloryMod.NPCs.IceFish
             NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
-            NPCID.Sets.MPAllowedEnemies[Type] = true;
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;

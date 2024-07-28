@@ -57,7 +57,7 @@ namespace GloryMod.Items.Geomancer
             Projectile.scale = 1;
             Projectile.alpha = 0;
 
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = false;
 
             Projectile.aiStyle = -1;

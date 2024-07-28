@@ -40,6 +40,8 @@
     <None Remove="Items\BasaltBarriers\ExtinctionHeaterHook.png" />
     <None Remove="Items\BloodMoon\HemolicLance.png" />
     <None Remove="Items\BloodMoon\HemolicLanceMask.png" />
+    <None Remove="Items\HM\BlunderAxe.png" />
+    <None Remove="Items\HM\BlunderAxeFlash.png" />
     <None Remove="Items\Sightseer\DeadEyesBow.png" />
     <None Remove="Items\Sightseer\Oracle.png" />
     <None Remove="Items\Sightseer\OracleCooldown.png" />
@@ -97,6 +99,7 @@
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpikeMask.png" />
     <None Remove="NPCs\Geomancer\GeomancerDefeatedCape.png" />
     <None Remove="NPCs\IceFish\HM.png" />
+    <None Remove="NPCs\IceFish\HM_Head_Boss.png" />
     <None Remove="NPCs\Nerd\Nerd.png" />
     <None Remove="NPCs\Nerd\Nerd_Head_Boss.png" />
     <None Remove="NPCs\Sightseer\Minions\SeersTag.png" />

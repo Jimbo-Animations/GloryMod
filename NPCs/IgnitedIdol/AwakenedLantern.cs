@@ -341,6 +341,26 @@ namespace GloryMod.NPCs.IgnitedIdol
                             SoundEngine.PlaySound(SoundID.Item100, NPC.Center);
                             animState = 1;
                             NPC.localAI[1]++;
+                            Vector2 directionTo = NPC.DirectionTo(target.Center);
+                            float fanSize = 50;
+
+                            for (int i = -1; i < 2; i++)
+                            {
+                                int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(1, 0).RotatedBy(i * MathHelper.ToRadians(fanSize) / 3 + directionTo.ToRotation()), ProjectileType<AwakenedLight>(), 60, 3f, Main.myPlayer);
+                                Main.projectile[proj].ai[0] = NPC.ai[0];
+                                Main.projectile[proj].ai[1] = 3;
+                            }
+
+                            int numDusts = 20;
+                            for (int i = 0; i < numDusts; i++)
+                            {
+                                int dust = Dust.NewDust(NPC.Center, 0, 0, 59, Scale: 3f);
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].noLight = true;
+                                Main.dust[dust].velocity = new Vector2(10, 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
+                            }
+
+                            NPC.netUpdate = true;
                         }
                     }
 

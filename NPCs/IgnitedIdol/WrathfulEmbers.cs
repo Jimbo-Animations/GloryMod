@@ -29,6 +29,16 @@ namespace GloryMod.NPCs.IgnitedIdol
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
+
+
+            int numDusts = 8;
+            for (int i = 0; i < numDusts; i++)
+            {
+                int dust = Dust.NewDust(Projectile.Center, 0, 0, 59, Scale: 2f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = true;
+                Main.dust[dust].velocity = new Vector2(5, 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
+            }
         }
 
         public override void AI()
@@ -49,7 +59,7 @@ namespace GloryMod.NPCs.IgnitedIdol
                 }
             }
 
-            if (Projectile.localAI[0] >= 20 && Projectile.timeLeft <= 20)
+            if (Projectile.localAI[0] >= 25 && Projectile.timeLeft <= 20)
             {
                 Projectile.hostile = true;
             }

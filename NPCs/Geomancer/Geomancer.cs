@@ -170,10 +170,14 @@ namespace GloryMod.NPCs.Geomancer
 
             npcLoot.Add(ItemDropRule.Common(ItemID.WizardHat));
             npcLoot.Add(ItemDropRule.Common(ItemType<OrbOfPondering>()));
-            npcLoot.Add(hardMode);
 
-            for (int i = 0;  i < 10; i++) npcLoot.Add(ItemDropRule.OneFromOptions(1, ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Amber, ItemID.Diamond));
-
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amethyst, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Topaz, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Sapphire, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Emerald, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Ruby, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Amber, 1, 3, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Diamond, 1, 3, 5));
         }
 
         public override void BossLoot(ref string name, ref int potionType)

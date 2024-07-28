@@ -123,11 +123,13 @@ namespace GloryMod.Items.IgnitedIdol
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 4;
         }
         public override void SetDefaults()
         {
-            Projectile.width = 70;
-            Projectile.height = 70;
+            Projectile.width = 110;
+            Projectile.height = 110;
             Projectile.friendly = true; // Projectile hits enemies
             Projectile.timeLeft = 10000; // Time it takes for projectile to expire
             Projectile.penetrate = -1; // Projectile pierces infinitely
@@ -239,10 +241,16 @@ namespace GloryMod.Items.IgnitedIdol
             Texture2D mask = Request<Texture2D>(Texture + "Mask").Value;
             Texture2D glow = Request<Texture2D>("GloryMod/CoolEffects/Textures/Glow_1").Value;
 
-            Vector2 glowPos = Owner.MountedCenter + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale * 0.9f) - Main.screenPosition;
+            Vector2 holdOffset = new Vector2(-36, 0).RotatedBy(Projectile.rotation);
+            Vector2 glowPos = Owner.MountedCenter + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale * 0.9f) + holdOffset - Main.screenPosition;
 
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
-            Main.spriteBatch.Draw(mask, Projectile.Center - Main.screenPosition, default, Color.White * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            for (int i = 1; i < Projectile.oldPos.Length; i++)
+            {
+                Main.EntitySpriteDraw(texture, Projectile.oldPos[i] - Projectile.position + Projectile.Center + holdOffset - Main.screenPosition, default, lightColor * Projectile.Opacity * (1 - i / (float)Projectile.oldPos.Length) * .1f, Projectile.oldRot[i] + rotationOffset, origin, Projectile.scale, effects, 0);
+            }
+
+            Main.spriteBatch.Draw(texture, Projectile.Center + holdOffset - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            Main.spriteBatch.Draw(mask, Projectile.Center + holdOffset - Main.screenPosition, default, Color.White * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
             Main.spriteBatch.Draw(glow, glowPos, default, new Color(250, 200, 100) * Projectile.Opacity * 0.25f, Projectile.rotation + rotationOffset, glow.Size() / 2, Projectile.scale * 0.25f, effects, 0);
 
             return false;
@@ -252,7 +260,7 @@ namespace GloryMod.Items.IgnitedIdol
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Vector2 start = Owner.MountedCenter;
-            Vector2 end = start + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale);
+            Vector2 end = start + Projectile.rotation.ToRotationVector2() * ((Projectile.Size.Length() - 36) * Projectile.scale);
             float collisionPoint = 0f;
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, 15f * Projectile.scale, ref collisionPoint);
         }
@@ -429,7 +437,7 @@ namespace GloryMod.Items.IgnitedIdol
             Projectile.height = 10;
 
             Projectile.friendly = true;
-            Projectile.timeLeft = 10;
+            Projectile.timeLeft = 20;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false; 
             Projectile.usesLocalNPCImmunity = true; 
@@ -458,6 +466,8 @@ namespace GloryMod.Items.IgnitedIdol
        
             Projectile.rotation = Projectile.velocity.ToRotation();
             opacity = MathHelper.Lerp(opacity, 1, 0.1f);
+
+            if (Projectile.timeLeft < 10) Projectile.friendly = false;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

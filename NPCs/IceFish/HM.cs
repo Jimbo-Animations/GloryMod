@@ -1,12 +1,10 @@
 ﻿using GloryMod.Systems;
-using Microsoft.VisualBasic;
-using rail;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ModLoader;
+using Terraria.GameContent.Bestiary;
 
 namespace GloryMod.NPCs.IceFish
 {
+    [AutoloadBossHead]
     partial class HM : ModNPC
     {
         public override void SetStaticDefaults()
@@ -22,6 +20,14 @@ namespace GloryMod.NPCs.IceFish
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire3] = true;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
+                new FlavorTextBestiaryInfoElement("A massive, apex predator that thrives within the inhospitable chill of the blizzards. Natives to the tundra know to flee at the feeling of vibrations deep beneath the snow.")
+            });
         }
 
         public override void SetDefaults()
@@ -124,7 +130,6 @@ namespace GloryMod.NPCs.IceFish
                     NPC.netUpdate = true;
 
                     break;
-
 
                 case AttackPattern.Idle:
 
@@ -627,19 +632,27 @@ namespace GloryMod.NPCs.IceFish
             Vector2 drawPos = NPC.Center - screenPos;
             SpriteEffects effects;
 
-            if (NPC.ai[0] != 6 && NPC.ai[0] != 7) NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
-
-            blurAlpha = MathHelper.SmoothStep(blurAlpha, animState == 1 || animState == 2 ? 1 : 0, .15f);
-
-            if (NPC.spriteDirection > 0) effects = SpriteEffects.FlipHorizontally;
-            else effects = SpriteEffects.None;
-
-            for (int i = 1; i < NPC.oldPos.Length; i++)
+            if (!NPC.IsABestiaryIconDummy)
             {
-                Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, (Color.White * .25f) * blurAlpha * ((1 - i / (float)NPC.oldPos.Length) * 0.95f), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
-            }
+                if (NPC.ai[0] != 6 && NPC.ai[0] != 7) NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
 
-            spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                blurAlpha = MathHelper.SmoothStep(blurAlpha, animState == 1 || animState == 2 ? 1 : 0, .15f);
+
+                if (NPC.spriteDirection > 0) effects = SpriteEffects.FlipHorizontally;
+                else effects = SpriteEffects.None;
+
+                for (int i = 1; i < NPC.oldPos.Length; i++)
+                {
+                    Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, (Color.White * .25f) * blurAlpha * ((1 - i / (float)NPC.oldPos.Length) * 0.95f), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, drawColor, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+            }
+            else
+            {
+                spriteBatch.Draw(texture, drawPos + new Vector2(4, 0), NPC.frame, drawColor, NPC.rotation, new Vector2(NPC.frame.Width * .5f, NPC.frame.Height * .5f), .75f, SpriteEffects.None, 0f);
+            }
+            
 
             return false;
         }

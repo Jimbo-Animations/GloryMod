@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using GloryMod.Systems;
-using Terraria;
+using MonoMod.RuntimeDetour;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -159,7 +160,16 @@ namespace GloryMod.Items.BasaltBarriers
             duration = player.itemAnimationMax;
             Projectile.timeLeft = Projectile.ai[0] != 0 ? 600 : duration;
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            // Projectile.spriteDirection for this projectile is derived from the mouse position of the owner in OnSpawn, as such it needs to be synced. spriteDirection is not one of the fields automatically synced over the network. All Projectile.ai slots are used already, so we will sync it manually. 
+            writer.Write((sbyte)Projectile.spriteDirection);
+        }
 
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Projectile.spriteDirection = reader.ReadSByte();
+        }
 
         public override void AI()
         {
@@ -206,11 +216,11 @@ namespace GloryMod.Items.BasaltBarriers
             if (Projectile.spriteDirection > 0) effects = SpriteEffects.None;
             else effects = SpriteEffects.FlipVertically;
 
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(32 - Projectile.ai[1], 0).RotatedBy(Projectile.rotation), default, lightColor, Projectile.rotation, origin, Projectile.scale, effects, 0);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(32 - Projectile.ai[2], 0).RotatedBy(Projectile.rotation), default, lightColor, Projectile.rotation, origin, Projectile.scale, effects, 0);
 
             origin = new Vector2(flash.Width * 0.5f, frameHeight * 0.5f);
 
-            Main.spriteBatch.Draw(flash, Projectile.Center - Main.screenPosition + new Vector2(80 - Projectile.ai[1], -4 * Projectile.spriteDirection).RotatedBy(Projectile.rotation), sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale / 2, effects, 0);
+            Main.spriteBatch.Draw(flash, Projectile.Center - Main.screenPosition + new Vector2(80 - Projectile.ai[2], -4 * Projectile.spriteDirection).RotatedBy(Projectile.rotation), sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale / 2, effects, 0);
 
             return false;
         }
@@ -278,7 +288,9 @@ namespace GloryMod.Items.BasaltBarriers
 
                     Projectile.ai[1]++;
 
-                    Projectile.position = hitTarget.Center - Projectile.Size / 2;
+                    Vector2 hookOffset = new Vector2(-12, 0).RotatedBy(Projectile.rotation);
+
+                    Projectile.position = (hitTarget.Center + hookOffset) - (Projectile.Size / 2);
 
                     if (hitTarget.active == false || hitTarget.life <= 0) Projectile.ai[0] = 2;
 

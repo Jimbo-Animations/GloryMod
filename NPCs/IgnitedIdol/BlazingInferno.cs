@@ -25,17 +25,9 @@ namespace GloryMod.NPCs.IgnitedIdol
         }
 
         public override string Texture => "GloryMod/CoolEffects/Textures/InvisProj";
-        private int rippleCount = 1;
-        private int rippleSize = 5;
-        private int rippleSpeed = 15;
-        private float distortStrength = 100f;
 
         public override void OnSpawn(IEntitySource source)
         {
-            if (Main.netMode != NetmodeID.Server && !Terraria.Graphics.Effects.Filters.Scene["Shockwave"].IsActive())
-            {
-                Terraria.Graphics.Effects.Filters.Scene.Activate("Shockwave", Projectile.Center).GetShader().UseColor(rippleCount, rippleSize, rippleSpeed).UseTargetPosition(Projectile.Center);
-            }
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
         }
 
@@ -50,12 +42,6 @@ namespace GloryMod.NPCs.IgnitedIdol
             }
 
             Lighting.AddLight(Projectile.Center, 0.5f * expand, 0.5f * expand, 1 * expand);
-
-            if (Main.netMode != NetmodeID.Server && Terraria.Graphics.Effects.Filters.Scene["Shockwave"].IsActive())
-            {
-                float progress = (100f - Projectile.timeLeft) / 60f;
-                Terraria.Graphics.Effects.Filters.Scene["Shockwave"].GetShader().UseProgress(progress).UseOpacity(distortStrength * (1 - progress / 3f));
-            }
 
             //Spray bullets everywhere.
 
@@ -107,14 +93,6 @@ namespace GloryMod.NPCs.IgnitedIdol
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffType<FlamesOfRetribution>(), 200, true);
-        }
-
-        public override void Kill(int timeLeft)
-        {
-            if (Main.netMode != NetmodeID.Server && Terraria.Graphics.Effects.Filters.Scene["Shockwave"].IsActive())
-            {
-                Terraria.Graphics.Effects.Filters.Scene["Shockwave"].Deactivate();
-            }
         }
 
         private float expand = 0;

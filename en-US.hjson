@@ -175,6 +175,15 @@ Mods: {
 				DisplayName: Divine Intervention
 				Tooltip: ""
 			}
+
+			BlunderAxe: {
+				DisplayName: Blunder Axe
+				Tooltip:
+					'''
+					Left click to fire bouncy, detonating ice chunks that release bullets in all directions
+					Right click to raise and swing the weapon as an axe, dealing melee damage and inflicting Frostbite
+					'''
+			}
 		}
 
 		Projectiles: {
@@ -259,6 +268,8 @@ Mods: {
 			BSBSpineRocket.DisplayName: Spine Rocket
 			HMShockwave.DisplayName: H M Shockwave
 			BlueRoar.DisplayName: Blue Roar
+			BlunderAxeProj.DisplayName: Blunder Axe
+			BlunderSpike.DisplayName: Icy Caltrop
 		}
 
 		Buffs: {

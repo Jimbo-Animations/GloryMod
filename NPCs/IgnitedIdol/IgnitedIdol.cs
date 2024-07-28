@@ -632,17 +632,6 @@ namespace GloryMod.NPCs.IgnitedIdol
                         }
                     }
 
-                    //Control the camera.
-
-                    if (NPC.localAI[1] == 1)
-                    {
-                        ScreenUtils.ChangeCameraPos(NPC.Center, 100, 1.2f);
-                    }
-                    if (NPC.localAI[1] == 100 && NPC.localAI[0] <= 900)
-                    {
-                        NPC.localAI[1] = 0;
-                    }
-
                     //End scene.
 
                     if (NPC.ai[3] == 900)
