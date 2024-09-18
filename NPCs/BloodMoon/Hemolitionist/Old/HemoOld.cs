@@ -1,12 +1,4 @@
-﻿using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
-using GloryMod.Systems;
-using System.Collections.Generic;
-using GloryMod.Systems.BossBars;
-using GloryMod.Items.BloodMoon.Hemolitionist;
-
+﻿/*
 namespace GloryMod.NPCs.BloodMoon.Hemolitionist
 {
     [AutoloadBossHead]
@@ -1571,3 +1563,4 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist
         }
     }
 }
+*/

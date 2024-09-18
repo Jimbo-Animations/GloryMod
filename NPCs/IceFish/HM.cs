@@ -1,4 +1,5 @@
 ﻿using GloryMod.Systems;
+using GloryMod.Systems.BossBars;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 
@@ -51,7 +52,7 @@ namespace GloryMod.NPCs.IceFish
             NPC.coldDamage = true;
 
             Music = MusicID.OtherworldlyUGHallow;
-
+            NPC.BossBar = GetInstance<HMBossBarr>();
         }
 
         public Player target

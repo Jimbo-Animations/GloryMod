@@ -226,7 +226,6 @@ namespace GloryMod.NPCs.BasaltBarriers.Projectiles
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(255, 255, 255) * visibility, 0, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, new Color(200, 150, 50, 150) * glowVisibility, 0, glow.Size() / 2, Projectile.scale * (Projectile.ai[0] * 0.075f + 0.25f), SpriteEffects.None, 0);
 
-
             return false;
         }
     }

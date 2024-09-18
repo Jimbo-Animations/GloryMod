@@ -25,6 +25,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
+            if (Projectile.ai[1] != 0) Projectile.timeLeft = 180;
         }
 
         public override void AI()
@@ -43,16 +44,29 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
                     Projectile.frame = 0;
                 }
             }
+            if (Projectile.ai[1] == 0)
+            {
+                int age = 150 - Projectile.timeLeft;
+                float homingFactor = 1f / (float)Math.Max(age / 2f, 50f - age / 2f);
 
-            int age = 150 - Projectile.timeLeft;
-            float homingFactor = 1f / (float)Math.Max(age / 2f, 50f - age / 2f);
+                float velocityFactor = Math.Min(1 + age / 5f, 50f);
 
-            float velocityFactor = Math.Min(1 + age / 5f, 50f);
+                Vector2 goalVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * velocityFactor;
+                Projectile.velocity += (goalVelocity - Projectile.velocity) * homingFactor;
+                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * velocityFactor;
+            }
+            else
+            {
+                int age = 200 - Projectile.timeLeft;
+                float homingFactor = 1f / (Projectile.timeLeft < 100 ? age / 5 : 50);
 
-            Vector2 goalVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * velocityFactor;
-            Projectile.velocity += (goalVelocity - Projectile.velocity) * homingFactor;
-            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * velocityFactor;
+                float velocityFactor = Projectile.timeLeft < 100 ? age / 10 : 10f;
 
+                Vector2 goalVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * velocityFactor;
+                Projectile.velocity += (goalVelocity - Projectile.velocity) * homingFactor;
+                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * velocityFactor;
+            }
+       
             if (Main.rand.NextBool(20)) Dust.NewDustPerfect(Projectile.Center, 266, new Vector2(Main.rand.NextFloat(3), 0).RotatedBy(Projectile.rotation).RotatedByRandom(MathHelper.ToRadians(90)), Scale: 2f);
         }
 

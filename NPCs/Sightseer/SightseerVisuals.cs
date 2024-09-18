@@ -27,20 +27,13 @@ namespace GloryMod.NPCs.Sightseer
                 timer = 0f;
             }
 
+            Color mirageColor = Systems.Utils.ColorLerpCycle(Main.GlobalTimeWrappedHourly, 5, new Color[] { new Color(50, 130, 250), new Color(130, 50, 250) });
+
             //Makes sure it does not draw its normal code for its bestiary entry.
             if (!NPC.IsABestiaryIconDummy)
             {
                 spriteWidth = MathHelper.SmoothStep(spriteWidth, 1, 0.2f);
                 if (beVisible) visibility = MathHelper.SmoothStep(visibility, 1, 0.2f);
-
-                spriteBatch.Draw(texture, drawPos, NPC.frame, useSilhouette ? new Color(0, 0, 0, 255) * visibility : drawColor * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
-                spriteBatch.Draw(mask, drawPos, NPC.frame, Color.White * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
-
-                for (int i = 0; i < 4; i++)
-                {
-                    Main.EntitySpriteDraw(mask2, drawPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, Color.White * visibility * 0.5f,
-                    NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0);
-                }
 
                 void MirrorChaseVisuals(int mirageCount)
                 {
@@ -48,15 +41,24 @@ namespace GloryMod.NPCs.Sightseer
                     {
                         Vector2 MirrorPos = target.Center - new Vector2(target.Center.X - NPC.Center.X, target.Center.Y - NPC.Center.Y).RotatedBy(MathHelper.TwoPi * i / mirageCount) - screenPos;
 
-                        spriteBatch.Draw(texture, MirrorPos, NPC.frame, new Color(0, 0, 0, 255) * visibility, NPC.rotation + (MathHelper.TwoPi / mirageCount) * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
-                        spriteBatch.Draw(mask, MirrorPos, NPC.frame, Color.White * visibility, NPC.rotation + (MathHelper.TwoPi / mirageCount) * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+                        spriteBatch.Draw(texture, MirrorPos, NPC.frame, Color.Black * visibility, NPC.rotation + (MathHelper.TwoPi / mirageCount) * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+                        spriteBatch.Draw(mask, MirrorPos, NPC.frame, mirageColor * visibility, NPC.rotation + (MathHelper.TwoPi / mirageCount) * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
 
                         for (int j = 0; j < 4; j++)
                         {
-                            Main.EntitySpriteDraw(mask2, MirrorPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + j * MathHelper.TwoPi / 4), NPC.frame, Color.White * visibility * 0.5f,
-                            NPC.rotation + (MathHelper.TwoPi / mirageCount) * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0);
+                            Main.EntitySpriteDraw(mask2, MirrorPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + j * MathHelper.TwoPi / 4), NPC.frame, mirageColor * visibility * 0.5f,
+                            NPC.rotation + MathHelper.TwoPi / mirageCount * i, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0);
                         }
                     }
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, useSilhouette ? Color.Black * visibility : drawColor * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+                spriteBatch.Draw(mask, drawPos, NPC.frame, Color.White * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Main.EntitySpriteDraw(mask2, drawPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, Color.White * visibility * 0.5f,
+                    NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0);
                 }
 
 

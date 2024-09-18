@@ -1,6 +1,6 @@
 ﻿using GloryMod.NPCs.NeonBoss;
 using Terraria.Audio;
-using GloryMod.NPCs.BloodMoon.Hemolitionist;
+using GloryMod.NPCs.BloodMoon.Hemolitionist.New;
 using GloryMod.NPCs.Sightseer;
 using GloryMod.NPCs.BloodMoon.BloodSeekerBeast;
 

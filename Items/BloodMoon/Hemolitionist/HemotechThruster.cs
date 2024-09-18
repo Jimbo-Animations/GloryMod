@@ -19,7 +19,7 @@ namespace GloryMod.Items.BloodMoon.Hemolitionist
             Item.width = 40;
             Item.height = 40;
             Item.accessory = true;
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ItemRarityID.Pink;
             Item.value = Item.sellPrice(gold: 5);
         }
 

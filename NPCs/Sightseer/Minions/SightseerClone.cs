@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Terraria.GameContent;
-using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 
 namespace GloryMod.NPCs.Sightseer.Minions
 {
@@ -18,6 +18,8 @@ namespace GloryMod.NPCs.Sightseer.Minions
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.ProjectileNPC[Type] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
 
         public override void SetDefaults()
@@ -56,6 +58,11 @@ namespace GloryMod.NPCs.Sightseer.Minions
             }
 
             target.AddBuff(BuffType<SeersTag>(), 600, true);
+        }
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return target.Distance(NPC.Center) <= NPC.width / 2;
         }
 
         public override bool CheckActive()
@@ -247,14 +254,16 @@ namespace GloryMod.NPCs.Sightseer.Minions
                 timer = 0f;
             }
 
+            Color mirageColor = Systems.Utils.ColorLerpCycle(Main.GlobalTimeWrappedHourly, 3, new Color[] { new Color(200, 200, 100), new Color(100, 200, 200) });
+
             spriteWidth = MathHelper.SmoothStep(spriteWidth, 1, 0.2f);
 
-            spriteBatch.Draw(silhouette, drawPos, NPC.frame, new Color(0, 0, 0, 255) * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
-            spriteBatch.Draw(mask, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(silhouette, drawPos, NPC.frame, Color.Black * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(mask, drawPos, NPC.frame, (IsReal == 0 ? Color.White : mirageColor) * visibility, NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0f);
 
             for (int i = 0; i < 4; i++)
             {
-                Main.EntitySpriteDraw(mask2, drawPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * visibility * 0.5f,
+                Main.EntitySpriteDraw(mask2, drawPos + new Vector2(8 - (4 * visibility), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), NPC.frame, new Color(255, 255, 255) * visibility * 0.5f,
                 NPC.rotation, drawOrigin, new Vector2(spriteWidth, 1), SpriteEffects.None, 0);
             }
 
@@ -278,7 +287,7 @@ namespace GloryMod.NPCs.Sightseer.Minions
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
-                Main.EntitySpriteDraw(glow, flash[i].Item1 - Main.screenPosition, null, new Color(255, 255, 255) * (1 - visibility), Main.GameUpdateCount * 0.025f + NPC.rotation, glow.Size() / 2, 1 + visibility, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(glow, flash[i].Item1 - Main.screenPosition, null, Color.White * (1 - visibility), Main.GameUpdateCount * 0.025f + NPC.rotation, glow.Size() / 2, 1 + visibility, SpriteEffects.None, 0);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);

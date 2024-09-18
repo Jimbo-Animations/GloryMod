@@ -46,6 +46,11 @@ namespace GloryMod.NPCs.Sightseer.Projectiles
             target.AddBuff(BuffType<SeersTag>(), 600, true);
         }
 
+        public override bool CanHitPlayer(Player target)
+        {
+            return target.Distance(Projectile.Center) <= Projectile.width / 2;
+        }
+
         public override void AI()
         {
             switch (Projectile.ai[0])
@@ -91,6 +96,8 @@ namespace GloryMod.NPCs.Sightseer.Projectiles
                 timer = 0f;
             }
 
+            Color mirageColor = Systems.Utils.ColorLerpCycle(Main.GlobalTimeWrappedHourly, 5, new Color[] { new Color(50, 130, 250), new Color(130, 50, 250) });
+
             for (int i = 0; i < Projectile.oldPos.Length; i++)
             {
                 Color color = Projectile.GetAlpha(new Color(20, 0, 30, 250)) * opacity;
@@ -105,11 +112,11 @@ namespace GloryMod.NPCs.Sightseer.Projectiles
             sourceRectangle = new Rectangle(0, frameY, texture.Width, frameHeight);
             origin = sourceRectangle.Size() / 2f;
 
-            Main.EntitySpriteDraw(texture, Projectile.oldPos[1] - Projectile.position + Projectile.Center - Main.screenPosition, sourceRectangle, Projectile.ai[1] == 1 ? new Color(0, 100, 250) * opacity : Color.White * opacity, Projectile.rotation, origin, Projectile.scale * opacity + (float)Math.Sin(timer) * 0.1f, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(texture, Projectile.oldPos[1] - Projectile.position + Projectile.Center - Main.screenPosition, sourceRectangle, Projectile.ai[1] == 1 ? mirageColor * opacity : Color.White * opacity, Projectile.rotation, origin, Projectile.scale * opacity + (float)Math.Sin(timer) * 0.1f, SpriteEffects.None, 0);
 
             for (int i = 0; i < 4; i++)
             {
-                Main.EntitySpriteDraw(texture, Projectile.oldPos[1] - Projectile.position + Projectile.Center - Main.screenPosition + new Vector2(4 - (2 * opacity), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), sourceRectangle, Projectile.ai[1] == 1 ? new Color(0, 100, 250) * opacity * 0.5f : new Color(47, 250, 255) * opacity * 0.5f,
+                Main.EntitySpriteDraw(texture, Projectile.oldPos[1] - Projectile.position + Projectile.Center - Main.screenPosition + new Vector2(4 - (2 * opacity), 0).RotatedBy(timer + i * MathHelper.TwoPi / 4), sourceRectangle, Projectile.ai[1] == 1 ? mirageColor * opacity * 0.5f : new Color(47, 250, 255) * opacity * 0.5f,
                 Projectile.rotation, origin, Projectile.scale * opacity + (float)Math.Sin(timer) * 0.05f, SpriteEffects.None, 0);
             }
 

@@ -104,6 +104,11 @@ namespace GloryMod.NPCs.Sightseer.Minions
             else Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, 33, Scale: 2f)].noGravity = true;
         }
 
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return target.Distance(NPC.Center) <= NPC.width / 2;
+        }
+
         public override void AI()
         {
             NPC owner = Main.npc[(int)NPC.ai[0]];

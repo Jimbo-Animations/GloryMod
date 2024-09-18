@@ -1,6 +1,7 @@
 ﻿using Terraria.Audio;
 using Terraria.DataStructures;
 using ReLogic.Utilities;
+using Terraria.GameContent.Bestiary;
 
 namespace GloryMod.NPCs.Geomancer
 {
@@ -12,6 +13,8 @@ namespace GloryMod.NPCs.Geomancer
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.ImmuneToAllBuffs[Type] = true;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
 
         public override void SetDefaults()

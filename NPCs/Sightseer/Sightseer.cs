@@ -189,6 +189,11 @@ namespace GloryMod.NPCs.Sightseer
             npcLoot.Add(ItemDropRule.Common(ItemType<OtherworldlyFlesh>(), 1, 6, 6));
         }
 
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return target.Distance(NPC.Center) <= NPC.width / 2;
+        }
+
         private int animState = 0;
         private int animSpeed = 6;
         public override void FindFrame(int frameHeight)

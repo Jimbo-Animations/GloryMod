@@ -1,14 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Audio;
-using Terraria.DataStructures;
-using GloryMod.Systems;
-using System.Collections.Generic;
-using System;
+﻿using Terraria.DataStructures;
 
 namespace GloryMod.NPCs.BloodMoon.BloodDrone
 {

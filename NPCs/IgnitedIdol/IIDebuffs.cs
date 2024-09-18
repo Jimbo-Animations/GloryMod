@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace GloryMod.NPCs.IgnitedIdol
+﻿namespace GloryMod.NPCs.IgnitedIdol
 {
     public class FlamesOfJudgement : ModBuff
     {

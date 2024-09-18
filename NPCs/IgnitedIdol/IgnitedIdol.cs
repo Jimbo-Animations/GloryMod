@@ -732,7 +732,7 @@ namespace GloryMod.NPCs.IgnitedIdol
 
                 case AttackPattern.TorchTrail:
 
-                    //Create fire and shoot predicting bullets.
+                    // Create fire and shoot predicting bullets.
 
                     NPC.localAI[0]++;
                     NPC.localAI[1]++;

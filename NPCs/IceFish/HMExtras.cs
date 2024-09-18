@@ -1,5 +1,4 @@
-﻿using GloryMod.Items.BloodMoon;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Utilities;

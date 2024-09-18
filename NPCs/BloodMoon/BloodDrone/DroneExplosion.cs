@@ -15,7 +15,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
             Projectile.width = 90;
             Projectile.height = 90;
             Projectile.tileCollide = false;
-            Projectile.hostile = true;
+            Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 24;
             Projectile.alpha = 0;
@@ -36,7 +36,6 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
                 Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(8), 0).RotatedBy(i * MathHelper.TwoPi / numDusts);
             }
         }
-
         public override void AI()
         {
             Projectile.ai[0]++;
@@ -50,6 +49,9 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
                 {
                     Projectile.frame = 7;
                 }
+
+                if (Projectile.frame > 1 & Projectile.frame < 6) Projectile.hostile = true;
+                else Projectile.hostile = false;
             }
 
             visibility = MathHelper.Lerp(visibility, Projectile.timeLeft <= 10 ? 0 : 1, 0.1f);
@@ -58,9 +60,23 @@ namespace GloryMod.NPCs.BloodMoon.BloodDrone
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
             Rectangle result = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-            int num = (int)Terraria.Utils.Remap(Projectile.ai[0] * 2, 0, 200, 10, 40);
+            int num = (int)Terraria.Utils.Remap(Projectile.ai[0] * 4, 0, 200, 10, 40);
             result.Inflate(num, num);
             hitbox = result;
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+            return target.Distance(Projectile.Center) <= Projectile.Hitbox.X / 2;
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (Projectile.ai[2] > 0) 
+            {
+                CombatText.NewText(target.getRect(), Color.Red, "KABOOMM!!!", true);
+                target.AddBuff(BuffID.Bleeding, 300, true);
+            }
         }
 
         float visibility = 1;

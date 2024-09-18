@@ -3,7 +3,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
 using Terraria.DataStructures;
 using GloryMod.NPCs.BloodMoon.BloodSeekerBeast;
-using GloryMod.NPCs.BloodMoon.Hemolitionist;
+using GloryMod.NPCs.BloodMoon.Hemolitionist.New;
 
 namespace GloryMod.Systems.BossBars
 {
@@ -74,7 +74,7 @@ namespace GloryMod.Systems.BossBars
         public override bool? ModifyInfo(ref BigProgressBarInfo info, ref float life, ref float lifeMax, ref float shield, ref float shieldMax)
         {
             NPC npc = Main.npc[info.npcIndexToAimAt];
-            if (!npc.active || npc.ai[0] == 0)
+            if (!npc.active || npc.ai[0] < 2)
                 return false;
 
             if (npc.type == NPCType<BSBHead>() && npc.ai[2] == 0)
@@ -236,6 +236,48 @@ namespace GloryMod.Systems.BossBars
             float shakeIntensity = drawParams.Life <= drawParams.LifeMax * 0.3f ? Terraria.Utils.Clamp(1f - lifePercent - 0.2f, 0f, 1f) : 0;
             drawParams.BarCenter.Y -= 20f;
             drawParams.BarCenter += Main.rand.NextVector2Circular(0.5f, 0.5f) * shakeIntensity * 5f;
+
+            return true;
+        }
+    }
+
+    public class HMBossBarr : ModBossBar
+    {
+        private int bossHeadIndex = -1;
+
+        public override Asset<Texture2D> GetIconTexture(ref Rectangle? iconFrame)
+        {
+            if (bossHeadIndex != -1)
+            {
+                return TextureAssets.NpcHeadBoss[bossHeadIndex];
+            }
+            return null;
+        }
+
+        public override bool? ModifyInfo(ref BigProgressBarInfo info, ref float life, ref float lifeMax, ref float shield, ref float shieldMax)
+        {
+            NPC npc = Main.npc[info.npcIndexToAimAt];
+            if (!npc.active || npc.ai[0] == 0 || npc.ai[0] == 6)
+                return false;
+
+            bossHeadIndex = npc.GetBossHeadTextureIndex();
+
+            life = npc.life;
+            lifeMax = npc.lifeMax;
+
+            return true;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, NPC npc, ref BossBarDrawParams drawParams)
+        {
+            drawParams.IconScale = 0.9f;
+
+            // Make the bar shake as it loses health in its final phase.
+            float lifePercent = drawParams.Life / drawParams.LifeMax;
+            float shakeIntensity = drawParams.Life <= 1 ? 1 : 0;
+            drawParams.BarCenter.Y -= 20f;
+            drawParams.BarCenter += Main.rand.NextVector2Circular(0.5f, 0.5f) * shakeIntensity * 5f;            
+            
 
             return true;
         }

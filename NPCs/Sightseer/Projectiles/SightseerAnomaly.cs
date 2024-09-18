@@ -45,6 +45,11 @@ namespace GloryMod.NPCs.Sightseer.Projectiles
             target.AddBuff(BuffType<SeersTag>(), 600, true);
         }
 
+        public override bool CanHitPlayer(Player target)
+        {
+            return target.Distance(Projectile.Center) <= Projectile.width / 2;
+        }
+
         public override void AI()
         {
             Projectile.ai[0]++;

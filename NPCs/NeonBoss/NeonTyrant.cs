@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using GloryMod.Systems.BossBars;
 using GloryMod.Items.NeonBoss;
 using System.IO;
+using Terraria;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace GloryMod.NPCs.NeonBoss
 {
@@ -16,6 +18,8 @@ namespace GloryMod.NPCs.NeonBoss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.MPAllowedEnemies[Type] = true;
 
@@ -29,7 +33,7 @@ namespace GloryMod.NPCs.NeonBoss
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-                new FlavorTextBestiaryInfoElement("This gargantuan slime has the ability to light up in all sorts of fantastic colors, thanks to its powerful sky magic.")
+                new FlavorTextBestiaryInfoElement("This gargantuan slime has the ability to light up in all sorts of fantastic colors, thanks to its powerful sky magic. Leading an army of elemenal minions; the Neon Tyrant is a formidable monster for even seasoned adventurers.")
             });
         }
 
@@ -70,10 +74,7 @@ namespace GloryMod.NPCs.NeonBoss
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = 1;
 
-            if (projectile.penetrate > 1 || projectile.penetrate == -1)
-            {
-                modNPC.DR = 0.5f;
-            }
+            if (projectile.penetrate != 1 && projectile.DamageType != DamageClass.Melee) modNPC.DR = 0.5f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -206,14 +207,8 @@ namespace GloryMod.NPCs.NeonBoss
             Vector2 groundPosition = NPC.Center.findGroundUnder();
             int goalDirectionX = player.Center.X < NPC.Center.X ? -1 : 1;
 
-            if (NPC.Bottom.Y < player.Top.Y)
-            {
-                canfall = true;
-            }
-            else
-            {
-                canfall = false;
-            }
+            canfall = NPC.Bottom.Y < player.Top.Y ? true : false;
+            NPC.damage = NPC.velocity.Y > 1 && NPC.ai[0] == 0 ? 120 : 0;
 
             float Phase2;
             float Phase3;
@@ -308,14 +303,8 @@ namespace GloryMod.NPCs.NeonBoss
             {
                 NPC.TargetClosest();
 
-                if (NPC.timeLeft > 10)
-                {
-                    NPC.timeLeft = 10;
-                }
-                if (NPC.velocity.Y < 10)
-                {
-                    NPC.velocity.Y -= 1f;
-                }
+                if (NPC.timeLeft > 10) NPC.timeLeft = 10;
+                if (NPC.velocity.Y < 10) NPC.velocity.Y -= 1f;
 
                 NPC.dontTakeDamage = true;
                 NPC.chaseable = false;
@@ -329,14 +318,8 @@ namespace GloryMod.NPCs.NeonBoss
                     NPC.dontTakeDamage = true;
                     NPC.damage = 0;
 
-                    if (NPC.alpha < 255 && NPC.ai[2] < 60)
-                    {
-                        NPC.alpha += 5;
-                    }
-                    if (NPC.ai[2] == 0 && WhatPhase != 1)
-                    {
-                        SoundEngine.PlaySound(SoundID.Zombie105, NPC.Center);
-                    }
+                    if (NPC.alpha < 255 && NPC.ai[2] < 60) NPC.alpha += 5;
+                    if (NPC.ai[2] == 0 && WhatPhase != 1) SoundEngine.PlaySound(SoundID.Zombie105, NPC.Center);
                     NPC.ai[2]++;
 
                     if (NPC.ai[2] < 60)
@@ -348,61 +331,7 @@ namespace GloryMod.NPCs.NeonBoss
 
                     if (NPC.ai[2] > 60)
                     {
-                        if (NPC.AnyNPCs(NPCType<NobleSlime1>()) && WhatPhase == 1)
-                        {
-                            Vector2 goalPos = player.Center + new Vector2(0, -300);
-                            Vector2 goalVel = goalPos - NPC.Center;
-                            if (goalVel.Length() > 10)
-                            {
-                                Speed = MathHelper.Lerp(Speed, 13f, 0.06f);
-                                goalVel.Normalize();
-                                goalVel *= Speed;
-                            }
-                            else
-                            {
-                                Speed = 1f;
-                            }
-
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, goalVel + player.position - player.oldPosition, 0.06f);
-                            NPC.hide = true;
-                        }
-                        else if (NPC.AnyNPCs(NPCType<NobleSlime2>()) && WhatPhase == 2)
-                        {
-                            Vector2 goalPos = player.Center + new Vector2(0, -300);
-                            Vector2 goalVel = goalPos - NPC.Center;
-                            if (goalVel.Length() > 10)
-                            {
-                                Speed = MathHelper.Lerp(Speed, 13f, 0.06f);
-                                goalVel.Normalize();
-                                goalVel *= Speed;
-                            }
-                            else
-                            {
-                                Speed = 1f;
-                            }
-
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, goalVel + player.position - player.oldPosition, 0.06f);
-                            NPC.hide = true;
-                        }
-                        else if (NPC.AnyNPCs(NPCType<NobleSlime3>()) && WhatPhase == 3)
-                        {
-                            Vector2 goalPos = player.Center + new Vector2(0, -300);
-                            Vector2 goalVel = goalPos - NPC.Center;
-                            if (goalVel.Length() > 10)
-                            {
-                                Speed = MathHelper.Lerp(Speed, 13f, 0.06f);
-                                goalVel.Normalize();
-                                goalVel *= Speed;
-                            }
-                            else
-                            {
-                                Speed = 1f;
-                            }
-
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, goalVel + player.position - player.oldPosition, 0.06f);
-                            NPC.hide = true;
-                        }
-                        else if (NPC.AnyNPCs(NPCType<NobleSlime4>()) && WhatPhase == 4)
+                        if ((NPC.AnyNPCs(NPCType<NobleSlime1>()) && WhatPhase == 1) || (NPC.AnyNPCs(NPCType<NobleSlime2>()) && WhatPhase == 2) || (NPC.AnyNPCs(NPCType<NobleSlime3>()) && WhatPhase == 3) || (NPC.AnyNPCs(NPCType<NobleSlime4>()) && WhatPhase == 4))
                         {
                             Vector2 goalPos = player.Center + new Vector2(0, -300);
                             Vector2 goalVel = goalPos - NPC.Center;
@@ -423,10 +352,7 @@ namespace GloryMod.NPCs.NeonBoss
                         else
                         {
                             NPC.hide = false;
-                            if (NPC.alpha > 0)
-                            {
-                                NPC.alpha -= 5;
-                            }
+                            if (NPC.alpha > 0) NPC.alpha -= 5;
 
                             Hopping(0, 0, 1000);
                             NPC.ai[3]++;
@@ -439,43 +365,26 @@ namespace GloryMod.NPCs.NeonBoss
                                 NPC.ai[2] = 0;
                                 NPC.ai[0] = 1;
 
-                                if (WhatPhase == 2)
-                                {
-                                    NPC.life = (int)(Phase2);
-                                }
-                                if (WhatPhase == 3)
-                                {
-                                    NPC.life = (int)(Phase3);
-                                }
-                                if (WhatPhase == 4)
-                                {
-                                    NPC.life = (int)(Phase4);
-                                }
+                                if (WhatPhase == 2) NPC.life = (int)(Phase2);
+                                if (WhatPhase == 3) NPC.life = (int)(Phase3);
+                                if (WhatPhase == 4) NPC.life = (int)(Phase4);
 
                                 ChangeAttacks();
                             }
                         }
-
                     }
 
-                    if (NPC.ai[2] == 60 && WhatPhase == 1 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (NPC.ai[2] == 60)
                     {
-                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Top.X, (int)NPC.Top.Y, NPCType<NobleSlime1>(), NPC.whoAmI);
-                        NPC.netUpdate = true;
-                    }
-                    if (NPC.ai[2] == 60 && WhatPhase == 2 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<NobleSlime2>(), NPC.whoAmI);
-                        NPC.netUpdate = true;
-                    }
-                    if (NPC.ai[2] == 60 && WhatPhase == 3 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<NobleSlime3>(), NPC.whoAmI);
-                        NPC.netUpdate = true;
-                    }
-                    if (NPC.ai[2] == 60 && WhatPhase == 4 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCType<NobleSlime4>(), NPC.whoAmI);
+                        if (WhatPhase == 1 && Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Top.X, (int)NPC.Top.Y, NPCType<NobleSlime1>(), NPC.whoAmI);
+                        if (WhatPhase == 2 && Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Top.X, (int)NPC.Center.Y, NPCType<NobleSlime2>(), NPC.whoAmI);
+                        if (WhatPhase == 3 && Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Top.X, (int)NPC.Center.Y, NPCType<NobleSlime3>(), NPC.whoAmI);
+                        if (WhatPhase == 4 && Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Top.X, (int)NPC.Center.Y, NPCType<NobleSlime4>(), NPC.whoAmI);
+
                         NPC.netUpdate = true;
                     }
 
@@ -495,7 +404,7 @@ namespace GloryMod.NPCs.NeonBoss
                         for (int i = 0; i < (int)(NPC.ai[3]); i++)
                         {
                             Vector2 spawninsky = player.Center + new Vector2(0, -500);
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), spawninsky, Vector2.Zero, ProjectileType<NeonVortex>(), NPC.damage / 2, 1, player.whoAmI, 0, (int)NPC.ai[3]);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), spawninsky, Vector2.Zero, ProjectileType<NeonVortex>(), 60, 1, player.whoAmI, 0, (int)NPC.ai[3]);
                             NPC.netUpdate = true;
                         }
 
@@ -514,10 +423,7 @@ namespace GloryMod.NPCs.NeonBoss
                     //Turn silver and jump back, then create and chuck debris.
 
                     NPC.velocity.Y += 0.2f;
-                    if (NPC.velocity.Y >= 16)
-                    {
-                        NPC.velocity.Y = 16;
-                    }
+                    if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
                     if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height) != new Vector2(0, NPC.velocity.Y))
                     {
@@ -545,7 +451,7 @@ namespace GloryMod.NPCs.NeonBoss
                                 for (int i = 0; i < projCount; i++)
                                 {
                                     Vector2 spawnonground = new Vector2(Main.rand.NextFloat(-330, 330), 0) + groundPosition;
-                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-0.3334f * projCount, -1 * projCount)).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileType<NeonTyrantDebris>(), NPC.damage / 2, 1, player.whoAmI);
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-0.3334f * projCount, (-1 * projCount) - 2)).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileType<NeonTyrantDebris>(), 75, 1, player.whoAmI);
                                 }
 
                                 NPC.netUpdate = true;
@@ -614,10 +520,7 @@ namespace GloryMod.NPCs.NeonBoss
                     {
                         NPC.velocity.Y += Main.getGoodWorld ? 0.25f : 0.2f;
                         NPC.velocity.X += Main.getGoodWorld ? 0.3f * goalDirectionX : 0.2f * goalDirectionX;
-                        if (NPC.velocity.Y >= 16)
-                        {
-                            NPC.velocity.Y = 16;
-                        }
+                        if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
                         if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, canfall, canfall) != new Vector2(0, NPC.velocity.Y))
                         {
@@ -639,7 +542,7 @@ namespace GloryMod.NPCs.NeonBoss
                                     }
                                     SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 
-                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition + new Vector2(0, -50), Vector2.Zero, ProjectileType<NeonTyrantShockwave>(), NPC.damage, 1, player.whoAmI, 0, 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition + new Vector2(0, -50), Vector2.Zero, ProjectileType<NeonTyrantShockwave>(), 50, 1, player.whoAmI, 0, 0);
                                     NPC.netUpdate = true;
                                 }
                             }
@@ -699,8 +602,8 @@ namespace GloryMod.NPCs.NeonBoss
                         Vector2 spawnongroundnegative = new Vector2(-650, 0) + groundPosition;
                         NPC.ai[2] = 0;
                         NPC.ai[3]++;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), NPC.damage / 2, 1, player.whoAmI);
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnongroundnegative, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), NPC.damage / 2, 1, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), 60, 1, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnongroundnegative, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), 60, 1, player.whoAmI);
                         NPC.netUpdate = true;
                     }
 
@@ -719,19 +622,11 @@ namespace GloryMod.NPCs.NeonBoss
             void Hopping(float speedX, float speedY, int canjump = 60, bool compensateX = false, bool compensateY = false)
             {
                 NPC.velocity.Y += 0.3f;
-                if (NPC.velocity.Y >= 16)
-                {
-                    NPC.velocity.Y = 16;
-                }
+                if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
-                if (compensateX == true)
-                {
-                    speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
-                }
-                if (compensateY == true)
-                {
-                    speedY -= (player.Center.Y - NPC.Center.Y) / 50;
-                }
+                if (compensateX == true) speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
+
+                if (compensateY == true) speedY -= (player.Center.Y - NPC.Center.Y) / 50;
 
 
                 if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true) != new Vector2(0, NPC.velocity.Y))
@@ -757,10 +652,7 @@ namespace GloryMod.NPCs.NeonBoss
                 }
                 else
                 {
-                    if (NPC.velocity.Y < 0)
-                    {
-                        NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
-                    }
+                    if (NPC.velocity.Y < 0) NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
                     else
                     {
                         NPC.rotation = NPC.rotation.AngleTowards(0f - NPC.velocity.X * 0.06f, 0.01f);
@@ -787,23 +679,18 @@ namespace GloryMod.NPCs.NeonBoss
 
             void ChangeAttacks()
             {
-                if (NPC.ai[1] <= 1)
-                {
-                    NPC.ai[1] = WhatPhase;
-                }
-                else
-                {
-                    NPC.ai[1]--;
-                }
+                if (NPC.ai[1] <= 1) NPC.ai[1] = WhatPhase;
+                else NPC.ai[1]--;
+
                 NPC.netUpdate = true;
             }
         }
 
-        private float alpha1 = 1;
-        private float alpha2 = 0;
-        private float alpha3 = 0;
-        private float alpha4 = 0;
-
+        private float alpha1;
+        private float alpha2;
+        private float alpha3;
+        private float alpha4;
+        private float auraAlpha;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -816,46 +703,29 @@ namespace GloryMod.NPCs.NeonBoss
             Vector2 drawPos = NPC.Center - screenPos;
 
             SpriteEffects effects = new SpriteEffects();
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
+            if (NPC.spriteDirection == 1) effects = SpriteEffects.FlipHorizontally;
 
             if (!NPC.IsABestiaryIconDummy)
             {
-                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(texture2, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha2, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(texture3, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha3, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(texture4, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha4, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                alpha1 = MathHelper.Lerp(alpha1, NPC.ai[1] == 1 || NPC.ai[1] == 0 ? 1 : 0, 0.05f);
+                alpha2 = MathHelper.Lerp(alpha2, NPC.ai[1] == 2 ? 1 : 0, 0.05f);
+                alpha3 = MathHelper.Lerp(alpha3, NPC.ai[1] == 3 ? 1 : 0, 0.05f);
+                alpha4 = MathHelper.Lerp(alpha4, NPC.ai[1] == 4 ? 1 : 0, 0.05f);
+                auraAlpha = MathHelper.Lerp(auraAlpha, NPC.damage > 0 ? 1 : 0, 0.15f);
 
-                if (NPC.ai[1] == 1)
+                for (int i = 1; i < NPC.oldPos.Length; i++)
                 {
-                    alpha1 = MathHelper.Lerp(alpha1, 1, 0.05f);
-                    alpha2 = MathHelper.Lerp(alpha2, 0, 0.05f);
-                    alpha3 = MathHelper.Lerp(alpha3, 0, 0.05f);
-                    alpha4 = MathHelper.Lerp(alpha4, 0, 0.05f);
+                    Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha1 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                    Main.EntitySpriteDraw(texture2, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha2 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                    Main.EntitySpriteDraw(texture3, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha3 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                    Main.EntitySpriteDraw(texture4, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha4 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
                 }
-                if (NPC.ai[1] == 2)
-                {
-                    alpha1 = MathHelper.Lerp(alpha1, 0, 0.05f);
-                    alpha2 = MathHelper.Lerp(alpha2, 1, 0.05f);
-                    alpha3 = MathHelper.Lerp(alpha3, 0, 0.05f);
-                    alpha4 = MathHelper.Lerp(alpha4, 0, 0.05f);
-                }
-                if (NPC.ai[1] == 3)
-                {
-                    alpha1 = MathHelper.Lerp(alpha1, 0, 0.05f);
-                    alpha2 = MathHelper.Lerp(alpha2, 0, 0.05f);
-                    alpha3 = MathHelper.Lerp(alpha3, 1, 0.05f);
-                    alpha4 = MathHelper.Lerp(alpha4, 0, 0.05f);
-                }
-                if (NPC.ai[1] == 4)
-                {
-                    alpha1 = MathHelper.Lerp(alpha1, 0, 0.05f);
-                    alpha2 = MathHelper.Lerp(alpha2, 0, 0.05f);
-                    alpha3 = MathHelper.Lerp(alpha3, 0, 0.05f);
-                    alpha4 = MathHelper.Lerp(alpha4, 1, 0.05f);
-                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(Color.White * alpha1), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(texture2, drawPos, NPC.frame, NPC.GetAlpha(Color.White * alpha2), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(texture3, drawPos, NPC.frame, NPC.GetAlpha(Color.White * alpha3), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(texture4, drawPos, NPC.frame, NPC.GetAlpha(Color.White * alpha4), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);              
+
                 spriteBatch.Draw(crowntexture, drawPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
             }
             else
@@ -877,6 +747,8 @@ namespace GloryMod.NPCs.NeonBoss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -920,6 +792,7 @@ namespace GloryMod.NPCs.NeonBoss
         }
 
         private float alpha1 = 0;
+        private float auraAlpha;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -928,13 +801,19 @@ namespace GloryMod.NPCs.NeonBoss
             Vector2 drawPos = NPC.Center - screenPos;
 
             SpriteEffects effects = new SpriteEffects();
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
+            if (NPC.spriteDirection == 1) effects = SpriteEffects.FlipHorizontally;
 
-            if (!NPC.IsABestiaryIconDummy) spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-            else spriteBatch.Draw(texture, drawPos, NPC.frame, new Color(255, 255, 255), NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
+            if (!NPC.IsABestiaryIconDummy)
+            {
+                auraAlpha = MathHelper.Lerp(auraAlpha, NPC.damage > 0 ? 1 : 0, 0.15f);
+                for (int i = 1; i < NPC.oldPos.Length; i++)
+                {
+                    if (alpha1 > 0) Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha1 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);                    
+                }
+                
+                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(Color.White) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+            } 
+            else spriteBatch.Draw(texture, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -947,10 +826,7 @@ namespace GloryMod.NPCs.NeonBoss
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = 1;
 
-            if (projectile.penetrate > 1 || projectile.penetrate == -1)
-            {
-                modNPC.DR = 0.5f;
-            }
+            if (projectile.penetrate != 1 && projectile.DamageType != DamageClass.Melee) modNPC.DR = 0.5f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -1027,22 +903,12 @@ namespace GloryMod.NPCs.NeonBoss
 
             NPC.dontTakeDamage = false;
             NPC.chaseable = true;
-            NPC.damage = 100;
+            NPC.damage = NPC.velocity.Y > .5f && NPC.ai[0] == 0 ? 80 : 0;
             alpha1 = MathHelper.Lerp(alpha1, 1, 0.1f);
 
-            if (NPC.alpha > 0)
-            {
-                NPC.alpha -= 17;
-            }
+            if (NPC.alpha > 0) NPC.alpha -= 17;
 
-            if (NPC.Bottom.Y < player.Top.Y)
-            {
-                canfall = true;
-            }
-            else
-            {
-                canfall = false;
-            }
+            canfall = NPC.Bottom.Y < player.Top.Y ? true : false;
 
             //Should the enemy leave?
             if (!player.active || player.dead)
@@ -1050,113 +916,52 @@ namespace GloryMod.NPCs.NeonBoss
                 Retreat();
             }
 
-            switch (NPC.ai[1])
+            Hopping(6, 14, 40, false, false);
+            NPC.ai[2]++;
+
+            if (NPC.ai[2] == 100)
             {
-                case 0:
-                    //Nerfed version of the orange NT attack.
+                NPC.ai[2] = 0;
+                NPC.ai[3]++;
 
-                    Hopping(6, 14, 40, false, false);
-                    NPC.ai[2]++;
+                for (int i = 0; i < (int)NPC.ai[3]; i++)
+                {
+                    Vector2 spawninsky = player.Center + new Vector2(0, -500);
+                    Projectile.NewProjectile(NPC.GetSource_FromThis(), spawninsky, Vector2.Zero, Main.getGoodWorld ? ProjectileType<NeonVortex>() : ProjectileType<NobleVortex>(), 60, 1, player.whoAmI, 0, (int)NPC.ai[3]);
+                }
 
-                    if (NPC.ai[2] == 100)
-                    {
-                        NPC.ai[2] = 0;
-                        NPC.ai[3]++;
-
-                        for (int i = 0; i < (int)NPC.ai[3]; i++)
-                        {
-                            Vector2 spawninsky = player.Center + new Vector2(0, -500);
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), spawninsky, Vector2.Zero, Main.getGoodWorld ? ProjectileType<NeonVortex>() : ProjectileType<NobleVortex>(), NPC.damage / 2, 1, player.whoAmI, 0, (int)NPC.ai[3]);
-                        }
-
-                        if (NPC.ai[3] == 3)
-                        {
-                            NPC.ai[3] = 0;
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 1;
-                            NPC.ai[0] = 0;
-                        }
-                        NPC.netUpdate = true;
-                    }
-
-                    break;
-
-                case 1:
-                    //Stay still and fire a ring of projectiles.
-
-                    Hopping(10, 20, 2000, false, false);
-
-                    if (NPC.ai[2] == 0)
-                    {
-                        targetPosition = new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi);
-                    }
-
-                    NPC.ai[2]++;
-
-                    if (NPC.ai[2] == 100)
-                    {
-                        float numberProjectiles = 10;
-
-                        for (int i = 0; i < numberProjectiles; i++)
-                        {
-                            Vector2 direction = (targetPosition).RotatedBy(i * MathHelper.TwoPi / numberProjectiles);
-                            direction.Normalize();
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction * 5, ProjectileType<VortexTelegraph>(), 0, 2f, Main.myPlayer);
-                        }
-                        NPC.netUpdate = true;
-                    }
-                    if (NPC.ai[2] == 120)
-                    {
-                        float numberProjectiles = 10;
-
-                        for (int i = 0; i < numberProjectiles; i++)
-                        {
-                            Vector2 direction = (targetPosition).RotatedBy(i * MathHelper.TwoPi / numberProjectiles);
-                            direction.Normalize();
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction, ProjectileType<NeonLightning>(), NPC.damage / 2, 2f, Main.myPlayer);
-                        }
-
-                        SoundEngine.PlaySound(SoundID.Item33, NPC.Center);
-
-                        NPC.ai[3] = 0;
-                        NPC.ai[2] = 0;
-                        NPC.ai[1] = 0;
-                        NPC.ai[0] = 1;
-                        NPC.netUpdate = true;
-                    }
-
-                    break;
+                if (NPC.ai[3] == 3)
+                {
+                    NPC.ai[3] = 0;
+                    NPC.ai[2] = 0;
+                    NPC.ai[1] = 0;
+                    NPC.ai[0] = 0;
+                }
+                NPC.netUpdate = true;
             }
 
             void Hopping(float speedX, float speedY, int canjump = 60, bool compensateX = false, bool compensateY = false)
             {
                 NPC.velocity.Y += 0.3f;
-                if (NPC.velocity.Y >= 16)
-                {
-                    NPC.velocity.Y = 16;
-                }
+                if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
-                if (compensateX == true)
-                {
-                    speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
-                }
-                if (compensateY == true)
-                {
-                    speedY -= (player.Center.Y - NPC.Center.Y) / 50;
-                }
+                if (compensateX == true) speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
 
-                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, canfall, canfall) != new Vector2(0, NPC.velocity.Y))
+                if (compensateY == true) speedY -= (player.Center.Y - NPC.Center.Y) / 50;
+
+
+                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true) != new Vector2(0, NPC.velocity.Y))
                 {
-                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, canfall, canfall);
+                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true);
                     NPC.position.Y += NPC.velocity.Y;
                     NPC.velocity.Y = 0;
                     NPC.rotation = 0;
 
-                    if (NPC.ai[0] == 0)
+                    if (NPC.ai[0] == 0 && !NPC.hide)
                     {
-                        for (int i = 0; i < 20; i++)
+                        for (int i = 0; i < 30; i++)
                         {
-                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-68, 68), 0), 0, 0, 0, Scale: 1.5f);
+                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-68, 68), 0), 0, 0, 0, Scale: 2f);
                             Main.dust[dust].noGravity = false;
                             Main.dust[dust].noLight = true;
                             Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(5), 0).RotatedByRandom(MathHelper.TwoPi);
@@ -1165,19 +970,16 @@ namespace GloryMod.NPCs.NeonBoss
                     }
 
                     NPC.ai[0]++;
-
                 }
                 else
                 {
-                    if (NPC.velocity.Y < 0)
-                    {
-                        NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
-                    }
+                    if (NPC.velocity.Y < 0) NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
                     else
                     {
                         NPC.rotation = NPC.rotation.AngleTowards(0f - NPC.velocity.X * 0.06f, 0.01f);
                         NPC.velocity.Y += 0.3f;
                     }
+
                     NPC.ai[0] = 0;
                 }
 
@@ -1216,6 +1018,8 @@ namespace GloryMod.NPCs.NeonBoss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -1259,7 +1063,7 @@ namespace GloryMod.NPCs.NeonBoss
         }
 
         private float alpha1 = 0;
-
+        private float auraAlpha;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -1268,13 +1072,19 @@ namespace GloryMod.NPCs.NeonBoss
             Vector2 drawPos = NPC.Center - screenPos;
 
             SpriteEffects effects = new SpriteEffects();
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
+            if (NPC.spriteDirection == 1) effects = SpriteEffects.FlipHorizontally;
 
-            if (!NPC.IsABestiaryIconDummy) spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-            else spriteBatch.Draw(texture, drawPos, NPC.frame, new Color(255, 255, 255), NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
+            if (!NPC.IsABestiaryIconDummy)
+            {
+                auraAlpha = MathHelper.Lerp(auraAlpha, NPC.damage > 0 ? 1 : 0, 0.15f);
+                for (int i = 1; i < NPC.oldPos.Length; i++)
+                {
+                    if (alpha1 > 0) Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha1 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(Color.White) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+            }
+            else spriteBatch.Draw(texture, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1287,10 +1097,7 @@ namespace GloryMod.NPCs.NeonBoss
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = 1;
 
-            if (projectile.penetrate > 1 || projectile.penetrate == -1)
-            {
-                modNPC.DR = 0.5f;
-            }
+            if (projectile.penetrate != 1 && projectile.DamageType != DamageClass.Melee) modNPC.DR = 0.5f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -1364,13 +1171,10 @@ namespace GloryMod.NPCs.NeonBoss
 
             NPC.dontTakeDamage = false;
             NPC.chaseable = true;
-            NPC.damage = 100;
+            NPC.damage = NPC.velocity.Y > .5f && NPC.ai[0] == 0 ? 80 : 0;
             alpha1 = MathHelper.Lerp(alpha1, 1, 0.1f);
 
-            if (NPC.alpha > 0)
-            {
-                NPC.alpha -= 17;
-            }
+            if (NPC.alpha > 0) NPC.alpha -= 17;     
 
             //Should the enemy leave?
             if (!player.active || player.dead)
@@ -1414,51 +1218,39 @@ namespace GloryMod.NPCs.NeonBoss
             void Hopping(float speedX, float speedY, int canjump = 60, bool compensateX = false, bool compensateY = false)
             {
                 NPC.velocity.Y += 0.3f;
-                if (NPC.velocity.Y >= 16)
-                {
-                    NPC.velocity.Y = 16;
-                }
+                if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
-                if (compensateX == true)
-                {
-                    speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
-                }
-                if (compensateY == true)
-                {
-                    speedY -= (player.Center.Y - NPC.Center.Y) / 50;
-                }
+                if (compensateX == true) speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
 
-                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height) != new Vector2(0, NPC.velocity.Y))
+                if (compensateY == true) speedY -= (player.Center.Y - NPC.Center.Y) / 50;
+
+
+                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true) != new Vector2(0, NPC.velocity.Y))
                 {
-                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height);
+                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true);
                     NPC.position.Y += NPC.velocity.Y;
                     NPC.velocity.Y = 0;
                     NPC.rotation = 0;
 
-                    if (NPC.ai[0] == 0)
+                    if (NPC.ai[0] == 0 && !NPC.hide)
                     {
-                        for (int i = 0; i < 20; i++)
+                        for (int i = 0; i < 30; i++)
                         {
-                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-68, 68), 0), 0, 0, 0, Scale: 1.5f);
+                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-68, 68), 0), 0, 0, 0, Scale: 2f);
                             Main.dust[dust].noGravity = false;
                             Main.dust[dust].noLight = true;
                             Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(5), 0).RotatedByRandom(MathHelper.TwoPi);
                         }
                         SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
 
-                        if (NPC.ai[1] == 0)
+                        int projCount = Main.getGoodWorld ? 4 : 3;
+
+                        for (int i = 0; i < projCount; i++)
                         {
-                            SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
-
-                            int projCount = Main.getGoodWorld ? 5 : 4;
-
-                            for (int i = 0; i < projCount; i++)
-                            {
-                                Vector2 spawnonground = new Vector2(Main.rand.NextFloat(-150, 150), 0) + groundPosition;
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-5, -15)).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileType<NeonTyrantDebris>(), NPC.damage / 2, 1, player.whoAmI);
-                            }
-                            NPC.netUpdate = true;
+                            Vector2 spawnonground = new Vector2(Main.rand.NextFloat(-162, 162), 0) + groundPosition;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-0.3334f * projCount, (-2 * projCount) - 2)).RotatedByRandom(MathHelper.ToRadians(15)), ProjectileType<NeonTyrantDebris>(), NPC.damage / 2, 1, player.whoAmI);
                         }
+
                         NPC.ai[3]++;
                     }
 
@@ -1466,15 +1258,13 @@ namespace GloryMod.NPCs.NeonBoss
                 }
                 else
                 {
-                    if (NPC.velocity.Y < 0)
-                    {
-                        NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
-                    }
+                    if (NPC.velocity.Y < 0) NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
                     else
                     {
                         NPC.rotation = NPC.rotation.AngleTowards(0f - NPC.velocity.X * 0.06f, 0.01f);
                         NPC.velocity.Y += 0.3f;
                     }
+
                     NPC.ai[0] = 0;
                 }
 
@@ -1513,6 +1303,8 @@ namespace GloryMod.NPCs.NeonBoss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -1556,25 +1348,44 @@ namespace GloryMod.NPCs.NeonBoss
         }
 
         private float alpha1 = 0;
+        private float auraAlpha;
+        float timer;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
-            Texture2D indicator = Request<Texture2D>("GloryMod/NPCs/NeonBoss/JumpIndicator").Value;
+            Texture2D arrow = Request<Texture2D>("GloryMod/NPCs/NeonBoss/JumpIndicator").Value;
+
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, NPC.frame.Height * 0.5f);
             Vector2 drawPos = NPC.Center - screenPos;
-            Player player = Main.player[NPC.target];
 
             SpriteEffects effects = new SpriteEffects();
-            if (NPC.spriteDirection == 1)
+            if (NPC.spriteDirection == 1) effects = SpriteEffects.FlipHorizontally;
+
+            if (!NPC.IsABestiaryIconDummy)
             {
-                effects = SpriteEffects.FlipHorizontally;
+                auraAlpha = MathHelper.Lerp(auraAlpha, NPC.damage > 0 ? 1 : 0, 0.15f);
+                for (int i = 1; i < NPC.oldPos.Length; i++)
+                {
+                    if (alpha1 > 0) Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha1 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(Color.White) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+
+                Player player = Main.player[NPC.target];
+                if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
+                    NPC.TargetClosest();
+
+                if (timer >= MathHelper.Pi) timer = 0f;
+                timer += 0.1f;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Main.EntitySpriteDraw(arrow, player.Center - new Vector2(0, 150) + new Vector2(4 * indicatorAlpha, 0).RotatedBy(timer + i * MathHelper.TwoPi / 4) - screenPos, null, NPC.GetAlpha(Color.Blue) * indicatorAlpha, 0, arrow.Size() / 2, 1, effects, 0);
+                }
+
+                spriteBatch.Draw(arrow, player.Center - new Vector2(0, 150) - screenPos, null, NPC.GetAlpha(Color.White) * indicatorAlpha, 0, arrow.Size() / 2, 1, effects, 0f);
             }
-
-            if (!NPC.IsABestiaryIconDummy) spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-            else spriteBatch.Draw(texture, drawPos, NPC.frame, new Color(255, 255, 255), NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
-
-            spriteBatch.Draw(indicator, player.Center + new Vector2(0, -100) - screenPos, null, NPC.GetAlpha(new Color(100, 200, 255)) * indicatorAlpha, 0, indicator.Size() / 2, NPC.scale * 1.2f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(indicator, player.Center + new Vector2(0, -100) - screenPos, null, NPC.GetAlpha(new Color(255, 255, 255)) * indicatorAlpha, 0, indicator.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+            else spriteBatch.Draw(texture, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1587,10 +1398,7 @@ namespace GloryMod.NPCs.NeonBoss
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = 1;
 
-            if (projectile.penetrate > 1 || projectile.penetrate == -1)
-            {
-                modNPC.DR = 0.5f;
-            }
+            if (projectile.penetrate != 1 && projectile.DamageType != DamageClass.Melee) modNPC.DR = 0.5f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -1667,37 +1475,17 @@ namespace GloryMod.NPCs.NeonBoss
 
             NPC.dontTakeDamage = false;
             NPC.chaseable = true;
-            NPC.damage = 100;
+            NPC.damage = NPC.velocity.Y > .5f && NPC.ai[0] == 0 ? 80 : 0;
             alpha1 = MathHelper.Lerp(alpha1, 1, 0.1f);
 
-            if (NPC.alpha > 0)
-            {
-                NPC.alpha -= 17;
-            }
+            if (NPC.alpha > 0) NPC.alpha -= 17;
 
-            if (NPC.Bottom.Y < player.Top.Y)
-            {
-                canfall = true;
-            }
-            else
-            {
-                canfall = false;
-            }
+            canfall = NPC.Bottom.Y < player.Top.Y ? true : false;
 
-            if (NPC.ai[1] == 0 && NPC.ai[0] == 0)
-            {
-                indicatorAlpha = MathHelper.Lerp(indicatorAlpha, 1, 0.1f);
-            }
-            else
-            {
-                indicatorAlpha = MathHelper.Lerp(indicatorAlpha, 0, 0.1f);
-            }
+            indicatorAlpha = MathHelper.Lerp(indicatorAlpha, NPC.ai[1] == 0 && NPC.ai[0] == 0 ? 1 : 0, 0.1f);
 
-            //Should the enemy leave?
-            if (!player.active || player.dead)
-            {
-                Retreat();
-            }
+            //Should the enemy leave? 
+            if (!player.active || player.dead) Retreat();
 
             switch (NPC.ai[1])
             {
@@ -1737,7 +1525,7 @@ namespace GloryMod.NPCs.NeonBoss
                                     }
                                     SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 
-                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition + new Vector2(0, -50), Vector2.Zero, ProjectileType<NeonTyrantShockwave>(), NPC.damage, 1, player.whoAmI, 0, 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition + new Vector2(0, -50), Vector2.Zero, ProjectileType<NeonTyrantShockwave>(), 50, 1, player.whoAmI, 0, 0);
                                 }
                                 NPC.netUpdate = true;
                             }
@@ -1754,10 +1542,7 @@ namespace GloryMod.NPCs.NeonBoss
                         }
                         else
                         {
-                            if (NPC.velocity.Y < 0)
-                            {
-                                NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.05f, 0.09f);
-                            }
+                            if (NPC.velocity.Y < 0) NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.05f, 0.09f);
                             else
                             {
                                 NPC.rotation = NPC.rotation.AngleTowards(0f - NPC.velocity.X * 0.05f, 0.01f);
@@ -1804,32 +1589,25 @@ namespace GloryMod.NPCs.NeonBoss
             void Hopping(float speedX, float speedY, int canjump = 60, bool compensateX = false, bool compensateY = false)
             {
                 NPC.velocity.Y += 0.3f;
-                if (NPC.velocity.Y >= 16)
-                {
-                    NPC.velocity.Y = 16;
-                }
+                if (NPC.velocity.Y >= 16) NPC.velocity.Y = 16;
 
-                if (compensateX == true)
-                {
-                    speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
-                }
-                if (compensateY == true)
-                {
-                    speedY -= (player.Center.Y - NPC.Center.Y) / 50;
-                }
+                if (compensateX == true) speedX += (player.Center.X - NPC.Center.X) / 75 * goalDirectionX;
 
-                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, canfall) != new Vector2(0, NPC.velocity.Y))
+                if (compensateY == true) speedY -= (player.Center.Y - NPC.Center.Y) / 50;
+
+
+                if (NPC.velocity.Y > 0 && Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true) != new Vector2(0, NPC.velocity.Y))
                 {
-                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, canfall);
+                    NPC.velocity = Collision.TileCollision(NPC.position, new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height, true, true);
                     NPC.position.Y += NPC.velocity.Y;
                     NPC.velocity.Y = 0;
                     NPC.rotation = 0;
 
-                    if (NPC.ai[0] == 0)
+                    if (NPC.ai[0] == 0 && !NPC.hide)
                     {
-                        for (int i = 0; i < 20; i++)
+                        for (int i = 0; i < 30; i++)
                         {
-                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-72, 72), 0), 0, 0, 0, Scale: 1.5f);
+                            int dust = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-68, 68), 0), 0, 0, 0, Scale: 2f);
                             Main.dust[dust].noGravity = false;
                             Main.dust[dust].noLight = true;
                             Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(5), 0).RotatedByRandom(MathHelper.TwoPi);
@@ -1838,19 +1616,16 @@ namespace GloryMod.NPCs.NeonBoss
                     }
 
                     NPC.ai[0]++;
-
                 }
                 else
                 {
-                    if (NPC.velocity.Y < 0)
-                    {
-                        NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
-                    }
+                    if (NPC.velocity.Y < 0) NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * 0.04f, 0.09f);
                     else
                     {
                         NPC.rotation = NPC.rotation.AngleTowards(0f - NPC.velocity.X * 0.06f, 0.01f);
                         NPC.velocity.Y += 0.3f;
                     }
+
                     NPC.ai[0] = 0;
                 }
 
@@ -1889,6 +1664,8 @@ namespace GloryMod.NPCs.NeonBoss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10;
+            NPCID.Sets.TrailingMode[NPC.type] = 3;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -1906,8 +1683,8 @@ namespace GloryMod.NPCs.NeonBoss
             NPC.alpha = 255;
 
             NPC.damage = 0;
-            NPC.defense = 15;
-            NPC.lifeMax = Main.getGoodWorld ? 1000 : 500;
+            NPC.defense = 16;
+            NPC.lifeMax = Main.getGoodWorld ? 1300 : 650;
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 0, 0, 0);
             NPC.npcSlots = 15f;
@@ -1932,6 +1709,7 @@ namespace GloryMod.NPCs.NeonBoss
         }
 
         private float alpha1 = 0;
+        private float auraAlpha;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
@@ -1940,13 +1718,19 @@ namespace GloryMod.NPCs.NeonBoss
             Vector2 drawPos = NPC.Center - screenPos;
 
             SpriteEffects effects = new SpriteEffects();
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
+            if (NPC.spriteDirection == 1) effects = SpriteEffects.FlipHorizontally;
 
-            if (!NPC.IsABestiaryIconDummy) spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(new Color(255, 255, 255)) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
-            else spriteBatch.Draw(texture, drawPos, NPC.frame, new Color(255, 255, 255), NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
+            if (!NPC.IsABestiaryIconDummy)
+            {
+                auraAlpha = MathHelper.Lerp(auraAlpha, NPC.damage > 0 ? 1 : 0, 0.15f);
+                for (int i = 1; i < NPC.oldPos.Length; i++)
+                {
+                    if (alpha1 > 0) Main.EntitySpriteDraw(texture, NPC.oldPos[i] - NPC.position + NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 0, 0) * alpha1 * auraAlpha * (1 - i / (float)NPC.oldPos.Length) * .9f, NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                }
+
+                spriteBatch.Draw(texture, drawPos, NPC.frame, NPC.GetAlpha(Color.White) * alpha1, NPC.rotation, drawOrigin, NPC.scale, effects, 0f);
+            }
+            else spriteBatch.Draw(texture, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, NPC.scale * 0.5f, effects, 0f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1958,14 +1742,8 @@ namespace GloryMod.NPCs.NeonBoss
         {
             DamageResistance modNPC = DamageResistance.modNPC(NPC);
             modNPC.DR = 1;
-            if (projectile.penetrate == 1 && NPC.ai[1] == 1)
-            {
-                //Do not effect the projectile.
-            }
-            else
-            {
-                modNPC.DR = 0.5f;
-            }
+
+            if (projectile.penetrate != 1 && projectile.DamageType != DamageClass.Melee) modNPC.DR = 0.5f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -2039,13 +1817,10 @@ namespace GloryMod.NPCs.NeonBoss
 
             NPC.dontTakeDamage = false;
             NPC.chaseable = true;
-            NPC.damage = 100;
+            NPC.damage = NPC.velocity.Y > .5f && NPC.ai[0] == 0 ? 80 : 0;
             alpha1 = MathHelper.Lerp(alpha1, 1, 0.1f);
 
-            if (NPC.alpha > 0)
-            {
-                NPC.alpha -= 17;
-            }
+            if (NPC.alpha > 0) NPC.alpha -= 17;
 
             //Should the enemy leave?
             if (!player.active || player.dead)
@@ -2065,9 +1840,9 @@ namespace GloryMod.NPCs.NeonBoss
                     {
                         Vector2 spawnonground = new Vector2(650, 0) + groundPosition;
                         Vector2 spawnongroundnegative = new Vector2(-650, 0) + groundPosition;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), NPC.damage / 2, 1, player.whoAmI);
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), NPC.damage / 2, 1, player.whoAmI);
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnongroundnegative, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), NPC.damage / 2, 1, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), groundPosition, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), 50, 1, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnonground, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), 50, 1, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnongroundnegative, new Vector2(0, Main.rand.NextFloat(-14, -18)), ProjectileType<NeonTyrantMine>(), 50, 1, player.whoAmI);
                         NPC.netUpdate = true;
                     }
 
@@ -2143,7 +1918,7 @@ namespace GloryMod.NPCs.NeonBoss
 
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, targetPosition.RotatedByRandom(MathHelper.ToRadians(60)) * Main.rand.NextFloat(12, 16), ProjectileType<NeonTyrantSpike>(), NPC.damage / 2, 2f, Main.myPlayer);
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, targetPosition.RotatedByRandom(MathHelper.ToRadians(60)) * Main.rand.NextFloat(12, 16), ProjectileType<NeonTyrantSpike>(), 50, 2f, Main.myPlayer);
                             }
                         }
                         NPC.netUpdate = true;
@@ -2198,7 +1973,6 @@ namespace GloryMod.NPCs.NeonBoss
     class NobleVortex : ModProjectile
     {
         public override string Texture => "GloryMod/NPCs/NeonBoss/NeonVortex";
-
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
@@ -2268,10 +2042,7 @@ namespace GloryMod.NPCs.NeonBoss
                     }
                     SoundEngine.PlaySound(SoundID.Item33, Projectile.Center);
                 }
-                if (Projectile.ai[0] > 80)
-                {
-                    Projectile.alpha += 12;
-                }
+                if (Projectile.ai[0] > 80) Projectile.alpha += 12;
             }
             else
             {
@@ -2670,7 +2441,7 @@ namespace GloryMod.NPCs.NeonBoss
             Projectile.width = 100;
             Projectile.height = 100;
             Projectile.tileCollide = false;
-            Projectile.hostile = true;
+            Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 20;
             Projectile.alpha = 0;
@@ -2758,12 +2529,7 @@ namespace GloryMod.NPCs.NeonBoss
                 }
             }
 
-            timer++;
-            Projectile.rotation += rotation;
-            float light = Projectile.timeLeft / 4;
-            Lighting.AddLight(Projectile.Center, 0.6f * light, 1 * light, 0.9f * light);
-
-            if (player.velocity.Y == 0 && player.immuneTime <= 0)
+            if (player.velocity.Y == 0 && player.immuneTime <= 0 && timer < 10)
             {
                 PlayerDeathReason shockwave = new PlayerDeathReason();
                 player.Hurt(shockwave, Projectile.damage, 0, false, false, 40, false);
@@ -2771,6 +2537,12 @@ namespace GloryMod.NPCs.NeonBoss
                 player.immuneTime = 40;
                 player.velocity.Y -= 10;
             }
+
+
+            timer++;
+            Projectile.rotation += rotation;
+            float light = Projectile.timeLeft / 4;
+            Lighting.AddLight(Projectile.Center, 0.6f * light, 1 * light, 0.9f * light);
         }
 
         List<Tuple<Vector2, float, float>> rings = new List<Tuple<Vector2, float, float>>();

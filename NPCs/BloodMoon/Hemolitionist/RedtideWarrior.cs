@@ -25,7 +25,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
                 new FlavorTextBestiaryInfoElement("The sanguine seas of a Blood Moon have a corruptive and transformative power on all that remain in contact with it. " +
-                "Such effects are disasterous for the peoples of the deep sea, who are forced to flee the oceans before moonrise, or be consumed by its dark energies...")
+                "Such effects are disastrous for the peoples of the deep sea, who are forced to flee the oceans before moonrise, or be consumed by its dark energies...")
             });
         }
 
@@ -95,13 +95,13 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist
 
             if (NPC.ai[0] == 350)
             {
-                CombatText.NewText(NPC.getRect(), new Color(218, 59, 31), "Every night when sky is lit by a red moon", true);
+                CombatText.NewText(NPC.getRect(), new Color(218, 59, 31), "Every night, when the sky is lit by a red moon,", true);
                 SoundEngine.PlaySound(SoundID.Zombie35, NPC.Center);
             }
 
             if (NPC.ai[0] == 475)
             {
-                CombatText.NewText(NPC.getRect(), new Color(218, 59, 31), "my kin are forced to flee as you lay waist to our homes...", true);
+                CombatText.NewText(NPC.getRect(), new Color(218, 59, 31), "my kin are forced to flee as you lay waste to our homes...", true);
                 SoundEngine.PlaySound(SoundID.Zombie34, NPC.Center);
             }
 
@@ -130,7 +130,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist
 
             if (NPC.ai[0] == 1050)
             {
-                CombatText.NewText(NPC.getRect(), new Color(255, 60, 30), "As the champion of these seas", true);
+                CombatText.NewText(NPC.getRect(), new Color(255, 60, 30), "As the champion of these seas;", true);
                 SoundEngine.PlaySound(SoundID.Zombie34, NPC.Center);
             }
 
@@ -160,7 +160,8 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist
 
             if (NPC.ai[1] == 2)
             {
-                NPC.SimpleStrikeNPC(Main.rand.Next(60000, 75000), 0, true, 0, DamageClass.Default, false);
+                CombatText.NewText(NPC.getRect(), Color.Red, "KABOOMM!!!", true);
+                NPC.SimpleStrikeNPC(100000, 0, true);
                 SoundEngine.PlaySound(SoundID.DD2_WyvernScream, NPC.Center);
             }
           

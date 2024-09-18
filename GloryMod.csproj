@@ -40,6 +40,8 @@
     <None Remove="Items\BasaltBarriers\ExtinctionHeaterHook.png" />
     <None Remove="Items\BloodMoon\HemolicLance.png" />
     <None Remove="Items\BloodMoon\HemolicLanceMask.png" />
+    <None Remove="Items\BloodMoon\Hemolitionist\ClawShot.png" />
+    <None Remove="Items\BloodMoon\Hemolitionist\ClawShotProj.png" />
     <None Remove="Items\HM\BlunderAxe.png" />
     <None Remove="Items\HM\BlunderAxeFlash.png" />
     <None Remove="Items\Sightseer\DeadEyesBow.png" />
@@ -97,6 +99,17 @@
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTail.png" />
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpike.png" />
     <None Remove="NPCs\BloodMoon\BloodSeekerBeast\BSBTopSpikeMask.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\Hemolitionist.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\HemolitionistArm.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistArmMask.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistArmMask2.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistJet.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistJetMask.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistJetMask2.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistJetMask3.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\HemolitionistMask.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\Hemolitionist_Head_Boss.png" />
+    <None Remove="NPCs\BloodMoon\Hemolitionist\New\Projectiles\HemoBlast.png" />
     <None Remove="NPCs\Geomancer\GeomancerDefeatedCape.png" />
     <None Remove="NPCs\IceFish\HM.png" />
     <None Remove="NPCs\IceFish\HM_Head_Boss.png" />

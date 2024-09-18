@@ -65,7 +65,7 @@ namespace GloryMod.NPCs.BloodMoon.BloodSeekerBeast
 
         public override void AI()
         {
-            // Various pieces of misc code I couldn't find a way to make it look more organized
+            // Various pieces of misc code I couldn't find a way to make look more organized
 
             NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
             NPC.spriteDirection = NPC.direction;
