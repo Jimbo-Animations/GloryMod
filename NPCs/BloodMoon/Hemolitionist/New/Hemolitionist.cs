@@ -110,7 +110,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
 
                 case AttackPattern.CarpetBomb:
 
-                    CarpetBomb(target.Center, Phase2Started ? .85f : .7f, Phase2Started ? 4 : 6);
+                    CarpetBomb(target.Center + new Vector2(0, -300), Phase2Started ? .85f : .7f, Phase2Started ? 16 : 12);
 
                     break;
 

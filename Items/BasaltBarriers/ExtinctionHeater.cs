@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using GloryMod.Systems;
-using MonoMod.RuntimeDetour;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -87,7 +86,6 @@ namespace GloryMod.Items.BasaltBarriers
         {
             return true;
         }
-
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {

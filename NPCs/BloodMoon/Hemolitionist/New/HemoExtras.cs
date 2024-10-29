@@ -280,6 +280,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
             }
             npcLoot.Add(ItemDropRule.Common(ItemID.ChumBucket, minimumDropped: 12, maximumDropped: 20));
             npcLoot.Add(ItemDropRule.Common(ItemType<HemotechThruster>()));
+            npcLoot.Add(ItemDropRule.Common(ItemType<ClawBuster>()));
         }
 
         public override void PostAI()
@@ -361,7 +362,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
                         aiWeights[state] += aiWeights[(int)NPC.ai[0]] / (aiWeights.Length - 1);
                 }
                 aiWeights[(int)NPC.ai[0]] = 0f;
-            }           
+            }        
         }
 
         private void InitializeAIStates()

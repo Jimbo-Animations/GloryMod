@@ -319,7 +319,6 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
             AITimer++;
             if (AITimer == 1)
             {
-                AITimer3 = target.Center.X < NPC.Center.X ? 1 : -1;
                 bodyAnim = 2;
                 screamTimer = 68;
                 ScreenUtils.screenShaking = 5f;
@@ -331,10 +330,11 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
             if (NPC.Distance(targetPos) < 100) NPC.velocity += NPC.DirectionFrom(targetPos) * baseSpeed;
             NPC.velocity *= NPC.Distance(targetPos) > 500 ? .96f : .9f;
 
-            if (NPC.Distance(targetPos) < 450 && AITimer < 100) AITimer = 100;
+            if (NPC.Distance(targetPos) < 450 && AITimer < 120) AITimer = 120;
 
             if (AITimer == 150)
             {
+                AITimer3 = target.Center.X < NPC.Center.X ? 1 : -1;
                 SoundEngine.PlaySound(SoundID.Zombie71 with { Volume = 2, Pitch = -.25f }, NPC.Center);
                 bodyAnim = 1;
             }
@@ -379,8 +379,74 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
             }
         }
 
-        void CarpetBomb(Vector2 targetPos, float baseSpeed = .7f, int projectileThickness = 6)
+        void CarpetBomb(Vector2 targetPos, float baseSpeed = .7f, int projectileThickness = 12)
         {
+            AITimer++;
+
+            if (AITimer == 1)
+            {                
+                SoundEngine.PlaySound(SoundID.Zombie68 with { Volume = 2, Pitch = -.25f }, NPC.Center);
+                bodyAnim = 1;
+            }
+
+            if (AITimer <= 80)
+            {
+                NPC.rotation = NPC.rotation.AngleTowards(0f + NPC.velocity.X * .05f, .1f);
+                MathHelper.Clamp(NPC.rotation, -1, 1);
+            }
+
+            if (AITimer < 80)
+            {
+                if (NPC.Distance(targetPos) > 10) NPC.velocity += NPC.DirectionTo(targetPos) * baseSpeed;
+                NPC.velocity *= NPC.Distance(targetPos) > 100 ? .98f : .92f;
+            }
+            else NPC.velocity *= .97f;
+
+            if (AITimer < 60 && NPC.Distance(targetPos) < 50) AITimer = 60;
+
+            if (AITimer == 80)
+            {
+                bodyAnim = 2;
+                SoundEngine.PlaySound(SoundID.NPCHit57 with { Volume = 2 }, NPC.Center);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite with { Volume = 2, Pitch = -.25f }, NPC.Center);
+
+                screamTimer = 30;
+            }
+
+            if (AITimer > 80 && AITimer2 <= 0)
+            {
+                NPC.rotation = NPC.rotation.AngleTowards(MathHelper.Pi, .1f);
+
+                if (Systems.Utils.CloseTo(NPC.rotation, MathHelper.Pi, .1f))
+                {
+                    for (int i = -projectileThickness / 2; i < (projectileThickness / 2) + 1; i++)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(0, 27).RotatedBy(NPC.rotation), new Vector2(i * 3, 4).RotatedBy(NPC.rotation), ProjectileType<HemoGrenade>(), 75, 0, target.whoAmI);
+
+                        int dust = Dust.NewDust(NPC.Center + new Vector2(0, 27).RotatedByRandom(MathHelper.PiOver2).RotatedBy(NPC.rotation), 0, 0, 5, Scale: 1f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].noLight = true;
+                        Main.dust[dust].velocity = new Vector2(Main.rand.NextFloat(25), 0).RotatedByRandom(MathHelper.TwoPi);
+                    }
+
+                    SoundEngine.PlaySound(SoundID.NPCDeath13 with { Volume = 2 }, NPC.Center);
+                    NPC.velocity += new Vector2(0, -3).RotatedBy(NPC.rotation);
+                    AITimer2++;
+                    NPC.netUpdate = true;
+                }
+            }
+           
+
+            if (AITimer > 135)
+            {
+                ResetValues();
+                PickAttack();
+            }
+        }
+
+        /*void CarpetBomb(Vector2 targetPos, float baseSpeed = .7f, int projectileThickness = 6)
+        {          
             AITimer++;
             AITimer2++;
             int goalDirection = target.Center.X < NPC.Center.X ? -1 : 1;
@@ -455,7 +521,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
                 ResetValues();
                 PickAttack();
             }
-        }
+        }*/
 
         void MissileBarrage(Vector2 targetPos, float turnSpeed = .07f, float baseSpeed = .7f)
         {
@@ -658,7 +724,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
                 }
 
                 SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion, NPC.Center);
-                if (AITimer == 1) SoundEngine.PlaySound(SoundID.Item162, targetPos); //SoundEngine.PlaySound(SoundID.Zombie93 with { Volume = 2 }, targetPos);
+                if (AITimer == 1) SoundEngine.PlaySound(SoundID.Item162, targetPos); 
                 NPC.netUpdate = true;
             }
 
@@ -667,7 +733,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
                 if (AITimer == 25 || AITimer == 85)
                 {
                     NPC.hide = false;
-                    NPC.position = AITimer == 85 ? targetPos - NPC.Size / 2 : targetPos - NPC.Size / 2 + ( target.velocity != Vector2.Zero ? new Vector2(500, 0).RotatedBy(target.velocity.ToRotation()) : Vector2.Zero);
+                    NPC.position = targetPos - NPC.Size / 2 + (AITimer == 25 ? new Vector2(target.velocity != Vector2.Zero ? 500 : 0, 0).RotatedBy(target.velocity.ToRotation()) : Vector2.Zero);
                 }
 
                 Vector2 dustDirection = new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi);
@@ -714,6 +780,8 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New
             if (AITimer > 120)
             {
                 ResetValues();
+                InitializeAIStates();
+                aiWeights[7] = 0f;
                 PickAttack();
             }          
         }

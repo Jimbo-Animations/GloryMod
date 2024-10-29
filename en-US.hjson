@@ -185,9 +185,13 @@ Mods: {
 					'''
 			}
 
-			ClawShot: {
-				DisplayName: Claw Shot
-				Tooltip: ""
+			ClawBuster: {
+				DisplayName: Claw Buster
+				Tooltip:
+					'''
+					Fires a quintuple burst of Hemolic Bombs that arc together as they fly
+					Applies a life regeneration buff when used
+					'''
 			}
 		}
 
@@ -199,11 +203,7 @@ Mods: {
 			NeonBoltFriendly.DisplayName: Neon Bolt
 			XenonChainProj.DisplayName: Xenon Chain
 			XenonSpike.DisplayName: Xenon Spike
-			BloodBullet.DisplayName: Blood Bullet
-			HemoPulse.DisplayName: Sanguine Pulse
 			IntroExplosion.DisplayName: Sanguine Blast
-			NecroRay.DisplayName: Necrotic Ray
-			NecroticBolt.DisplayName: Necrotic Bolt
 			DebrisExplosion.DisplayName: Explosion
 			NeonLightning.DisplayName: Neon Bolt
 			NeonTyrantDebris.DisplayName: Debris
@@ -245,12 +245,11 @@ Mods: {
 			DroneExplosion.DisplayName: Bloody Blast
 			LightBringerStab.DisplayName: Light Bringer Stab
 			RadiantBlast.DisplayName: Radiant Blast
-			ScopophobiaProj.DisplayName: Scopophobia Proj
-			OracleSwing.DisplayName: Oracle Swing
+			ScopophobiaProj.DisplayName: Chasing Vortex
+			OracleSwing.DisplayName: Oracle Afterwave
 			SightseerStaffMinion.DisplayName: Warper Jellyfish
-			HemolicLanceProj.DisplayName: Hemolic Lance Proj
-			HemolicLanceThrow.DisplayName: Hemolic Lance Throw
-			EnergySpinProj.DisplayName: Energy Spin Proj
+			HemolicLanceProj.DisplayName: Hemolic Lance
+			EnergySpinProj.DisplayName: Lance Afterwave
 			BBExplosion.DisplayName: Fiery Explosion
 			BBFireBallSmall.DisplayName: Barrier Fireball
 			BBFireBallLarge.DisplayName: Barrier Fireball
@@ -266,20 +265,22 @@ Mods: {
 			ExtinctionHeaterProj.DisplayName: Extinction Heater
 			ExtinctionHeaterHook.DisplayName: Heater Hook
 			BBPurpleRune.DisplayName: Purple Rune
-			BasaltBarrierFireWall.DisplayName: Basalt Barrier Fire Wall
-			BasaltBarrierFireWallCore.DisplayName: Basalt Barrier Fire Wall Core
+			BasaltBarrierFireWall.DisplayName: Firewall
+			BasaltBarrierFireWallCore.DisplayName: Firewall
 			BBRedRune.DisplayName: Red Rune
 			BSBVortex.DisplayName: Bloody Vortex
 			BSBSpineRocket.DisplayName: Spine Rocket
-			HMShockwave.DisplayName: H M Shockwave
+			HMShockwave.DisplayName: Shockwave
 			BlueRoar.DisplayName: Blue Roar
-			BlunderAxeProj.DisplayName: Blunder Axe
+			BlunderAxeProj.DisplayName: BlunderAxe
 			BlunderSpike.DisplayName: Icy Caltrop
 			RedRoar.DisplayName: Red Roar
-			HemoBlast.DisplayName: Hemo Blast
-			HemoGrenade.DisplayName: Hemo Grenade
+			HemoBlast.DisplayName: Hemolic Bomb
+			HemoGrenade.DisplayName: Grenade
 			GrenadeExplosion.DisplayName: Grenade Explosion
-			ClawShotProj.DisplayName: Claw Shot Proj
+			ClawBusterProj.DisplayName: Claw Buster
+			HemoBlastFriendly.DisplayName: Hemolic Bomb
+			HemoExplosionFriendly.DisplayName: Necrotic Blast
 		}
 
 		Buffs: {
@@ -310,12 +311,17 @@ Mods: {
 
 			OracleCooldown: {
 				DisplayName: Oracle Cooldown
-				Description: You cannot blink with the Oracle
+				Description: You cannot blink with the Oracle.
 			}
 
 			SightseerMinionBuff: {
 				Description: Warper Jellyfish
-				DisplayName: The jellyfish will fight for you
+				DisplayName: The jellyfish will fight for you.
+			}
+
+			ClawBusterBuff: {
+				Description: Induced Regeneration
+				DisplayName: Increases your "ammo" supply.
 			}
 		}
 

@@ -1,4 +1,4 @@
-﻿using static Terraria.ModLoader.ModContent;
+﻿
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Audio;
@@ -28,7 +28,7 @@ namespace GloryMod.Items.Geomancer
             Item.channel = true;
             Item.shoot = ProjectileType<DischargeBook>();
             Item.value = Item.sellPrice(gold: 10);
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.Pink;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

@@ -25,10 +25,15 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New.Projectiles
         {
             Projectile.damage /= Main.expertMode ? Main.masterMode ? 6 : 4 : 2;
             Projectile.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+
+            Player target = Main.player[Projectile.owner];
+
+            targetOrigin = target.Center;
         }
 
         private bool activation = false;
         private bool landed = false;
+        private Vector2 targetOrigin;
         public override void AI()
         {
             Projectile.velocity *= .99f;
@@ -109,7 +114,7 @@ namespace GloryMod.NPCs.BloodMoon.Hemolitionist.New.Projectiles
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            fallThrough = false;
+            fallThrough = Projectile.Center.Y < targetOrigin.Y;
             return true;
         }
 

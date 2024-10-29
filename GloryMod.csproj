@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="CoolEffects\Textures\laser2.png" />
+    <None Remove="CoolEffects\Textures\scratch_03.png" />
     <None Remove="CoolEffects\Textures\twirl.png" />
     <None Remove="Gores\BloodDroneGore1.png" />
     <None Remove="Gores\BloodDroneGore2.png" />
@@ -40,8 +41,8 @@
     <None Remove="Items\BasaltBarriers\ExtinctionHeaterHook.png" />
     <None Remove="Items\BloodMoon\HemolicLance.png" />
     <None Remove="Items\BloodMoon\HemolicLanceMask.png" />
-    <None Remove="Items\BloodMoon\Hemolitionist\ClawShot.png" />
-    <None Remove="Items\BloodMoon\Hemolitionist\ClawShotProj.png" />
+    <None Remove="Items\BloodMoon\Hemolitionist\ClawBuster.png" />
+    <None Remove="Items\BloodMoon\Hemolitionist\ClawBusterProj.png" />
     <None Remove="Items\HM\BlunderAxe.png" />
     <None Remove="Items\HM\BlunderAxeFlash.png" />
     <None Remove="Items\Sightseer\DeadEyesBow.png" />
@@ -115,6 +116,12 @@
     <None Remove="NPCs\IceFish\HM_Head_Boss.png" />
     <None Remove="NPCs\Nerd\Nerd.png" />
     <None Remove="NPCs\Nerd\Nerd_Head_Boss.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferBody.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferBodyMask.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferHead.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferTail.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferTailMask.png" />
+    <None Remove="NPCs\PellucidWolfer\WolferWing.png" />
     <None Remove="NPCs\Sightseer\Minions\SeersTag.png" />
     <None Remove="NPCs\Sightseer\Minions\SightseerMinion.png" />
     <None Remove="NPCs\Sightseer\Minions\SightseerMinionMask.png" />
